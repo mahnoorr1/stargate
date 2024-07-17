@@ -8,4 +8,8 @@ class AppImages {
 class AppIcons {
   static const String lock = 'assets/icons/lock.svg';
   static const String profession = 'assets/icons/profession.svg';
+  static const String home = 'assets/icons/home.svg';
+  static const String services = 'assets/icons/services.svg';
+  static const String listing = 'assets/icons/listing.svg';
+  static const String profile = 'assets/icons/profile.svg';
 }

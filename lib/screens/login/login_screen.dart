@@ -18,7 +18,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void onForgetPassword() {}
 
-  void onSignIn() {}
+  void onSignIn() {
+    Navigator.popAndPushNamed(context, '/navbar');
+  }
+
   void onSignUp() {
     Navigator.popAndPushNamed(context, '/signup');
   }
