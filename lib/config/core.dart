@@ -31,27 +31,27 @@ class AppStyles {
   );
   static const heading1 = TextStyle(
     color: AppColors.black,
-    fontWeight: FontWeight.w600,
-    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    fontSize: 32,
   );
   static const heading2 = TextStyle(
     color: AppColors.black,
     fontWeight: FontWeight.w600,
-    fontSize: 16,
+    fontSize: 24,
   );
   static const heading3 = TextStyle(
     color: AppColors.black,
     fontWeight: FontWeight.w600,
-    fontSize: 14,
+    fontSize: 18,
   );
   static const heading4 = TextStyle(
     color: AppColors.black,
     fontWeight: FontWeight.w600,
-    fontSize: 12,
+    fontSize: 14,
   );
   static const normalText = TextStyle(
     color: AppColors.black,
-    fontSize: 12,
+    fontSize: 14,
   );
   static const supportiveText = TextStyle(
     color: AppColors.primaryGrey,
