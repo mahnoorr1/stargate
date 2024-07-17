@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stargate/screens/onboarding/onboarding.dart';
+import 'package:stargate/screens/onboarding/onboarding1.dart';
 
 class AppRoutes {
   static const String onboarding = '/onboarding';
@@ -7,6 +7,6 @@ class AppRoutes {
   static const String login = '/login';
 
   static Map<String, WidgetBuilder> routes = {
-    onboarding: (context) => const OnBoardingScreen(),
+    onboarding: (context) => const OnBoardingScreen1(),
   };
 }
