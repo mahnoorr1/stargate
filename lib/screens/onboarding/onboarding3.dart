@@ -24,7 +24,13 @@ class _OnBoardingScreen3State extends State<OnBoardingScreen3> {
           title: onboardData[2].title,
           description: onboardData[2].description,
           index: 2,
-          onNextButtonTap: () {},
+          onNextButtonTap: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+            );
+          },
         ),
       ),
     );
