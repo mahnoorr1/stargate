@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stargate/config/core.dart';
-import 'package:stargate/screens/home/home_screen.dart';
+import 'package:stargate/drawer/drawer.dart';
 import 'package:stargate/screens/listings/listings_screen.dart';
 import 'package:stargate/screens/profile/profile_screen.dart';
 import 'package:stargate/screens/services_screen/services_screen.dart';
@@ -26,7 +26,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
   bool heart = false;
   final controller = PageController();
   List<Widget> screens = [
-    const HomeScreen(),
+    const CustomDrawer(),
     const ServicesScreen(),
     const ListingsScreen(),
     const ProfileScreen(),

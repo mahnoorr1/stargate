@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 class AppColors {
   static const black = Color.fromARGB(255, 1, 23, 43);
   static const primaryGrey = Color(0xFF959494);
+  static const darkGrey = Color(0xFF707070);
   static const lightGrey = Color(0xFFD9D9D9);
   static const blue = Color(0xFF0075C2);
   static const darkBlue = Color(0xFF003B74);
@@ -35,7 +36,7 @@ class AppStyles {
     fontSize: 32,
   );
   static const heading2 = TextStyle(
-    color: AppColors.black,
+    color: AppColors.darkBlue,
     fontWeight: FontWeight.w600,
     fontSize: 24,
   );
