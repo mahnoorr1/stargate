@@ -25,50 +25,52 @@ class OnboardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              isNetworkImage ? Image.network(image) : Image.asset(image),
-              Column(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    child: Text(
-                      title,
-                      style: AppStyles.heading1,
-                      textAlign: TextAlign.center,
-                      maxLines: 3,
+    return SizedBox(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                isNetworkImage ? Image.network(image) : Image.asset(image),
+                Column(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: Text(
+                        title,
+                        style: AppStyles.heading1,
+                        textAlign: TextAlign.center,
+                        maxLines: 3,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 16.w,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: Text(
-                      description,
-                      style: AppStyles.normalText,
-                      textAlign: TextAlign.center,
-                      maxLines: 10,
+                    SizedBox(
+                      height: 16.w,
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Text(
+                        description,
+                        style: AppStyles.normalText,
+                        textAlign: TextAlign.center,
+                        maxLines: 10,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.1,
-          child: Padding(
-              padding: EdgeInsets.only(bottom: 30.w),
-              child: NextButton(onPressed: onNextButtonTap, index: index)),
-        )
-      ],
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: Padding(
+                padding: EdgeInsets.only(bottom: 30.w),
+                child: NextButton(onPressed: onNextButtonTap, index: index)),
+          )
+        ],
+      ),
     );
   }
 }
