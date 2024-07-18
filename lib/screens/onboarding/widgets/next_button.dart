@@ -45,7 +45,9 @@ class _NextButtonState extends State<NextButton> {
               widget.index == 2
                   ? const SizedBox()
                   : GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
                       child: Text(
                         "Skip",
                         style: AppStyles.heading4.copyWith(
