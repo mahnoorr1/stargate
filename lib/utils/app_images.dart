@@ -19,4 +19,5 @@ class AppIcons {
   static const String faq = 'assets/icons/faq.svg';
   static const String legalNotice = 'assets/icons/legal_notice.svg';
   static const String terms = 'assets/icons/terms.svg';
+  static const String filter = 'assets/icons/filter.svg';
 }
