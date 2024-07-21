@@ -135,6 +135,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
       ),
       body: SafeArea(
         child: PageView(
+          physics: const NeverScrollableScrollPhysics(),
           controller: controller,
           children: screens,
         ),
