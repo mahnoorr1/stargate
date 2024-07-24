@@ -3,8 +3,11 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:stargate/config/core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/utils/app_enums.dart';
+import 'package:stargate/widgets/buttons/custom_button.dart';
+import 'package:stargate/widgets/buttons/custom_tab_button.dart';
 import 'package:stargate/widgets/buttons/filter_button.dart';
 import 'package:stargate/widgets/cards/listing_card.dart';
+import 'package:stargate/widgets/inputfields/country_textfield.dart';
 
 class ServicesScreen extends StatefulWidget {
   const ServicesScreen({super.key});
@@ -28,6 +31,28 @@ class _ServicesScreenState extends State<ServicesScreen> {
     UserType.notary,
     UserType.appraiser,
   ];
+  TextEditingController country = TextEditingController();
+  TextEditingController state = TextEditingController();
+  TextEditingController city = TextEditingController();
+  List<String> cities = [];
+
+  List<String> experience = [
+    'All',
+    '5 years above',
+    '5 years',
+    'below 5 years'
+  ];
+  String selectedExperience = '';
+  bool filterApplied = false;
+  void resetFilters() {
+    setState(() {
+      country.clear();
+      state.clear();
+      city.clear();
+      selectedExperience = '';
+      filterApplied = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +73,16 @@ class _ServicesScreenState extends State<ServicesScreen> {
               scrollDirection: Axis.horizontal,
               child: Row(children: [
                 ...userTypes.map(
-                  (type) => customTabButton(type),
+                  (type) => CustomTabButton(
+                    type: type.toString().split('.').last,
+                    current: selectedUser.toString().split('.').last,
+                    selected: (value) {
+                      setState(() {
+                        selectedUser = UserType.values.firstWhere(
+                            (e) => e.toString().split('.').last == value);
+                      });
+                    },
+                  ),
                 ),
               ]),
             ),
@@ -63,7 +97,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 children: List.generate(items.length + 1, (index) {
                   if (index == 1) {
                     return FilterButton(
-                      onTap: () {},
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return bottomSheetContent();
+                          },
+                        );
+                      },
                     );
                   } else {
                     int itemIndex = index > 1 ? index - 1 : index;
@@ -84,56 +125,96 @@ class _ServicesScreenState extends State<ServicesScreen> {
     );
   }
 
-  Widget customTabButton(UserType type) {
-    List<String> titles = [
-      'investors',
-      'agents',
-      'lawyers',
-      'notaries',
-      'appraisers',
-    ];
-    int index() {
-      if (type == UserType.investor) {
-        return 0;
-      } else if (type == UserType.agent) {
-        return 1;
-      } else if (type == UserType.lawyer) {
-        return 2;
-      } else if (type == UserType.notary) {
-        return 3;
-      } else if (type == UserType.appraiser) {
-        return 4;
-      }
-      return 0;
-    }
-
-    bool isSelected = selectedUser == type;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedUser = type;
-        });
-      },
-      child: Container(
-        margin: EdgeInsets.only(right: 10.w, bottom: 12.w),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(20),
-          ),
-          color: isSelected == true ? AppColors.blue : AppColors.lightBlue,
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.w),
-          child: Center(
-            child: Text(
-              titles[index()],
-              style: isSelected == true
-                  ? AppStyles.heading4.copyWith(color: AppColors.white)
-                  : AppStyles.normalText,
+  Widget bottomSheetContent() {
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(20.w),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.w),
+              topRight: Radius.circular(20.w),
             ),
+            color: AppColors.backgroundColor,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Apply search filters for Service Providers',
+                style: AppStyles.heading4,
+              ),
+              SizedBox(height: 12.h),
+              filterApplied
+                  ? GestureDetector(
+                      onTap: () {
+                        resetFilters();
+                        setState(() {});
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          "clear filters",
+                          style: AppStyles.heading4.copyWith(
+                            color: AppColors.blue,
+                          ),
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+              CountryPickerField(
+                country: country,
+                state: state,
+                city: city,
+              ),
+              SizedBox(
+                height: 12.w,
+              ),
+              Text(
+                "Experience",
+                style: AppStyles.normalText.copyWith(
+                  color: AppColors.primaryGrey,
+                ),
+              ),
+              SizedBox(
+                height: 6.w,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    ...experience.map(
+                      (e) => CustomTabButton(
+                        type: e,
+                        selected: (value) {
+                          setState(() {
+                            selectedExperience = value;
+                          });
+                        },
+                        current: selectedExperience,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.h),
+              CustomButton(
+                text: 'Apply Filters',
+                onPressed: () {
+                  Navigator.pop(context);
+                  if (country.text.isNotEmpty || selectedExperience != '') {
+                    setState(() {
+                      filterApplied = true;
+                    });
+                  }
+                },
+              ),
+            ],
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
