@@ -48,7 +48,7 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.35,
+                        top: MediaQuery.of(context).size.height * 0.36,
                         left: MediaQuery.of(context).size.width * 0.025,
                         right: MediaQuery.of(context).size.width * 0.025,
                       ),
@@ -120,7 +120,7 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                                 width: 50.w,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30.w),
-                                  color: AppColors.lightBlue.withOpacity(0.5),
+                                  color: AppColors.lightBlue.withOpacity(0.3),
                                 ),
                                 child: const Center(
                                   child: Icon(
