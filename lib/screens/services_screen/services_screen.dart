@@ -59,9 +59,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Search",
-          style: AppStyles.heading3,
+          style: AppStyles.heading3.copyWith(
+            color: AppColors.darkBlue,
+          ),
         ),
         centerTitle: true,
         surfaceTintColor: Colors.transparent,
