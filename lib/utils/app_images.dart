@@ -4,6 +4,8 @@ class AppImages {
   static const String onboard3 = 'assets/images/onboard3.png';
   static const String house = 'assets/images/house.jpg';
   static const String logo = 'assets/images/stargate.png';
+  static const String bed = 'assets/images/bed.png';
+  static const String bath = 'assets/images/bath.png';
 }
 
 class AppIcons {

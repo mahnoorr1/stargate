@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/real_estate_listing.dart';
+import 'package:stargate/screens/listings/listing_details_screen.dart';
 import 'package:stargate/utils/app_images.dart';
 
 class ListingCard extends StatelessWidget {
@@ -19,11 +20,11 @@ class ListingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: () => Navigator.of(context, rootNavigator: false).push(
-      //   MaterialPageRoute(
-      //     builder: (context) => ,
-      //   ),
-      // ),
+      onTap: () => Navigator.of(context, rootNavigator: false).push(
+        MaterialPageRoute(
+          builder: (context) => ListingDetailsScreen(listing: listing),
+        ),
+      ),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.47,
         height: 220,
