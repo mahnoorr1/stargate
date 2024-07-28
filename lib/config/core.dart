@@ -58,4 +58,10 @@ class AppStyles {
     color: AppColors.primaryGrey,
     fontSize: 12,
   );
+  static BoxShadow boxShadow = BoxShadow(
+    color: AppColors.black.withOpacity(0.01),
+    spreadRadius: 5,
+    blurRadius: 1,
+    offset: const Offset(0, 0),
+  );
 }

@@ -3,7 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/config/core.dart';
 
 class MembershipButton extends StatefulWidget {
-  const MembershipButton({super.key});
+  final Color textColor;
+  const MembershipButton({
+    super.key,
+    this.textColor = AppColors.blue,
+  });
 
   @override
   State<MembershipButton> createState() => _MembershipButtonState();
@@ -31,7 +35,8 @@ class _MembershipButtonState extends State<MembershipButton> {
                   child: Center(
                     child: Text(
                       "membership",
-                      style: AppStyles.heading4.copyWith(color: AppColors.blue),
+                      style:
+                          AppStyles.heading4.copyWith(color: widget.textColor),
                     ),
                   ),
                 ),
@@ -49,11 +54,12 @@ class _MembershipButtonState extends State<MembershipButton> {
           child: Container(
             height: 40.w,
             width: 40.w,
+            margin: EdgeInsets.all(6.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
                 Radius.circular(20.w),
               ),
-              color: AppColors.lightBlue,
+              color: AppColors.lightBlue.withOpacity(0.5),
             ),
             child: Icon(
               Icons.star,

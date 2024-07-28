@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:stargate/config/core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/utils/app_enums.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
 import 'package:stargate/widgets/buttons/custom_tab_button.dart';
@@ -94,7 +95,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 8.w,
                 mainAxisSpacing: 8.w,
-                children: List.generate(items.length + 1, (index) {
+                children: List.generate(users.length + 1, (index) {
                   if (index == 1) {
                     return FilterButton(
                       onTap: () {
@@ -109,11 +110,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   } else {
                     int itemIndex = index > 1 ? index - 1 : index;
                     return ListingCard(
-                      imageURl:
-                          'https://images.stockcake.com/public/0/3/1/0316b537-d898-429c-8d78-099e7df7a140_large/masked-urban-individual-stockcake.jpg',
-                      title: items[itemIndex],
-                      subtitle: items[itemIndex],
-                      isVerified: true,
+                      user: users[itemIndex],
                     );
                   }
                 }),

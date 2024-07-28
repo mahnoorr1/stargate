@@ -20,4 +20,7 @@ class AppIcons {
   static const String legalNotice = 'assets/icons/legal_notice.svg';
   static const String terms = 'assets/icons/terms.svg';
   static const String filter = 'assets/icons/filter.svg';
+  static const String location = 'assets/icons/location.svg';
+  static const String cash = 'assets/images/Cash.png';
+  static const String medal = 'assets/icons/medal.svg';
 }
