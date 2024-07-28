@@ -7,9 +7,9 @@ import 'package:stargate/models/user.dart';
 import 'package:stargate/screens/services_screen/service_provider_details.dart';
 import 'package:stargate/widgets/blurred_rectangle.dart';
 
-class ListingCard extends StatelessWidget {
+class ServiceProviderListingCard extends StatelessWidget {
   final User user;
-  const ListingCard({
+  const ServiceProviderListingCard({
     super.key,
     required this.user,
   });

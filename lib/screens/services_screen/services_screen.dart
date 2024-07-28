@@ -7,7 +7,7 @@ import 'package:stargate/utils/app_enums.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
 import 'package:stargate/widgets/buttons/custom_tab_button.dart';
 import 'package:stargate/widgets/buttons/filter_button.dart';
-import 'package:stargate/widgets/cards/listing_card.dart';
+import 'package:stargate/screens/services_screen/widgets/user_listing_card.dart';
 import 'package:stargate/widgets/inputfields/country_textfield.dart';
 
 class ServicesScreen extends StatefulWidget {
@@ -111,7 +111,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     );
                   } else {
                     int itemIndex = index > 1 ? index - 1 : index;
-                    return ListingCard(
+                    return ServiceProviderListingCard(
                       user: users[itemIndex],
                     );
                   }
