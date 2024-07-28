@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           routes: AppRoutes.routes,
           theme: ThemeData(
+            primaryColor: AppColors.blue,
             appBarTheme: const AppBarTheme(
                 backgroundColor: Colors.white,
                 titleTextStyle: AppStyles.screenTitle),
