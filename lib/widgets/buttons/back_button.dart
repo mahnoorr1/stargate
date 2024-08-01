@@ -3,7 +3,11 @@ import 'package:stargate/config/core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomBackButton extends StatelessWidget implements PreferredSizeWidget {
-  const CustomBackButton({super.key});
+  final Color? color;
+  const CustomBackButton({
+    super.key,
+    this.color,
+  });
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
   @override
@@ -19,10 +23,10 @@ class CustomBackButton extends StatelessWidget implements PreferredSizeWidget {
           borderRadius: BorderRadius.circular(30.w),
           color: AppColors.lightBlue.withOpacity(0.5),
         ),
-        child: const Center(
+        child: Center(
           child: Icon(
             Icons.arrow_back,
-            color: AppColors.white,
+            color: color ?? AppColors.white,
           ),
         ),
       ),

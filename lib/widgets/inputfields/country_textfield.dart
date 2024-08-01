@@ -23,7 +23,7 @@ class _CountryPickerFieldState extends State<CountryPickerField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -35,8 +35,18 @@ class _CountryPickerFieldState extends State<CountryPickerField> {
             textFieldDecoration: const InputDecoration(
               fillColor: AppColors.white,
               filled: true,
-              labelStyle: TextStyle(color: AppColors.primaryGrey),
-              suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
+              hintStyle: TextStyle(
+                color: AppColors.primaryGrey,
+                fontSize: 14,
+              ),
+              labelStyle: TextStyle(
+                color: AppColors.primaryGrey,
+                fontSize: 14,
+              ),
+              suffixIcon: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: AppColors.primaryGrey,
+              ),
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.lightGrey),
                 borderRadius: BorderRadius.all(Radius.circular(10)),

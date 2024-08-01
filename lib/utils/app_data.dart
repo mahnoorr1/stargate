@@ -91,6 +91,7 @@ List<String> propertyTypes = ['commercial', 'conventional'];
 List<String> sellingTypes = ['purchase', 'rental'];
 List<String> conditions = ['new', 'old', 'renovating'];
 List<String> requestType = ['offer', 'request'];
+List<String> furnishedTypes = ['yes', 'no'];
 List<String> commercialPropertyCategory = ['Hotel'];
 List<String> conventionalPropertyCategory = ['Rental Building'];
 List<String> commercialPropertySubcategory = ['Town House'];

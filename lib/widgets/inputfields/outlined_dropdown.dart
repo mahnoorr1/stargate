@@ -32,84 +32,81 @@ class _DropdownButtonExampleState extends State<OutlinedDropdownButtonExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          value: dropdownValue,
-          isDense: true,
-          isExpanded: false,
-          buttonStyleData: ButtonStyleData(
-            height: 55,
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: AppColors.lightGrey,
-              ),
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2(
+        value: dropdownValue,
+        isDense: true,
+        isExpanded: false,
+        buttonStyleData: ButtonStyleData(
+          height: 55,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: AppColors.lightGrey,
             ),
           ),
-          dropdownStyleData: DropdownStyleData(
-            maxHeight: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: Colors.white,
+        ),
+        dropdownStyleData: DropdownStyleData(
+          maxHeight: 200,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color: Colors.white,
+          ),
+          offset: const Offset(0, 0),
+          scrollbarTheme: ScrollbarThemeData(
+            radius: const Radius.circular(40),
+            thickness: WidgetStateProperty.all(6),
+            thumbVisibility: WidgetStateProperty.all(true),
+          ),
+        ),
+        menuItemStyleData: const MenuItemStyleData(
+          height: 30,
+          padding: EdgeInsets.symmetric(horizontal: 10),
+        ),
+        onChanged: (String? value) {
+          if (value != null) {
+            setState(() {
+              dropdownValue = value;
+            });
+            widget.onSelected(value);
+          }
+        },
+        items: widget.list.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value,
+              style: const TextStyle(fontSize: 14),
             ),
-            offset: const Offset(0, 0),
-            scrollbarTheme: ScrollbarThemeData(
-              radius: const Radius.circular(40),
-              thickness: WidgetStateProperty.all(6),
-              thumbVisibility: WidgetStateProperty.all(true),
+          );
+        }).toList(),
+        customButton: Container(
+          height: 60,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: AppColors.lightGrey,
             ),
           ),
-          menuItemStyleData: const MenuItemStyleData(
-            height: 30,
-            padding: EdgeInsets.symmetric(horizontal: 10),
-          ),
-          onChanged: (String? value) {
-            if (value != null) {
-              setState(() {
-                dropdownValue = value;
-              });
-              widget.onSelected(value);
-            }
-          },
-          items: widget.list.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: const TextStyle(fontSize: 14),
-              ),
-            );
-          }).toList(),
-          customButton: Container(
-            height: 60,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: AppColors.lightGrey,
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    dropdownValue ?? widget.label,
-                    style: const TextStyle(
-                      color: AppColors.black,
-                      fontSize: 14,
-                    ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  dropdownValue ?? widget.label,
+                  style: const TextStyle(
+                    color: AppColors.black,
+                    fontSize: 14,
                   ),
                 ),
-                const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: AppColors.black,
-                ),
-              ],
-            ),
+              ),
+              const Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: AppColors.black,
+              ),
+            ],
           ),
         ),
       ),

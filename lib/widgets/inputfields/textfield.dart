@@ -12,6 +12,9 @@ class CustomTextField extends StatefulWidget {
   final bool obscureText;
   final TextCapitalization textCapitalization;
   final TextInputType inputType;
+  final double? horizontalSpacing;
+  final double? verticalSpacing;
+  final int maxLines;
 
   const CustomTextField({
     super.key,
@@ -22,6 +25,9 @@ class CustomTextField extends StatefulWidget {
     this.obscureText = false,
     this.textCapitalization = TextCapitalization.none,
     required this.inputType,
+    this.horizontalSpacing,
+    this.verticalSpacing,
+    this.maxLines = 1,
   });
 
   @override
@@ -54,14 +60,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+      margin: EdgeInsets.symmetric(
+          horizontal: widget.horizontalSpacing ?? 20,
+          vertical: widget.verticalSpacing ?? 7),
       child: TextField(
         focusNode: _focusNode,
         enabled: true,
         controller: widget.controller,
         textCapitalization: widget.textCapitalization,
-        maxLength: 32,
-        maxLines: 1,
+        maxLength: widget.maxLines == 1 ? 32 : null,
+        maxLines: widget.maxLines,
         obscureText: widget.obscureText,
         keyboardType: widget.inputType,
         textAlign: TextAlign.start,
@@ -90,8 +98,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
           counterText: "",
           hintText: widget.hintText,
-          hintStyle:
-              const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+          hintStyle: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+            color: AppColors.primaryGrey,
+          ),
+          alignLabelWithHint: true,
           labelStyle: const TextStyle(color: AppColors.primaryGrey),
           contentPadding: const EdgeInsets.all(18),
           border: const OutlineInputBorder(

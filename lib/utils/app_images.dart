@@ -5,7 +5,9 @@ class AppImages {
   static const String house = 'assets/images/house.jpg';
   static const String logo = 'assets/images/stargate.png';
   static const String bed = 'assets/images/bed.png';
+  static const String room = 'assets/images/room.png';
   static const String bath = 'assets/images/bath.png';
+  static const String sale = 'assets/images/sale.png';
 }
 
 class AppIcons {
