@@ -8,6 +8,7 @@ class User {
   String city;
   String country;
   bool verified;
+  String email;
 
   User({
     required this.name,
@@ -17,6 +18,7 @@ class User {
     required this.city,
     required this.country,
     this.verified = false,
+    required this.email,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class User {
       city: json['city'],
       country: json['country'],
       verified: json['verified'],
+      email: json['email'],
     );
   }
 
@@ -42,6 +45,7 @@ class User {
       'city': city,
       'country': country,
       'verified': verified,
+      'email': email,
     };
   }
 
