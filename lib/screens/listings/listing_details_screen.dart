@@ -80,11 +80,24 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                         left: MediaQuery.of(context).size.width * 0.025,
                         right: MediaQuery.of(context).size.width * 0.025,
                       ),
-                      child: BubbleTextButton(
-                        text: widget.listing.propertyType,
-                        textStyle: AppStyles.heading4.copyWith(
-                          color: AppColors.white,
-                        ),
+                      child: Row(
+                        children: [
+                          BubbleTextButton(
+                            text: widget.listing.propertyType,
+                            textStyle: AppStyles.heading4.copyWith(
+                              color: AppColors.white,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 4.w,
+                          ),
+                          BubbleTextButton(
+                            text: widget.listing.sellingType,
+                            textStyle: AppStyles.heading4.copyWith(
+                              color: AppColors.white,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Container(
@@ -111,9 +124,23 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      widget.listing.title,
-                                      style: AppStyles.heading3,
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.6,
+                                          child: Text(
+                                            widget.listing.title,
+                                            style: AppStyles.heading3,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        BubbleTextButton(
+                                          text: widget.listing.requestType,
+                                        ),
+                                      ],
                                     ),
                                     SizedBox(height: 4.w),
                                     Row(
@@ -170,6 +197,44 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "category",
+                  style: AppStyles.supportiveText,
+                ),
+                SizedBox(
+                  height: 6.w,
+                ),
+                BubbleTextButton(
+                  text: widget.listing.propertyCategory,
+                ),
+              ],
+            ),
+            const Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "subcategory",
+                  style: AppStyles.supportiveText,
+                ),
+                SizedBox(
+                  height: 6.w,
+                ),
+                BubbleTextButton(
+                  text: widget.listing.propertySubCategory,
+                ),
+              ],
+            )
+          ],
+        ),
+        SizedBox(
+          height: 8.w,
+        ),
         Text(
           "Price",
           style: AppStyles.supportiveText.copyWith(
@@ -363,21 +428,104 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         SizedBox(
           height: 8.w,
         ),
-        Row(
-          children: [
-            const Text(
-              "garage:",
-              style: AppStyles.normalText,
-            ),
-            const Spacer(),
-            Text(
-              widget.listing.garage ? 'yes' : 'no',
-              style: AppStyles.normalText.copyWith(
-                fontWeight: FontWeight.bold,
+        widget.listing.propertyType == 'commercial'
+            ? Row(
+                children: [
+                  const Text(
+                    "no of parking places:",
+                    style: AppStyles.normalText,
+                  ),
+                  const Spacer(),
+                  widget.listing.parkingPlaces != null
+                      ? Text(
+                          widget.listing.parkingPlaces!.toString(),
+                          style: AppStyles.normalText.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : Text(
+                          "0",
+                          style: AppStyles.normalText.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ],
+              )
+            : Row(
+                children: [
+                  const Text(
+                    "garage:",
+                    style: AppStyles.normalText,
+                  ),
+                  const Spacer(),
+                  Text(
+                    widget.listing.garage! ? 'yes' : 'no',
+                    style: AppStyles.normalText.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+        SizedBox(
+          height: 20.w,
         ),
+        widget.listing.propertyType == 'commercial'
+            ? Column(
+                children: [
+                  const Text(
+                    "Equipment Details",
+                    style: AppStyles.heading4,
+                  ),
+                  SizedBox(
+                    height: 8.w,
+                  ),
+                ],
+              )
+            : const SizedBox(),
+        widget.listing.equipment == null &&
+                widget.listing.qualityOfEquipment == null
+            ? const Text(
+                "None",
+                style: AppStyles.normalText,
+              )
+            : Column(
+                children: [
+                  widget.listing.equipment != null
+                      ? Column(
+                          children: [
+                            const Text(
+                              "equipment",
+                              style: AppStyles.supportiveText,
+                            ),
+                            SizedBox(
+                              height: 6.w,
+                            ),
+                            Text(
+                              widget.listing.equipment!,
+                              style: AppStyles.normalText,
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
+                  widget.listing.equipment != null
+                      ? Column(
+                          children: [
+                            const Text(
+                              "Quality of equipment",
+                              style: AppStyles.supportiveText,
+                            ),
+                            SizedBox(
+                              height: 6.w,
+                            ),
+                            Text(
+                              widget.listing.qualityOfEquipment!,
+                              style: AppStyles.normalText,
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
+                ],
+              ),
         SizedBox(
           height: 20.w,
         ),

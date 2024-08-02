@@ -44,7 +44,7 @@ List<RealEstateListing> listings = [
         "The house is fully furnished and newly constructed contains all the facilities and a 10/10 in condition, interested person can contact at my given contact information.",
     requestType: "request",
     condition: "new",
-    propertyType: "commercial",
+    propertyType: "conventional",
     propertyCategory: "Bangalow",
     propertySubCategory: "Royal Bangalow",
     sellingType: "rental",
@@ -81,9 +81,10 @@ List<RealEstateListing> listings = [
       'https://images.stockcake.com/public/d/0/b/d0bc6c18-9f1a-46c9-aa01-3c8aa6855e09_large/luxurious-mansion-exterior-stockcake.jpg',
     ],
     furnished: false,
-    garage: false,
+    equipment: "Good equipment",
     landAreaInTotal: 2400,
     occupiedLandArea: 1200,
+    parkingPlaces: 2,
   ),
 ];
 

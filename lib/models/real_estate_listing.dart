@@ -16,9 +16,12 @@ class RealEstateListing {
   int noOfBathrooms;
   List<String> pictures;
   bool furnished;
-  bool garage;
+  bool? garage;
   double landAreaInTotal;
   double occupiedLandArea;
+  String? equipment;
+  String? qualityOfEquipment;
+  int? parkingPlaces;
 
   RealEstateListing({
     required this.title,
@@ -38,34 +41,39 @@ class RealEstateListing {
     required this.noOfBathrooms,
     required this.pictures,
     required this.furnished,
-    required this.garage,
+    this.garage,
     required this.landAreaInTotal,
     required this.occupiedLandArea,
+    this.equipment,
+    this.qualityOfEquipment,
+    this.parkingPlaces,
   });
 
   factory RealEstateListing.fromJson(Map<String, dynamic> json) {
     return RealEstateListing(
-      title: json['title'],
-      address: json['address'],
-      price: json['price'],
-      country: json['country'],
-      city: json['city'],
-      state: json['state'],
-      description: json['description'],
-      requestType: json['requestType'],
-      condition: json['condition'],
-      propertyType: json['propertyType'],
-      propertyCategory: json['propertyCategory'],
-      propertySubCategory: json['propertySubCategory'],
-      sellingType: json['sellingType'],
-      noOfBeds: json['noOfBeds'],
-      noOfBathrooms: json['noOfBathrooms'],
-      pictures: List<String>.from(json['pictures']),
-      furnished: json['furnished'],
-      garage: json['garage'],
-      landAreaInTotal: json['landAreaInTotal'],
-      occupiedLandArea: json['occupiedLandArea'],
-    );
+        title: json['title'],
+        address: json['address'],
+        price: json['price'],
+        country: json['country'],
+        city: json['city'],
+        state: json['state'],
+        description: json['description'],
+        requestType: json['requestType'],
+        condition: json['condition'],
+        propertyType: json['propertyType'],
+        propertyCategory: json['propertyCategory'],
+        propertySubCategory: json['propertySubCategory'],
+        sellingType: json['sellingType'],
+        noOfBeds: json['noOfBeds'],
+        noOfBathrooms: json['noOfBathrooms'],
+        pictures: List<String>.from(json['pictures']),
+        furnished: json['furnished'],
+        garage: json['garage'],
+        landAreaInTotal: json['landAreaInTotal'],
+        occupiedLandArea: json['occupiedLandArea'],
+        equipment: json['equipment'],
+        qualityOfEquipment: json['qualityOfEquipment'],
+        parkingPlaces: json['parkingPlaces']);
   }
 
   Map<String, dynamic> toJson() {
@@ -90,6 +98,9 @@ class RealEstateListing {
       'garage': garage,
       'landAreaInTotal': landAreaInTotal,
       'occupiedLandArea': occupiedLandArea,
+      'equipment': equipment,
+      'qualityOfEquipment': qualityOfEquipment,
+      'parkingPlaces': parkingPlaces,
     };
   }
 }
