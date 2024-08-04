@@ -54,6 +54,10 @@ class AppStyles {
     color: AppColors.black,
     fontSize: 14,
   );
+  static const greyText = TextStyle(
+    color: AppColors.primaryGrey,
+    fontSize: 14,
+  );
   static const supportiveText = TextStyle(
     color: AppColors.primaryGrey,
     fontSize: 12,

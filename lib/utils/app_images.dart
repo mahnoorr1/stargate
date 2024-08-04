@@ -27,4 +27,5 @@ class AppIcons {
   static const String location = 'assets/icons/location.svg';
   static const String cash = 'assets/images/Cash.png';
   static const String medal = 'assets/icons/medal.svg';
+  static const String euro = 'assets/icons/euro.svg';
 }

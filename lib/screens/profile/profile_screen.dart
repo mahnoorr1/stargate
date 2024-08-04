@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/user.dart';
+import 'edit_profile_screen.dart';
 import 'package:stargate/screens/profile/widgets/post_card.dart';
 import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/widgets/buttons/membership_button.dart';
@@ -152,19 +153,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Positioned(
             top: 16.w,
             right: 12.w,
-            child: Container(
-              height: 40.w,
-              width: 40.w,
-              margin: EdgeInsets.all(6.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.w),
+            child: InkWell(
+              onTap: () => Navigator.of(
+                context,
+                rootNavigator: false,
+              ).push(
+                MaterialPageRoute(
+                  builder: (context) => const EditProfile(),
                 ),
-                color: AppColors.lightBlue.withOpacity(0.5),
               ),
-              child: const Icon(
-                Icons.edit,
-                color: Colors.white,
+              child: Container(
+                height: 40.w,
+                width: 40.w,
+                margin: EdgeInsets.all(6.w),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20.w),
+                  ),
+                  color: AppColors.lightBlue.withOpacity(0.5),
+                ),
+                child: const Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

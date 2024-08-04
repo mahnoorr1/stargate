@@ -8,8 +8,16 @@ List<User> users = [
       image:
           'https://images.stockcake.com/public/0/3/1/0316b537-d898-429c-8d78-099e7df7a140_large/masked-urban-individual-stockcake.jpg',
       services: [
-        Service(userType: UserType.investor, experience: 5),
-        Service(userType: UserType.agent, experience: 3),
+        Service(
+          userType: UserType.investor,
+          experience: 5,
+          serviceSubcategory: 'pro investor',
+        ),
+        Service(
+          userType: UserType.agent,
+          experience: 3,
+          serviceSubcategory: 'house seller',
+        ),
       ],
       address: 'HNO 654, street 2, West, Green Garden, Abogado',
       city: 'Anytown',
@@ -87,7 +95,12 @@ List<RealEstateListing> listings = [
     parkingPlaces: 2,
   ),
 ];
-
+List<String> servicesList = [
+  'Investor',
+  'Agent',
+  'Notary',
+  'Lawyer',
+];
 List<String> propertyTypes = ['commercial', 'conventional'];
 List<String> sellingTypes = ['purchase', 'rental'];
 List<String> conditions = ['new', 'old', 'renovating'];
@@ -97,3 +110,9 @@ List<String> commercialPropertyCategory = ['Hotel'];
 List<String> conventionalPropertyCategory = ['Rental Building'];
 List<String> commercialPropertySubcategory = ['Town House'];
 List<String> conventionalPropertySubcategory = ['Small House'];
+List<String> experiencesList = [
+  'Select Experience',
+  'less than 5 years',
+  '5 years',
+  'more than 5 years',
+];
