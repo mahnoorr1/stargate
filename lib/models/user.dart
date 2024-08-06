@@ -9,6 +9,7 @@ class User {
   String country;
   bool verified;
   String email;
+  String membership;
 
   User({
     required this.name,
@@ -19,6 +20,7 @@ class User {
     required this.country,
     this.verified = false,
     required this.email,
+    required this.membership,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -33,6 +35,7 @@ class User {
       country: json['country'],
       verified: json['verified'],
       email: json['email'],
+      membership: json['membership'],
     );
   }
 
@@ -46,6 +49,7 @@ class User {
       'country': country,
       'verified': verified,
       'email': email,
+      'membership': membership,
     };
   }
 

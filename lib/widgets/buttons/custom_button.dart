@@ -10,6 +10,7 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final bool? nextIcon;
   final VoidCallback? onPressed;
+  final Color? color;
   const CustomButton({
     super.key,
     required this.text,
@@ -17,6 +18,7 @@ class CustomButton extends StatelessWidget {
     this.nextIcon = false,
     this.height,
     this.onPressed,
+    this.color,
   });
 
   @override
@@ -27,7 +29,7 @@ class CustomButton extends StatelessWidget {
         width: width ?? 360.w,
         height: height ?? 50.w,
         decoration: ShapeDecoration(
-          color: AppColors.blue,
+          color: color ?? AppColors.blue,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.r),
           ),

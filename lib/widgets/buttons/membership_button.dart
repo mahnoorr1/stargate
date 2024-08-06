@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/screens/profile/membership_screen.dart';
 
 class MembershipButton extends StatefulWidget {
   final Color textColor;
@@ -15,7 +16,14 @@ class MembershipButton extends StatefulWidget {
 
 class _MembershipButtonState extends State<MembershipButton> {
   bool isHovered = false;
-  void onMembershipTap() {}
+  void onMembershipTap() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const MembershipScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(

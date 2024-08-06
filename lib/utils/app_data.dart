@@ -1,43 +1,48 @@
+import 'package:stargate/models/membership.dart';
 import 'package:stargate/models/real_estate_listing.dart';
 import 'package:stargate/models/user.dart';
 import 'package:stargate/utils/app_enums.dart';
 
 List<User> users = [
   User(
-      name: 'Syeda Mahnoor Hashmi',
-      image:
-          'https://images.stockcake.com/public/0/3/1/0316b537-d898-429c-8d78-099e7df7a140_large/masked-urban-individual-stockcake.jpg',
-      services: [
-        Service(
-          userType: UserType.investor,
-          experience: 5,
-          serviceSubcategory: 'pro investor',
-        ),
-        Service(
-          userType: UserType.agent,
-          experience: 3,
-          serviceSubcategory: 'house seller',
-        ),
-      ],
-      address: 'HNO 654, street 2, West, Green Garden, Abogado',
-      city: 'Anytown',
-      country: 'USA',
-      email: 'mahnoorhashmi4000@gmail.com'),
+    name: 'Syeda Mahnoor Hashmi',
+    image:
+        'https://images.stockcake.com/public/0/3/1/0316b537-d898-429c-8d78-099e7df7a140_large/masked-urban-individual-stockcake.jpg',
+    services: [
+      Service(
+        userType: UserType.investor,
+        experience: 5,
+        serviceSubcategory: 'pro investor',
+      ),
+      Service(
+        userType: UserType.agent,
+        experience: 3,
+        serviceSubcategory: 'house seller',
+      ),
+    ],
+    address: 'HNO 654, street 2, West, Green Garden, Abogado',
+    city: 'Anytown',
+    country: 'USA',
+    email: 'mahnoorhashmi4000@gmail.com',
+    membership: "Special Member",
+  ),
   User(
-      name: 'Hashim',
-      image:
-          'https://images.stockcake.com/public/0/3/1/0316b537-d898-429c-8d78-099e7df7a140_large/masked-urban-individual-stockcake.jpg',
-      services: [
-        Service(
-            userType: UserType.lawyer,
-            experience: 4,
-            serviceSubcategory: "law enforcement"),
-        Service(userType: UserType.notary, experience: 3),
-      ],
-      address: '123 Main St',
-      city: 'Anytown',
-      country: 'USA',
-      email: 'hashimamla123@gmail.com'),
+    name: 'Hashim',
+    image:
+        'https://images.stockcake.com/public/0/3/1/0316b537-d898-429c-8d78-099e7df7a140_large/masked-urban-individual-stockcake.jpg',
+    services: [
+      Service(
+          userType: UserType.lawyer,
+          experience: 4,
+          serviceSubcategory: "law enforcement"),
+      Service(userType: UserType.notary, experience: 3),
+    ],
+    address: '123 Main St',
+    city: 'Anytown',
+    country: 'USA',
+    email: 'hashimamla123@gmail.com',
+    membership: 'Free Trial',
+  ),
 ];
 
 List<RealEstateListing> listings = [
@@ -115,4 +120,36 @@ List<String> experiencesList = [
   'less than 5 years',
   '5 years',
   'more than 5 years',
+];
+
+List<Membership> memberships = [
+  Membership(
+    tag: "Free Trial",
+    points: [
+      "access to real estate section",
+      "view property listing and inquiries",
+      "post property listing and inquiries",
+    ],
+  ),
+  Membership(
+    tag: "Regular",
+    points: [
+      "free trial privileges",
+      "access to listed service providers",
+    ],
+  ),
+  Membership(
+    tag: "Premium",
+    points: [
+      "regular privileges",
+      "access to listed investors",
+    ],
+  ),
+  Membership(
+    tag: "Special Member",
+    points: [
+      "premium privileges",
+      "access to view and contact all users",
+    ],
+  ),
 ];

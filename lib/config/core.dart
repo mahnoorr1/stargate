@@ -10,7 +10,7 @@ class AppColors {
   static const darkBlue = Color(0xFF003B74);
   static const lightBlue = Color.fromRGBO(206, 220, 240, 0.5);
   static const white = Colors.white;
-  static const backgroundColor = Color(0xFFFDFEFF);
+  static const backgroundColor = Color.fromARGB(255, 246, 247, 249);
 }
 
 void easyLoading() {

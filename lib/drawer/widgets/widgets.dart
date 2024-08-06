@@ -16,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.backgroundColor,
       leading: GestureDetector(
         onTap: () => Navigator.pushNamedAndRemoveUntil(
-            context, '/drawer', (route) => false),
+            context, '/navbar', (route) => false),
         child: Container(
           height: 20.w,
           width: 20.w,
