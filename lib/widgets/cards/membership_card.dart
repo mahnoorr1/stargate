@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/membership.dart';
-import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
 
 class MembershipCard extends StatelessWidget {
