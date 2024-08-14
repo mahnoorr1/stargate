@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/drawer/widgets/faq_card.dart';
 import 'package:stargate/drawer/widgets/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stargate/utils/app_data.dart';
 
 class FAQScreen extends StatelessWidget {
   const FAQScreen({super.key});
@@ -13,9 +15,17 @@ class FAQScreen extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         color: AppColors.backgroundColor,
-        child: const Column(
+        child: Column(
           children: [
-            Heading(heading: "Frequently Asked Questions"),
+            const Heading(heading: "Frequently Asked \nQuestions"),
+            SizedBox(
+              height: 18.w,
+            ),
+            ...faqs.map(
+              (faq) => FAQCard(
+                faq: faq,
+              ),
+            ),
           ],
         ),
       ),

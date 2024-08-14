@@ -43,11 +43,14 @@ class Heading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.8,
-      child: Text(
-        heading,
-        style: AppStyles.heading2,
-        maxLines: 2,
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          heading,
+          style: AppStyles.heading2,
+          maxLines: 2,
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:stargate/models/faq.dart';
 import 'package:stargate/models/membership.dart';
 import 'package:stargate/models/real_estate_listing.dart';
 import 'package:stargate/models/user.dart';
@@ -152,4 +153,14 @@ List<Membership> memberships = [
       "access to view and contact all users",
     ],
   ),
+];
+
+List<FAQ> faqs = [
+  FAQ(
+      question: "Can i contact any member of the app being free member?",
+      textReply:
+          "No, all the membership specifications can be read on the membership page and you can request for other memberships to get access to specific features."),
+  FAQ(
+      question: "What is this app about?",
+      videoURL: "https://www.youtube.com/watch?v=X3i9SErMGD0"),
 ];
