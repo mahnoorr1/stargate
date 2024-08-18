@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void onSignIn() async {
     String? loggedIn = await loginUser(email.text, password.text);
-    if (loggedIn != null) {
+    if (loggedIn == 'token') {
       setState(() {
         login = true;
       });
@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.popAndPushNamed(context, '/navbar');
     } else {
       showToast(
-        message: "Login failed",
+        message: loggedIn!,
         context: context,
         isAlert: true,
         color: Colors.redAccent,

@@ -20,12 +20,15 @@ Future<String?> loginUser(String email, String pass) async {
       final Map<String, dynamic> responseData = jsonDecode(jsonString);
       String? token = responseData['data']['accessToken'] as String?;
       storeAccessToken(token!);
-      return token;
+      return 'token';
     } else {
-      return null;
+      final errorResponse = await response.stream.bytesToString();
+      final Map<String, dynamic> errorData = jsonDecode(errorResponse);
+      final String errorMessage = errorData['message'] as String;
+      return errorMessage;
     }
   } catch (e) {
-    return null;
+    return e.toString();
   }
 }
 
@@ -57,8 +60,12 @@ Future<String?> registerUser(
       String? token = responseData['data']['accessToken'] as String?;
       storeAccessToken(token!);
       return 'token';
+    } else {
+      final errorResponse = await response.stream.bytesToString();
+      final Map<String, dynamic> errorData = jsonDecode(errorResponse);
+      final String errorMessage = errorData['message'] as String;
+      return errorMessage;
     }
-    return 'Login Failed';
   } catch (e) {
     return e.toString();
   }

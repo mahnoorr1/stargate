@@ -11,12 +11,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    Builder(builder: (context) {
-      return MultiProvider(
-        providers: [],
-        child: const MyApp(),
-      );
-    }),
+    // Builder(builder: (context) {
+    //   return MultiProvider(
+    //     providers: [],
+    //     child: const MyApp(),
+    //   );
+    // }),
+    const MyApp(),
   );
 }
 
