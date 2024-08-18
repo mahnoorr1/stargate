@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
+import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/dropdown.dart';
 import 'package:stargate/widgets/inputfields/underlined_textfield.dart';
 
@@ -30,13 +34,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
     'Other'
   ];
 
-  void onSignUp() {}
+  bool registerSuccess = false;
+
   void onSignIn() {
     Navigator.popAndPushNamed(context, '/login');
   }
 
   @override
   Widget build(BuildContext context) {
+    void onSignUp() async {
+      String? register = await registerUser(
+          name.text, email.text, password.text, profession.text);
+      if (register == 'token') {
+        registerSuccess = true;
+        Navigator.pushReplacementNamed(context, '/drawer');
+      } else {
+        showToast(
+            message: register!,
+            context: context,
+            color: Colors.redAccent,
+            isAlert: true);
+      }
+    }
+
     return Container(
       height: double.infinity,
       width: double.infinity,
@@ -143,7 +163,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const Spacer(),
                         CustomButton(
                           text: "Sign Up",
-                          onPressed: onSignUp,
+                          onPressed: () {
+                            if (password.text != confirmPassword.text) {
+                              showToast(
+                                message: "Password does not match",
+                                context: context,
+                                isAlert: true,
+                                color: Colors.redAccent,
+                              );
+                            }
+                            onSignUp();
+                          },
                         ),
                       ],
                     ),

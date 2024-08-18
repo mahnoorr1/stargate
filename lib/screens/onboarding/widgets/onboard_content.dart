@@ -68,7 +68,7 @@ class OnboardContent extends StatelessWidget {
             child: Padding(
                 padding: EdgeInsets.only(bottom: 30.w),
                 child: NextButton(onPressed: onNextButtonTap, index: index)),
-          )
+          ),
         ],
       ),
     );

@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
+import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/underlined_textfield.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,11 +19,28 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  bool login = false;
 
   void onForgetPassword() {}
 
-  void onSignIn() {
-    Navigator.popAndPushNamed(context, '/navbar');
+  void onSignIn() async {
+    String? loggedIn = await loginUser(email.text, password.text);
+    if (loggedIn != null) {
+      setState(() {
+        login = true;
+      });
+    }
+    if (login) {
+      showToast(message: "Login successful", context: context);
+      Navigator.popAndPushNamed(context, '/navbar');
+    } else {
+      showToast(
+        message: "Login failed",
+        context: context,
+        isAlert: true,
+        color: Colors.redAccent,
+      );
+    }
   }
 
   void onSignUp() {
@@ -114,9 +135,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const Spacer(),
                         CustomButton(
-                          text: "Sign In",
-                          onPressed: onSignIn,
-                        ),
+                            text: "Sign In",
+                            onPressed: () {
+                              onSignIn();
+                            }),
                       ],
                     ),
                   ),

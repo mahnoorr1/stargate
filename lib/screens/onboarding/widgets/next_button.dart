@@ -46,7 +46,11 @@ class _NextButtonState extends State<NextButton> {
                   ? const SizedBox()
                   : GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, '/login');
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/login',
+                          (Route<dynamic> route) => false,
+                        );
                       },
                       child: Text(
                         "Skip",

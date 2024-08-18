@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/screens/onboarding/widgets/onboard_content.dart';
 
 import 'onboarding3.dart';
@@ -12,6 +13,11 @@ class OnBoardingScreen2 extends StatefulWidget {
 }
 
 class _OnBoardingScreen2State extends State<OnBoardingScreen2> {
+  void storeOnboardToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('onboardDone', true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +33,7 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen2> {
           description: onboardData[1].description,
           index: 1,
           onNextButtonTap: () {
+            storeOnboardToken();
             Navigator.push(
                 context,
                 MaterialPageRoute(

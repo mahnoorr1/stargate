@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/screens/onboarding/widgets/onboard_content.dart';
 
 class OnBoardingScreen3 extends StatefulWidget {
@@ -10,6 +11,11 @@ class OnBoardingScreen3 extends StatefulWidget {
 }
 
 class _OnBoardingScreen3State extends State<OnBoardingScreen3> {
+  void storeOnboardToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('onboardDone', true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +31,7 @@ class _OnBoardingScreen3State extends State<OnBoardingScreen3> {
           description: onboardData[2].description,
           index: 2,
           onNextButtonTap: () {
+            storeOnboardToken();
             Navigator.pushNamedAndRemoveUntil(
               context,
               '/login',

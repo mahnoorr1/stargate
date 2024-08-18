@@ -1,16 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stargate/providers/app_provider.dart';
 import 'package:stargate/routes/app_routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    Builder(builder: (context) {
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => OnboardingProvider()),
+        ],
+        child: const MyApp(),
+      );
+    }),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool onboardDone = false;
+  String accessToken = '';
+  String route = '';
+  bool loaded = false;
+
+  void checkOnBoardCheck() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      onboardDone = prefs.getBool('onboardDone') ?? false;
+      accessToken = prefs.getString('accessToken') ?? '';
+    });
+    setState(() {});
+  }
+
+  String initialRoute() {
+    if (accessToken != '') {
+      AppRoutes.drawer;
+    } else if (accessToken == '' && onboardDone == true) {
+      AppRoutes.login;
+    } else {
+      AppRoutes.onboarding;
+    }
+    return AppRoutes.onboarding;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkOnBoardCheck();
+    setState(() {
+      route = initialRoute();
+      loaded = true;
+    });
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +74,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           builder: EasyLoading.init(),
           title: 'Stargate',
-          initialRoute: AppRoutes.onboarding,
+          initialRoute: loaded ? route : null,
           debugShowCheckedModeBanner: false,
           routes: AppRoutes.routes,
           theme: ThemeData(

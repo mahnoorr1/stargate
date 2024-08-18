@@ -69,3 +69,7 @@ class AppStyles {
     offset: const Offset(0, 0),
   );
 }
+
+class GlobalVariables {
+  static const server = 'http://localhost:3000/api/v1/';
+}

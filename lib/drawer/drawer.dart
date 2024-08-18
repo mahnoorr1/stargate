@@ -5,8 +5,10 @@ import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/screens/home/home_screen.dart';
+import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stargate/widgets/custom_toast.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -155,10 +157,17 @@ class _SliderView extends StatelessWidget {
                 SizedBox(
                   width: 20.w,
                 ),
-                const Text('Logout',
-                    style: TextStyle(
-                      color: AppColors.blue,
-                    )),
+                GestureDetector(
+                  onTap: () {
+                    deleteAccessToken();
+                    Navigator.popAndPushNamed(context, '/login');
+                    showToast(message: "Logged Out", context: context);
+                  },
+                  child: const Text('Logout',
+                      style: TextStyle(
+                        color: AppColors.blue,
+                      )),
+                ),
               ],
             ),
           ),
