@@ -13,9 +13,7 @@ void main() {
   runApp(
     Builder(builder: (context) {
       return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => OnboardingProvider()),
-        ],
+        providers: [],
         child: const MyApp(),
       );
     }),
@@ -46,13 +44,13 @@ class _MyAppState extends State<MyApp> {
 
   String initialRoute() {
     if (accessToken != '') {
-      AppRoutes.drawer;
-    } else if (accessToken == '' && onboardDone == true) {
-      AppRoutes.login;
+      return AppRoutes.drawer;
+    } else if (accessToken == '' ||
+        accessToken.isEmpty && onboardDone == true) {
+      return AppRoutes.login;
     } else {
-      AppRoutes.onboarding;
+      return AppRoutes.onboarding;
     }
-    return AppRoutes.onboarding;
   }
 
   @override
