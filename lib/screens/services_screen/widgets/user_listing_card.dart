@@ -30,20 +30,22 @@ class ServiceProviderListingCard extends StatelessWidget {
           borderRadius: BorderRadius.all(
             Radius.circular(30.w),
           ),
-          color: Colors.grey[100],
-          image: DecorationImage(
-            image: NetworkImage(
-              user.image,
-            ),
-            fit: BoxFit.cover,
-          ),
+          color: AppColors.lightGrey,
+          image: user.image != null
+              ? DecorationImage(
+                  image: NetworkImage(
+                    user.image!,
+                  ),
+                  fit: BoxFit.cover,
+                )
+              : null,
         ),
         child: Column(
-          mainAxisAlignment: user.verified
+          mainAxisAlignment: user.verified ?? false
               ? MainAxisAlignment.spaceBetween
               : MainAxisAlignment.end,
           children: [
-            user.verified
+            user.verified ?? false
                 ? SizedBox(
                     width: double.infinity,
                     child: Align(

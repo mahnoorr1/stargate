@@ -332,7 +332,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             Text.rich(
               TextSpan(
                 text:
-                    "${widget.listing.landAreaInTotal.toInt() + widget.listing.occupiedLandArea.toInt()} m",
+                    "${widget.listing.landAreaInTotal!.toInt() + widget.listing.occupiedLandArea!.toInt()} m",
                 style: AppStyles.normalText.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -361,7 +361,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             const Spacer(),
             Text.rich(
               TextSpan(
-                text: "${widget.listing.landAreaInTotal.toInt()} m",
+                text: "${widget.listing.landAreaInTotal!.toInt()} m",
                 style: AppStyles.normalText.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -390,7 +390,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             const Spacer(),
             Text.rich(
               TextSpan(
-                text: "${widget.listing.occupiedLandArea.toInt()} m",
+                text: "${widget.listing.occupiedLandArea!.toInt()} m",
                 style: AppStyles.normalText.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -418,7 +418,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             ),
             const Spacer(),
             Text(
-              widget.listing.furnished ? 'yes' : 'no',
+              widget.listing.furnished! ? 'yes' : 'no',
               style: AppStyles.normalText.copyWith(
                 fontWeight: FontWeight.bold,
               ),

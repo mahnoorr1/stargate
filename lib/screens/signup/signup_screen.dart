@@ -47,7 +47,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           name.text, email.text, password.text, profession.text);
       if (register == 'token') {
         registerSuccess = true;
-        Navigator.pushReplacementNamed(context, '/drawer');
+        Navigator.pushReplacementNamed(context, '/navbar');
       } else {
         showToast(
             message: register!,

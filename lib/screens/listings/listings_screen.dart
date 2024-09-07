@@ -1,14 +1,19 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:stargate/config/core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stargate/cubit/real_estate_listing/cubit.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
 import 'package:stargate/screens/listings/widgets/listing_card.dart';
 import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
 import 'package:stargate/widgets/buttons/custom_tab_button.dart';
 import 'package:stargate/widgets/buttons/filter_button.dart';
+import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/country_textfield.dart';
 import 'package:stargate/widgets/inputfields/outlined_dropdown.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -25,6 +30,33 @@ class _ListingsScreenState extends State<ListingsScreen> {
   TextEditingController country = TextEditingController();
   TextEditingController state = TextEditingController();
   TextEditingController city = TextEditingController();
+  SfRangeValues _priceRange = const SfRangeValues(0.0, 100000000.0);
+  String selectedPropertyType = '';
+  String selectedPropertyCategory = '';
+  String selectedPropertySubcategory = '';
+  String selectedRequestType = '';
+  String selectedCondition = '';
+  String selectedSellingType = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getAllListings();
+  }
+
+  void getAllListings() async {
+    RealEstateListingsCubit cubit =
+        BlocProvider.of<RealEstateListingsCubit>(context);
+    try {
+      await cubit.getAllRealEstateListings();
+    } catch (e) {
+      showToast(
+        message: "Unable to fetch Listings",
+        context: context,
+      );
+    }
+  }
+
   void resetFilters() {
     setState(() {
       country.clear();
@@ -38,20 +70,6 @@ class _ListingsScreenState extends State<ListingsScreen> {
       selectedSellingType = '';
       filterApplied = false;
     });
-  }
-
-  SfRangeValues _priceRange = const SfRangeValues(0.0, 100000000.0);
-  String selectedPropertyType = '';
-  String selectedPropertyCategory = '';
-  String selectedPropertySubcategory = '';
-  String selectedRequestType = '';
-  String selectedCondition = '';
-  String selectedSellingType = '';
-  List<String> categoryList() {
-    if (selectedPropertyCategory == 'commercial') {
-      return commercialPropertyCategory;
-    }
-    return conventionalPropertyCategory;
   }
 
   @override
@@ -69,31 +87,48 @@ class _ListingsScreenState extends State<ListingsScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(10.w),
-        child: SingleChildScrollView(
-          child: StaggeredGrid.count(
-            crossAxisCount: 2,
-            crossAxisSpacing: 8.w,
-            mainAxisSpacing: 8.w,
-            children: List.generate(listings.length + 1, (index) {
-              if (index == 1) {
-                return FilterButton(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return bottomSheet();
-                      },
+        child: BlocBuilder<RealEstateListingsCubit, RealEstateListingsState>(
+          builder: (context, state) {
+            if (state is GetAllRealEstateListingsLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is GetAllRealEstateListingsFailure) {
+              return Center(child: Text(state.errorMessage));
+            } else if (state is GetAllRealEstateListingsSuccess) {
+              return state.listings.isEmpty
+                  ? const Center(
+                      child: Text("No Property Listing Available"),
+                    )
+                  : SingleChildScrollView(
+                      child: StaggeredGrid.count(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8.w,
+                        mainAxisSpacing: 8.w,
+                        children:
+                            List.generate(state.listings.length + 1, (index) {
+                          if (index == 1) {
+                            return FilterButton(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return bottomSheet();
+                                  },
+                                );
+                              },
+                            );
+                          } else {
+                            int itemIndex = index > 1 ? index - 1 : index;
+                            return ListingCard(
+                              listing: state.listings[itemIndex],
+                            );
+                          }
+                        }),
+                      ),
                     );
-                  },
-                );
-              } else {
-                int itemIndex = index > 1 ? index - 1 : index;
-                return ListingCard(
-                  listing: listings[itemIndex],
-                );
-              }
-            }),
-          ),
+            } else {
+              return const Center(child: Text("No listings found."));
+            }
+          },
         ),
       ),
     );
@@ -143,9 +178,7 @@ class _ListingsScreenState extends State<ListingsScreen> {
                 state: state,
                 city: city,
               ),
-              SizedBox(
-                height: 12.w,
-              ),
+              SizedBox(height: 12.w),
               Text(
                 "Price Range",
                 style: AppStyles.normalText.copyWith(

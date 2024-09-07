@@ -37,14 +37,18 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                         bottomLeft: Radius.circular(30.w),
                         bottomRight: Radius.circular(30.w),
                       ),
-                      child: Image(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.45,
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                          widget.user.image,
-                        ),
-                      ),
+                      child: widget.user.image != null
+                          ? Image(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height * 0.45,
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                widget.user.image!,
+                              ),
+                            )
+                          : Container(
+                              color: AppColors.lightGrey,
+                            ),
                     ),
                     Container(
                       margin: EdgeInsets.only(
@@ -56,7 +60,7 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                         children: [
                           ...widget.user.services.map(
                             (service) => BubbleTextButton(
-                              text: service.userType.name,
+                              text: service.details['name'],
                               textStyle: AppStyles.heading4.copyWith(
                                 color: AppColors.white,
                               ),
@@ -103,11 +107,14 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                                                   .size
                                                   .width *
                                               0.65,
-                                          child: Text(
-                                            widget.user.address,
-                                            maxLines: 2,
-                                            style: AppStyles.supportiveText,
-                                          ),
+                                          child: widget.user.address != null
+                                              ? Text(
+                                                  widget.user.address!,
+                                                  maxLines: 2,
+                                                  style:
+                                                      AppStyles.supportiveText,
+                                                )
+                                              : const Text(""),
                                         ),
                                       ],
                                     )
@@ -237,9 +244,9 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
         SizedBox(height: 8.w),
         ...widget.user.services.map(
           (service) => ExperienceCard(
-            title: service.userType.name,
-            subTitle: service.serviceSubcategory,
-            noOfYears: service.experience,
+            title: service.details['name'],
+            subTitle: service.details['specialization'],
+            noOfYears: service.details['yearsOfExperience'],
           ),
         ),
         SizedBox(height: 12.w),
@@ -312,9 +319,9 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
         SizedBox(height: 8.w),
         ...widget.user.services.map(
           (service) => ExperienceCard(
-            title: service.userType.name,
-            subTitle: service.serviceSubcategory,
-            noOfYears: service.experience,
+            title: service.details['name'],
+            subTitle: service.details['specialization'],
+            noOfYears: service.details['yearsOfExperience'],
           ),
         ),
         SizedBox(height: 12.w),

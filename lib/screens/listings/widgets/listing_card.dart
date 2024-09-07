@@ -46,8 +46,8 @@ class ListingCard extends StatelessWidget {
           children: [
             AddressMorphismRectangle(
               country: listing.country,
-              state: listing.state,
-              city: listing.city,
+              state: listing.state ?? '',
+              city: listing.city ?? '',
             ),
           ],
         ),

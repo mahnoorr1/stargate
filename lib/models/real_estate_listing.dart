@@ -1,35 +1,39 @@
 class RealEstateListing {
+  String? id;
   String title;
   String address;
   double price;
   String country;
-  String city;
-  String state;
+  String? city;
+  String? state;
   String description;
-  String requestType; //'offer' or 'request'
+  String requestType;
   String condition;
-  String propertyType; //'conventional' or 'commercial'
-  String propertyCategory; //several types
+  String propertyType;
+  String propertyCategory;
   String propertySubCategory;
-  String sellingType; //'rental' or 'purchase'
-  int noOfBeds;
+  String sellingType;
+  int? noOfBeds;
+  int? rooms;
   int noOfBathrooms;
   List<String> pictures;
-  bool furnished;
+  bool? furnished;
   bool? garage;
-  double landAreaInTotal;
-  double occupiedLandArea;
+  double? landAreaInTotal;
+  double? occupiedLandArea;
+  double? buildableArea;
   String? equipment;
   String? qualityOfEquipment;
   int? parkingPlaces;
 
   RealEstateListing({
+    this.id,
     required this.title,
     required this.address,
     required this.price,
     required this.country,
-    required this.city,
-    required this.state,
+    this.city,
+    this.state,
     required this.description,
     required this.requestType,
     required this.condition,
@@ -37,13 +41,15 @@ class RealEstateListing {
     required this.propertyCategory,
     required this.propertySubCategory,
     required this.sellingType,
-    required this.noOfBeds,
+    this.noOfBeds,
+    this.rooms,
     required this.noOfBathrooms,
     required this.pictures,
-    required this.furnished,
+    this.furnished,
     this.garage,
-    required this.landAreaInTotal,
-    required this.occupiedLandArea,
+    this.landAreaInTotal,
+    this.occupiedLandArea,
+    this.buildableArea,
     this.equipment,
     this.qualityOfEquipment,
     this.parkingPlaces,
@@ -51,29 +57,33 @@ class RealEstateListing {
 
   factory RealEstateListing.fromJson(Map<String, dynamic> json) {
     return RealEstateListing(
-        title: json['title'],
-        address: json['address'],
-        price: json['price'],
-        country: json['country'],
-        city: json['city'],
-        state: json['state'],
-        description: json['description'],
-        requestType: json['requestType'],
-        condition: json['condition'],
-        propertyType: json['propertyType'],
-        propertyCategory: json['propertyCategory'],
-        propertySubCategory: json['propertySubCategory'],
-        sellingType: json['sellingType'],
-        noOfBeds: json['noOfBeds'],
-        noOfBathrooms: json['noOfBathrooms'],
-        pictures: List<String>.from(json['pictures']),
-        furnished: json['furnished'],
-        garage: json['garage'],
-        landAreaInTotal: json['landAreaInTotal'],
-        occupiedLandArea: json['occupiedLandArea'],
-        equipment: json['equipment'],
-        qualityOfEquipment: json['qualityOfEquipment'],
-        parkingPlaces: json['parkingPlaces']);
+      id: json['_id'],
+      title: json['title'] ?? '',
+      address: json['address'] ?? '',
+      price: json['price']?.toDouble() ?? 0.0,
+      country: json['country'] ?? '',
+      city: json['city'] ?? '',
+      state: json['district'] ?? '',
+      description: json['shortDescription'] ?? '',
+      requestType: json['offerType'] ?? '',
+      condition: json['condition'] ?? '',
+      propertyType: json['propertyType'] ?? '',
+      propertyCategory: json['investmentType'] ?? '',
+      propertySubCategory: json['investmentSubcategory'] ?? '',
+      sellingType: json['purchaseType'] ?? '',
+      noOfBeds: json['beds'] ?? 0,
+      rooms: json['rooms'] ?? 0,
+      noOfBathrooms: json['bathrooms'] ?? 0,
+      pictures: List<String>.from(json['pictures'] ?? []),
+      furnished: json['isFurnished'] ?? false,
+      garage: json['garage'] ?? false,
+      landAreaInTotal: json['landArea']?.toDouble() ?? 0.0,
+      occupiedLandArea: json['buildingUsageArea']?.toDouble() ?? 0.0,
+      buildableArea: json['buildableArea']?.toDouble() ?? 0.0,
+      equipment: json['equipment'] ?? '',
+      qualityOfEquipment: json['qualityOfEquipment'] ?? '',
+      parkingPlaces: json['numberOfParkingPlaces'] ?? 0,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -83,24 +93,26 @@ class RealEstateListing {
       'price': price,
       'country': country,
       'city': city,
-      'state': state,
-      'description': description,
-      'requestType': requestType,
+      'district': state,
+      'shortDescription': description,
+      'offerType': requestType,
       'condition': condition,
       'propertyType': propertyType,
-      'propertyCategory': propertyCategory,
-      'propertySubCategory': propertySubCategory,
-      'sellingType': sellingType,
-      'noOfBeds': noOfBeds,
-      'noOfBathrooms': noOfBathrooms,
+      'investmentType': propertyCategory,
+      'investmentSubCategory': propertySubCategory,
+      'purchaseType': sellingType,
+      'beds': noOfBeds,
+      'rooms': rooms,
+      'bathrooms': noOfBathrooms,
       'pictures': pictures,
-      'furnished': furnished,
+      'isFurnished': furnished,
       'garage': garage,
-      'landAreaInTotal': landAreaInTotal,
-      'occupiedLandArea': occupiedLandArea,
+      'landArea': landAreaInTotal,
+      'buildingUsageArea': occupiedLandArea,
+      'buildableArea': buildableArea,
       'equipment': equipment,
       'qualityOfEquipment': qualityOfEquipment,
-      'parkingPlaces': parkingPlaces,
+      'numberOfParkingPlaces': parkingPlaces,
     };
   }
 }

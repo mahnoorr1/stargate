@@ -1,12 +1,19 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:stargate/config/core.dart';
-import 'package:stargate/models/user.dart';
+import 'package:stargate/cubit/real_estate_listing/cubit.dart';
+import 'package:stargate/models/profile.dart';
+import 'package:stargate/widgets/custom_toast.dart';
+import 'package:stargate/widgets/loader/loader.dart';
+import 'package:stargate/widgets/screen/screen.dart';
 import 'edit_profile_screen.dart';
-import 'package:stargate/screens/profile/widgets/post_card.dart';
-import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/widgets/buttons/membership_button.dart';
+
+import 'widgets/post_card.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -16,9 +23,55 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  User user = users[0];
+  User? user;
+  bool loading = false;
+  @override
+  void initState() {
+    super.initState();
+    getProfile();
+  }
+
+  Future<void> getProfile() async {
+    RealEstateListingsCubit cubit =
+        BlocProvider.of<RealEstateListingsCubit>(context);
+    try {
+      await cubit.getUserProfileAlongWithProperty();
+    } catch (e) {
+      showToast(
+          message: "Unable to fetch details", context: context, isAlert: true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Screen(
+      overlayWidgets: [
+        BlocBuilder<RealEstateListingsCubit, RealEstateListingsState>(
+            builder: (context, state) {
+          if (state is UserProfileWithPropertyLoading) {
+            return const FullScreenLoader(
+              loading: true,
+            );
+          }
+          if (state is UserProfileWithPropertySuccess) {
+            return buildContent(state.user);
+          }
+          if (state is UserProfileWithPropertyFailure) {
+            showToast(
+              message: state.message,
+              context: context,
+              isAlert: true,
+              color: Colors.redAccent,
+            );
+          }
+          return const SizedBox();
+        })
+      ],
+      child: buildContent(user),
+    );
+  }
+
+  Widget buildContent(User? user) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Stack(
@@ -33,14 +86,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         bottomLeft: Radius.circular(30.w),
                         bottomRight: Radius.circular(30.w),
                       ),
-                      child: Image(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.45,
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                          user.image,
-                        ),
-                      ),
+                      child: user?.image != null
+                          ? Image(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height * 0.45,
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                user!.image!,
+                              ),
+                            )
+                          : Container(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height * 0.45,
+                              color: AppColors.lightGrey,
+                            ),
                     ),
                     Container(
                       margin: EdgeInsets.only(
@@ -75,7 +134,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   .width *
                                               0.65,
                                           child: Text(
-                                            user.name,
+                                            user?.name != null
+                                                ? user!.name
+                                                : "",
                                             style: AppStyles.heading3.copyWith(
                                               color: AppColors.white,
                                             ),
@@ -83,7 +144,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         Text(
-                                          user.email,
+                                          user?.email != null
+                                              ? user!.email
+                                              : "",
                                           style:
                                               AppStyles.supportiveText.copyWith(
                                             color: AppColors.white,
@@ -129,18 +192,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             height: 12.w,
                           ),
-                          SingleChildScrollView(
-                            child: StaggeredGrid.count(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 8.w,
-                              mainAxisSpacing: 8.w,
-                              children: List.generate(listings.length, (index) {
-                                return PostCard(
-                                  listing: listings[index],
-                                );
-                              }),
-                            ),
-                          ),
+                          // ignore: prefer_is_empty
+                          user?.properties!.length == 0 || user == null
+                              ? const SizedBox()
+                              : SingleChildScrollView(
+                                  child: StaggeredGrid.count(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 8.w,
+                                    mainAxisSpacing: 8.w,
+                                    children: List.generate(
+                                        user.properties!.length, (index) {
+                                      return PostCard(
+                                        listing: user.properties![index],
+                                      );
+                                    }),
+                                  ),
+                                ),
                         ],
                       ),
                     ),

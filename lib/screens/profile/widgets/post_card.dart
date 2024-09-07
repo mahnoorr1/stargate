@@ -1,15 +1,18 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'dart:ui';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/cubit/real_estate_listing/cubit.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/models/real_estate_listing.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/screens/listings/listing_details_screen.dart';
+import 'package:stargate/widgets/custom_toast.dart';
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   final RealEstateListing listing;
   const PostCard({
     super.key,
@@ -17,11 +20,31 @@ class PostCard extends StatelessWidget {
   });
 
   @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
+  Future<void> deleteListing() async {
+    RealEstateListingsCubit cubit =
+        BlocProvider.of<RealEstateListingsCubit>(context);
+    try {
+      await cubit.deleteListing(widget.listing.id!);
+      showToast(message: "Deletion Successful", context: context);
+    } catch (e) {
+      showToast(
+        message: "Unable to delete property",
+        context: context,
+        isAlert: true,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.of(context, rootNavigator: false).push(
         MaterialPageRoute(
-          builder: (context) => ListingDetailsScreen(listing: listing),
+          builder: (context) => ListingDetailsScreen(listing: widget.listing),
         ),
       ),
       child: Container(
@@ -35,7 +58,7 @@ class PostCard extends StatelessWidget {
           color: Colors.grey[100],
           image: DecorationImage(
             image: NetworkImage(
-              listing.pictures.first,
+              widget.listing.pictures.first,
             ),
             fit: BoxFit.cover,
           ),
@@ -49,17 +72,26 @@ class PostCard extends StatelessWidget {
                   Icons.notifications_none,
                   Colors.white,
                 ),
-                bubble(
-                  Icons.delete_outline_outlined,
-                  Colors.red,
+                GestureDetector(
+                  onTap: () {
+                    showDeleteConfirmationDialog(
+                      context,
+                      widget.listing.title,
+                      deleteListing,
+                    );
+                  },
+                  child: bubble(
+                    Icons.delete_outline_outlined,
+                    Colors.red,
+                  ),
                 ),
               ],
             ),
             const Spacer(),
             AddressMorphismRectangle(
-              country: listing.country,
-              state: listing.state,
-              city: listing.city,
+              country: widget.listing.country,
+              state: widget.listing.state ?? '',
+              city: widget.listing.city ?? '',
             ),
           ],
         ),
@@ -84,12 +116,43 @@ class PostCard extends StatelessWidget {
       ),
     );
   }
+
+  void showDeleteConfirmationDialog(
+      BuildContext context, String propertyName, VoidCallback onConfirm) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Deletion'),
+          content: Text(
+            'Are you sure you want to delete this property: "$propertyName"?',
+            style: const TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                onConfirm();
+              },
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class AddressMorphismRectangle extends StatelessWidget {
   final String country;
-  final String city;
-  final String state;
+  final String? city;
+  final String? state;
 
   const AddressMorphismRectangle({
     super.key,
@@ -144,16 +207,16 @@ class AddressMorphismRectangle extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              city.isNotEmpty
+                              city != null || city!.isNotEmpty
                                   ? Text(
-                                      city,
+                                      city!,
                                       style: AppStyles.heading4.copyWith(
                                         color: Colors.white,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     )
                                   : Text(
-                                      state,
+                                      state!,
                                       style: AppStyles.heading4.copyWith(
                                         color: Colors.white,
                                       ),

@@ -62,11 +62,14 @@ class _EditProfileState extends State<EditProfile> {
                     height: 100.w,
                     width: 100.w,
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          user.image,
-                        ),
-                      ),
+                      image: user.image != null
+                          ? DecorationImage(
+                              image: NetworkImage(
+                                user.image!,
+                              ),
+                            )
+                          : null,
+                      color: AppColors.lightGrey,
                       borderRadius: BorderRadius.circular(50.w),
                     ),
                   ),

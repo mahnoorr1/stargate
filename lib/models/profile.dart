@@ -1,3 +1,4 @@
+import 'package:stargate/models/real_estate_listing.dart';
 import 'package:stargate/utils/app_enums.dart';
 
 class User {
@@ -10,10 +11,9 @@ class User {
   String? country;
   bool? verified;
   String email;
-  String? membership;
   String? websiteLink;
   bool? restrictContact;
-  List<dynamic>? properties;
+  List<RealEstateListing>? properties;
 
   User({
     required this.id,
@@ -25,7 +25,6 @@ class User {
     required this.country,
     required this.email,
     this.verified,
-    this.membership,
     this.websiteLink,
     this.restrictContact,
     this.properties,
@@ -46,8 +45,9 @@ class User {
       verified: json['isRecommended'] ?? false,
       websiteLink: json['websiteLink'] ?? '',
       restrictContact: json['restrictContact'] ?? false,
-      properties: json['properties'] as List<dynamic>,
-      membership: json['membership'] ?? '',
+      properties: (json['properties'] as List<dynamic>? ?? [])
+          .map((property) => RealEstateListing.fromJson(property))
+          .toList(),
     );
   }
 
@@ -64,7 +64,7 @@ class User {
       'email': email,
       'websiteLink': websiteLink,
       'restrictContact': restrictContact,
-      'properties': properties?.toList(),
+      'properties': properties?.map((property) => property.toJson()).toList(),
     };
   }
 

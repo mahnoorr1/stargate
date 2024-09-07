@@ -1,15 +1,19 @@
-import 'dart:typed_data';
+// ignore_for_file: unnecessary_nullable_for_final_variable_declarations, use_build_context_synchronously
 
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
+import 'package:stargate/services/real_estate_listings.dart';
 import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/buttons/back_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
 import 'package:stargate/widgets/buttons/custom_tab_button.dart';
+import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/country_textfield.dart';
 import 'package:stargate/widgets/inputfields/outlined_dropdown.dart';
 import 'package:stargate/widgets/inputfields/textfield.dart';
@@ -36,7 +40,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   TextEditingController selectedLandArea = TextEditingController();
   TextEditingController selectedBuildingArea = TextEditingController();
   TextEditingController selectedBuildableArea = TextEditingController();
-  TextEditingController parkingPlaces = TextEditingController();
+  TextEditingController parkingPlaces = TextEditingController(text: '0');
 
   List<String> requestTypeList = ['offering', 'requesting'];
   String selectedRequestType = '';
@@ -51,7 +55,58 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   int price = 0;
   String furnished = '';
   String garage = '';
-  List<Uint8List> images = [];
+  List<String> images = [];
+
+  Future<void> onSendRequest() async {
+    String response = await addPropertyRequest(
+      title: title.text,
+      country: country.text,
+      district: state.text,
+      city: city.text,
+      shortDescription: description.text,
+      investmentType: selectedInvestmentType,
+      investmentSubcategory: selectedInvestmentSubcategory,
+      requestType: selectedRequestType,
+      condition: selectedCondition,
+      purchaseType: selectedPurchaseType,
+      propertyType: selectedPropertyType,
+      landArea: double.parse(selectedLandArea.text),
+      buildingUsageArea: double.parse(selectedBuildingArea.text),
+      buildableArea: double.parse(selectedBuildableArea.text),
+      bathrooms: bathroom,
+      beds: beds,
+      rooms: beds,
+      price: price.toDouble(),
+      equipment: equipment.text,
+      qualityOfEquipment: qualityOfEquipment.text,
+      isFurnished: furnished == 'yes' ? true : false,
+      garage: garage == 'yes' ? true : false,
+      pictures: images,
+      postedBy: '66c1c707286658a032898266',
+      parkingPlaces:
+          parkingPlaces.text.isNotEmpty ? int.parse(parkingPlaces.text) : 0,
+    );
+    if (response == 'Success') {
+      showToast(message: 'Listing added Successfully', context: context);
+      // Navigator.pop(context);
+    } else {
+      showToast(
+        message: response,
+        context: context,
+        isAlert: true,
+        color: Colors.redAccent,
+      );
+    }
+  }
+
+  Future<List<String>> _pickFile(BuildContext context) async {
+    final ImagePicker picker = ImagePicker();
+    final List<XFile>? pickedFiles = await picker.pickMultiImage();
+    if (pickedFiles != null) {
+      return pickedFiles.map((xfile) => xfile.path).toList();
+    }
+    return [];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -370,28 +425,44 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         SizedBox(
           height: 6.w,
         ),
-        Container(
-          height: 100.w,
-          width: 100.w,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.w),
-            border: Border.all(
-              width: 1,
-              color: AppColors.lightGrey,
+        GestureDetector(
+          onTap: () {
+            _pickFile(context).then((pickedImages) {
+              setState(() {
+                images.addAll(pickedImages);
+              });
+            });
+          },
+          child: Container(
+            height: 100.w,
+            width: 100.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.w),
+              border: Border.all(
+                width: 1,
+                color: AppColors.lightGrey,
+              ),
             ),
-          ),
-          child: const Center(
-            child: Icon(
-              Icons.add,
-              color: AppColors.blue,
+            child: const Center(
+              child: Icon(
+                Icons.add,
+                color: AppColors.blue,
+              ),
             ),
           ),
         ),
         SizedBox(
           height: 10.w,
         ),
-        const CustomButton(
-          text: "Post",
+        imagesContainer(context),
+        SizedBox(
+          height: 10.w,
+        ),
+        GestureDetector(
+          onTap: onSendRequest,
+          child: const CustomButton(
+            text: "Post",
+          ),
         ),
       ],
     );
@@ -516,31 +587,111 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         SizedBox(
           height: 6.w,
         ),
-        Container(
-          height: 100.w,
-          width: 100.w,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.w),
-            border: Border.all(
-              width: 1,
-              color: AppColors.lightGrey,
+        GestureDetector(
+          onTap: () {
+            _pickFile(context).then((pickedImages) {
+              setState(() {
+                images.addAll(pickedImages);
+              });
+            });
+          },
+          child: Container(
+            height: 100.w,
+            width: 100.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.w),
+              border: Border.all(
+                width: 1,
+                color: AppColors.lightGrey,
+              ),
             ),
-          ),
-          child: const Center(
-            child: Icon(
-              Icons.add,
-              color: AppColors.blue,
+            child: const Center(
+              child: Icon(
+                Icons.add,
+                color: AppColors.blue,
+              ),
             ),
           ),
         ),
         SizedBox(
           height: 10.w,
         ),
-        const CustomButton(
-          text: "Post",
+        imagesContainer(context),
+        SizedBox(
+          height: 10.w,
+        ),
+        GestureDetector(
+          onTap: onSendRequest,
+          child: const CustomButton(
+            text: "Post",
+          ),
         ),
       ],
     );
+  }
+
+  Widget imagesContainer(BuildContext context) {
+    return images.isNotEmpty
+        ? LayoutBuilder(
+            builder: (context, constraints) {
+              int rows = (images.length / 3).ceil();
+              double totalHeight =
+                  (rows * MediaQuery.of(context).size.width * 0.315) +
+                      ((rows - 1) * 4.0);
+
+              return SizedBox(
+                height: totalHeight,
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 4.0,
+                    mainAxisSpacing: 4.0,
+                  ),
+                  itemCount: images.length,
+                  itemBuilder: (context, index) {
+                    return Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.file(
+                            File(images[index]),
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        ),
+                        Positioned(
+                          right: 6,
+                          top: 6,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                images.removeAt(index);
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: AppColors.lightBlue,
+                              ),
+                              child: const Icon(
+                                Icons.close,
+                                color: AppColors.black,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              );
+            },
+          )
+        : const Center(
+            child: Text('No images selected'),
+          );
   }
 
   Widget sliderSelections() {
