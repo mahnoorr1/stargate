@@ -15,6 +15,7 @@ class CustomTextField extends StatefulWidget {
   final double? horizontalSpacing;
   final double? verticalSpacing;
   final int maxLines;
+  final Function(dynamic value)? onChanged;
 
   const CustomTextField({
     super.key,
@@ -28,6 +29,7 @@ class CustomTextField extends StatefulWidget {
     this.horizontalSpacing,
     this.verticalSpacing,
     this.maxLines = 1,
+    this.onChanged,
   });
 
   @override
@@ -64,6 +66,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
           horizontal: widget.horizontalSpacing ?? 20,
           vertical: widget.verticalSpacing ?? 7),
       child: TextField(
+        onChanged: (value) {
+          widget.onChanged!(value);
+        },
         focusNode: _focusNode,
         enabled: true,
         controller: widget.controller,

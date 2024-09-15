@@ -30,7 +30,12 @@ Future<List<RealEstateListing>> getAllListings() async {
           final List<dynamic> data = decodedData['data'];
           if (data.isNotEmpty) {
             final listings = data.map((json) {
-              return RealEstateListing.fromJson(json);
+              return RealEstateListing.fromJson(
+                json,
+                prefs.getString('email'),
+                prefs.getString('name'),
+                prefs.getString('id'),
+              );
             }).toList();
             return listings;
           } else {

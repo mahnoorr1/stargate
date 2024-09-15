@@ -14,6 +14,7 @@ class User {
   String? websiteLink;
   bool? restrictContact;
   List<RealEstateListing>? properties;
+  List<dynamic>? references;
 
   User({
     required this.id,
@@ -28,27 +29,29 @@ class User {
     this.websiteLink,
     this.restrictContact,
     this.properties,
+    this.references,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['_id'],
-      name: json['name'] ?? '',
-      image: json['profilePicture'] ?? '',
-      services: (json['professions'] as List<dynamic>? ?? [])
-          .map((profession) => Service.fromJson(profession))
-          .toList(),
-      address: json['address'] ?? '',
-      city: json['city'] ?? '',
-      country: json['country'] ?? '',
-      email: json['email'] ?? '',
-      verified: json['isRecommended'] ?? false,
-      websiteLink: json['websiteLink'] ?? '',
-      restrictContact: json['restrictContact'] ?? false,
-      properties: (json['properties'] as List<dynamic>? ?? [])
-          .map((property) => RealEstateListing.fromJson(property))
-          .toList(),
-    );
+        id: json['_id'],
+        name: json['name'] ?? '',
+        image: json['profilePicture'] ?? '',
+        services: (json['professions'] as List<dynamic>? ?? [])
+            .map((profession) => Service.fromJson(profession))
+            .toList(),
+        address: json['address'] ?? '',
+        city: json['city'] ?? '',
+        country: json['country'] ?? '',
+        email: json['email'] ?? '',
+        verified: json['isRecommended'] ?? false,
+        websiteLink: json['websiteLink'] ?? '',
+        restrictContact: json['restrictContact'] ?? false,
+        properties: (json['properties'] as List<dynamic>? ?? [])
+            .map((property) => RealEstateListing.fromJson(
+                property, json['email'], json['name'], json['_id']))
+            .toList(),
+        references: json['references'] as List<dynamic> ?? []);
   }
 
   Map<String, dynamic> toJson() {

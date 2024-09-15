@@ -38,7 +38,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await cubit.getUserProfileAlongWithProperty();
     } catch (e) {
       showToast(
-          message: "Unable to fetch details", context: context, isAlert: true);
+        message: "Unable to fetch details",
+        context: context,
+        isAlert: true,
+      );
     }
   }
 
@@ -201,11 +204,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     crossAxisSpacing: 8.w,
                                     mainAxisSpacing: 8.w,
                                     children: List.generate(
-                                        user.properties!.length, (index) {
-                                      return PostCard(
-                                        listing: user.properties![index],
-                                      );
-                                    }),
+                                      user.properties!.length,
+                                      (index) {
+                                        return PostCard(
+                                          listing: user.properties![index],
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                         ],
@@ -226,7 +231,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 rootNavigator: false,
               ).push(
                 MaterialPageRoute(
-                  builder: (context) => const EditProfile(),
+                  builder: (context) => EditProfile(
+                    user: user!,
+                  ),
                 ),
               ),
               child: Container(

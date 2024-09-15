@@ -160,6 +160,7 @@ class _SliderView extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     deleteAccessToken();
+                    deleteUserData();
                     Navigator.popAndPushNamed(context, '/login');
                     showToast(message: "Logged Out", context: context);
                   },

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
 import 'package:stargate/services/real_estate_listings.dart';
@@ -58,6 +59,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   List<String> images = [];
 
   Future<void> onSendRequest() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id')!;
     String response = await addPropertyRequest(
       title: title.text,
       country: country.text,
@@ -82,13 +85,13 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
       isFurnished: furnished == 'yes' ? true : false,
       garage: garage == 'yes' ? true : false,
       pictures: images,
-      postedBy: '66c1c707286658a032898266',
+      postedBy: id,
       parkingPlaces:
           parkingPlaces.text.isNotEmpty ? int.parse(parkingPlaces.text) : 0,
     );
     if (response == 'Success') {
       showToast(message: 'Listing added Successfully', context: context);
-      // Navigator.pop(context);
+      Navigator.pop(context);
     } else {
       showToast(
         message: response,

@@ -25,6 +25,9 @@ class RealEstateListing {
   String? equipment;
   String? qualityOfEquipment;
   int? parkingPlaces;
+  String userName;
+  String userEmail;
+  String userID;
 
   RealEstateListing({
     this.id,
@@ -53,9 +56,13 @@ class RealEstateListing {
     this.equipment,
     this.qualityOfEquipment,
     this.parkingPlaces,
+    required this.userEmail,
+    required this.userID,
+    required this.userName,
   });
 
-  factory RealEstateListing.fromJson(Map<String, dynamic> json) {
+  factory RealEstateListing.fromJson(
+      Map<String, dynamic> json, String? email, String? name, String? id) {
     return RealEstateListing(
       id: json['_id'],
       title: json['title'] ?? '',
@@ -83,6 +90,12 @@ class RealEstateListing {
       equipment: json['equipment'] ?? '',
       qualityOfEquipment: json['qualityOfEquipment'] ?? '',
       parkingPlaces: json['numberOfParkingPlaces'] ?? 0,
+      userEmail: email == '' || email == null
+          ? json['postedBy']['email'] ?? ''
+          : email,
+      userName:
+          name == '' || name == null ? json['postedBy']['name'] ?? '' : name,
+      userID: id == '' || id == null ? json['postedBy']['_id'] ?? '' : id,
     );
   }
 

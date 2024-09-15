@@ -104,11 +104,11 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                       margin: EdgeInsets.only(
                         top: MediaQuery.of(context).size.height * 0.42,
                         left: MediaQuery.of(context).size.width * 0.025,
-                        right: MediaQuery.of(context).size.width * 0.025,
+                        right: MediaQuery.of(context).size.width * 0.02,
                       ),
-                      width: MediaQuery.of(context).size.width * 0.95,
+                      width: MediaQuery.of(context).size.width * 0.96,
                       padding: EdgeInsets.symmetric(
-                          horizontal: 16.w, vertical: 20.w),
+                          horizontal: 12.w, vertical: 20.w),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30.w),
                         color: AppColors.white,
@@ -120,7 +120,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                           Row(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.85,
+                                width: MediaQuery.of(context).size.width * 0.86,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -130,7 +130,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.6,
+                                              0.61,
                                           child: Text(
                                             widget.listing.title,
                                             style: AppStyles.heading3,
@@ -138,7 +138,10 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                         ),
                                         const Spacer(),
                                         BubbleTextButton(
-                                          text: widget.listing.requestType,
+                                          text: widget.listing.requestType ==
+                                                  'requesting'
+                                              ? 'request'
+                                              : 'offer',
                                         ),
                                       ],
                                     ),
@@ -482,72 +485,60 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                 ],
               )
             : const SizedBox(),
-        widget.listing.equipment == null &&
-                widget.listing.qualityOfEquipment == null
+        widget.listing.equipment == '' &&
+                widget.listing.qualityOfEquipment == '' &&
+                widget.listing.propertyType == 'commercial'
             ? const Text(
-                "None",
+                "No Equipments",
                 style: AppStyles.normalText,
               )
-            : Column(
-                children: [
-                  widget.listing.equipment != null
-                      ? Column(
-                          children: [
-                            const Text(
-                              "equipment",
-                              style: AppStyles.supportiveText,
-                            ),
-                            SizedBox(
-                              height: 6.w,
-                            ),
-                            Text(
-                              widget.listing.equipment!,
-                              style: AppStyles.normalText,
-                            ),
-                          ],
-                        )
-                      : const SizedBox(),
-                  widget.listing.equipment != null
-                      ? Column(
-                          children: [
-                            const Text(
-                              "Quality of equipment",
-                              style: AppStyles.supportiveText,
-                            ),
-                            SizedBox(
-                              height: 6.w,
-                            ),
-                            Text(
-                              widget.listing.qualityOfEquipment!,
-                              style: AppStyles.normalText,
-                            ),
-                          ],
-                        )
-                      : const SizedBox(),
-                ],
-              ),
+            : widget.listing.propertyType == 'commercial'
+                ? Column(
+                    children: [
+                      widget.listing.equipment != ''
+                          ? Column(
+                              children: [
+                                const Text(
+                                  "equipment",
+                                  style: AppStyles.supportiveText,
+                                ),
+                                SizedBox(
+                                  height: 6.w,
+                                ),
+                                Text(
+                                  widget.listing.equipment!,
+                                  style: AppStyles.normalText,
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
+                      widget.listing.equipment != ''
+                          ? Column(
+                              children: [
+                                const Text(
+                                  "Quality of equipment",
+                                  style: AppStyles.supportiveText,
+                                ),
+                                SizedBox(
+                                  height: 6.w,
+                                ),
+                                Text(
+                                  widget.listing.qualityOfEquipment!,
+                                  style: AppStyles.normalText,
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
+                    ],
+                  )
+                : const SizedBox(),
         SizedBox(
           height: 20.w,
         ),
         Row(
           children: [
-            SizedBox(
-              height: 60.w,
-              width: 60.w,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30.w),
-                child: Image(
-                  image: NetworkImage(
-                    widget.listing.pictures.last,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 12.w,
-            ),
-            const Text(
-              "Smith Waterman",
+            Text(
+              widget.listing.userName,
               style: AppStyles.heading4,
             ),
             const Spacer(),

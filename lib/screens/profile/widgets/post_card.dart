@@ -207,7 +207,7 @@ class AddressMorphismRectangle extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              city != null || city!.isNotEmpty
+                              city != null && city! != ''
                                   ? Text(
                                       city!,
                                       style: AppStyles.heading4.copyWith(

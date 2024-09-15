@@ -14,8 +14,8 @@ class BubbleTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.w),
-      margin: EdgeInsets.only(right: 6.w),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.w),
+      margin: EdgeInsets.only(right: 4.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(
           Radius.circular(40.w),
