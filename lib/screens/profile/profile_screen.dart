@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/cubit/real_estate_listing/cubit.dart';
 import 'package:stargate/models/profile.dart';
@@ -168,6 +169,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             color: AppColors.white,
                                           ),
                                         ),
+                                        user == null || user.properties == null
+                                            ? Text(
+                                                '0',
+                                                style: AppStyles.heading4
+                                                    .copyWith(
+                                                        color: Colors.white),
+                                              )
+                                            : Text(
+                                                user.properties!.length
+                                                    .toString(),
+                                                style: AppStyles.heading4
+                                                    .copyWith(
+                                                        color: Colors.white))
                                       ],
                                     ),
                                   ],
@@ -196,15 +210,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 12.w,
                           ),
                           // ignore: prefer_is_empty
-                          user?.properties!.length == 0 || user == null
-                              ? const SizedBox()
+                          user?.properties == null || user!.properties!.isEmpty
+                              ? SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.3,
+                                  child: const Center(
+                                    child: Text(
+                                      "No properties",
+                                      style: AppStyles.supportiveText,
+                                    ),
+                                  ),
+                                )
                               : SingleChildScrollView(
                                   child: StaggeredGrid.count(
                                     crossAxisCount: 2,
                                     crossAxisSpacing: 8.w,
                                     mainAxisSpacing: 8.w,
                                     children: List.generate(
-                                      user.properties!.length,
+                                      user!.properties!.length,
                                       (index) {
                                         return PostCard(
                                           listing: user.properties![index],
@@ -226,16 +249,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             top: 16.w,
             right: 12.w,
             child: InkWell(
-              onTap: () => Navigator.of(
-                context,
-                rootNavigator: false,
-              ).push(
-                MaterialPageRoute(
-                  builder: (context) => EditProfile(
-                    user: user!,
+              onTap: () async {
+                final result =
+                    await Navigator.of(context, rootNavigator: false).push(
+                  MaterialPageRoute(
+                    builder: (context) => EditProfile(user: user!),
                   ),
-                ),
-              ),
+                );
+                if (result == 'success') {
+                  getProfile();
+                }
+              },
               child: Container(
                 height: 40.w,
                 width: 40.w,

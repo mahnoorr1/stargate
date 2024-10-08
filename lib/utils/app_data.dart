@@ -120,10 +120,9 @@ List<String> conventionalPropertySubcategory = [
   'Small House'
 ];
 List<String> experiencesList = [
-  'Select Experience',
-  'less than 5 years',
+  'below 5 years',
   '5 years',
-  'more than 5 years',
+  'above 5 years',
 ];
 
 List<Membership> memberships = [

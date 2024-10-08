@@ -12,6 +12,7 @@ class UnderlinedTextField extends StatefulWidget {
   final bool obscureText;
   final TextCapitalization textCapitalization;
   final TextInputType inputType;
+  final FormFieldValidator<String>? validator; // Optional validator
 
   const UnderlinedTextField({
     super.key,
@@ -23,6 +24,7 @@ class UnderlinedTextField extends StatefulWidget {
     this.textCapitalization = TextCapitalization.none,
     required this.inputType,
     this.icon,
+    this.validator, // Initialize the validator
   });
 
   @override
@@ -55,9 +57,8 @@ class _UnderlinedTextFieldState extends State<UnderlinedTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       focusNode: _focusNode,
-      enabled: true,
       controller: widget.controller,
       textCapitalization: widget.textCapitalization,
       maxLength: 32,
@@ -70,6 +71,7 @@ class _UnderlinedTextFieldState extends State<UnderlinedTextField> {
         fontSize: 16,
       ),
       cursorColor: AppColors.blue,
+      validator: widget.validator, // Add the validator here
       decoration: InputDecoration(
         focusColor: AppColors.blue,
         prefixIcon: widget.prefixSvgPath != null
@@ -77,7 +79,6 @@ class _UnderlinedTextFieldState extends State<UnderlinedTextField> {
                 padding: EdgeInsets.only(top: 18.w, bottom: 10.w),
                 child: SvgPicture.asset(
                   widget.prefixSvgPath!,
-                  // ignore: deprecated_member_use
                   color: AppColors.white,
                 ),
               )

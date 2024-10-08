@@ -9,4 +9,21 @@ class UserDataProvider {
       throw Exception('Failed to get users: ${e.toString()}');
     }
   }
+
+  Future<List<User>> filterUsers({
+    String? country,
+    String? city,
+    String? experience,
+  }) async {
+    try {
+      Future<List<User>> users = filterServiceUsers(
+        country: country,
+        city: city,
+        experience: experience,
+      );
+      return users;
+    } catch (e) {
+      throw Exception('Failed to get users: ${e.toString()}');
+    }
+  }
 }

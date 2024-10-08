@@ -13,7 +13,8 @@ Future<List<RealEstateListing>> getAllListings() async {
   String? token = prefs.getString('accessToken');
   var headers = {
     'Content-Type': 'application/json',
-    'Cookie': "accessToken=${token!}",
+    // 'Cookie': "accessToken=${token!}",
+    'Authorization': token!,
   };
 
   try {
@@ -28,6 +29,7 @@ Future<List<RealEstateListing>> getAllListings() async {
 
         if (decodedData is Map<String, dynamic>) {
           final List<dynamic> data = decodedData['data'];
+          print(data);
           if (data.isNotEmpty) {
             final listings = data.map((json) {
               return RealEstateListing.fromJson(
@@ -84,11 +86,13 @@ Future<String> addPropertyRequest({
   required List<String> pictures,
   required String postedBy,
 }) async {
+  print(address);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('accessToken');
   var headers = {
     'Content-Type': 'application/json',
-    'Cookie': "accessToken=${token!}",
+    // 'Cookie': "accessToken=${token!}",
+    'Authorization': token!,
   };
 
   var request = http.MultipartRequest(
@@ -159,7 +163,7 @@ Future<String> deleteProperty({
   String? token = prefs.getString('accessToken');
   var headers = {
     'Content-Type': 'application/json',
-    'Cookie': "accessToken=${token!}",
+    'Authorization': token!,
   };
   var request = http.Request('DELETE', Uri.parse('${server}property/$id'));
   try {

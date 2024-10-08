@@ -29,8 +29,15 @@ class _PostCardState extends State<PostCard> {
         BlocProvider.of<RealEstateListingsCubit>(context);
     try {
       await cubit.deleteListing(widget.listing.id!);
+
+      if (!mounted)
+        return; // Ensure the widget is still mounted before proceeding
+
       showToast(message: "Deletion Successful", context: context);
     } catch (e) {
+      if (!mounted)
+        return; // Ensure the widget is still mounted before proceeding
+
       showToast(
         message: "Unable to delete property",
         context: context,

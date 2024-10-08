@@ -21,4 +21,24 @@ class AllUsersCubit extends Cubit<AllUsersState> {
       emit(GetAllUsersFailure(e.toString()));
     }
   }
+
+  Future<void> filterUsers({
+    String? country,
+    String? city,
+    String? experience,
+  }) async {
+    try {
+      emit(GetFilteredUsersLoading());
+      List<User> users = await userRepository.filterUsers(
+        country: country,
+        city: city,
+        experience: experience,
+      );
+      print(users);
+      print("success");
+      emit(GetFilteredUsersSuccess(users));
+    } catch (e) {
+      emit(GetFilteredUsersFailure(e.toString()));
+    }
+  }
 }

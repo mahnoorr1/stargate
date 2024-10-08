@@ -12,4 +12,20 @@ class UserRepository {
       rethrow;
     }
   }
+
+  Future<List<User>> filterUsers({
+    String? country,
+    String? city,
+    String? experience,
+  }) async {
+    try {
+      return await _userDataProvider.filterUsers(
+        country: country,
+        city: city,
+        experience: experience,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

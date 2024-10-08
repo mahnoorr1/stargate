@@ -17,3 +17,17 @@ class GetAllUsersFailure extends AllUsersState {
 
   GetAllUsersFailure(this.errorMessage);
 }
+
+class GetFilteredUsersInitial extends AllUsersState {}
+
+class GetFilteredUsersLoading extends AllUsersState {}
+
+class GetFilteredUsersSuccess extends AllUsersState {
+  final List<User> filteredUsers;
+  GetFilteredUsersSuccess(this.filteredUsers);
+}
+
+class GetFilteredUsersFailure extends AllUsersState {
+  final String errorMessage;
+  GetFilteredUsersFailure(this.errorMessage);
+}

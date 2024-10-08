@@ -5,10 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BlurredRectangle extends StatelessWidget {
   final String title;
-  final String subtitle;
+  final String? subtitle;
 
-  const BlurredRectangle(
-      {super.key, required this.title, required this.subtitle});
+  const BlurredRectangle({super.key, required this.title, this.subtitle});
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -42,13 +41,15 @@ class BlurredRectangle extends StatelessWidget {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Text(
-                          subtitle,
-                          style: AppStyles.supportiveText.copyWith(
-                            color: AppColors.white,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        )
+                        subtitle != null
+                            ? Text(
+                                subtitle!,
+                                style: AppStyles.supportiveText.copyWith(
+                                  color: AppColors.white,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                   ),

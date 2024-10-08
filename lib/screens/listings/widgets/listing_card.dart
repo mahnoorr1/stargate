@@ -91,7 +91,7 @@ class AddressMorphismRectangle extends StatelessWidget {
                         EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.w),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
                           width: 30.w,
@@ -110,7 +110,7 @@ class AddressMorphismRectangle extends StatelessWidget {
                           width: 6.w,
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.29,
+                          width: MediaQuery.of(context).size.width * 0.275,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

@@ -20,6 +20,7 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
 
   @override
   Widget build(BuildContext context) {
+    storeOnboardToken();
     return Scaffold(
       appBar: OnBoardAppBar(index: 0),
       body: Container(

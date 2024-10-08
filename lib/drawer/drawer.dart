@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/home/home_screen.dart';
 import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
@@ -161,6 +162,7 @@ class _SliderView extends StatelessWidget {
                   onTap: () {
                     deleteAccessToken();
                     deleteUserData();
+                    UserProfileProvider().resetUserDetails();
                     Navigator.popAndPushNamed(context, '/login');
                     showToast(message: "Logged Out", context: context);
                   },

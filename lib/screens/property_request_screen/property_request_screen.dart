@@ -18,7 +18,11 @@ import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/country_textfield.dart';
 import 'package:stargate/widgets/inputfields/outlined_dropdown.dart';
 import 'package:stargate/widgets/inputfields/textfield.dart';
+import 'package:stargate/widgets/loader/loader.dart';
+import 'package:stargate/widgets/screen/screen.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+
+import '../../services/helper_methods.dart';
 
 class PropertyRequestForm extends StatefulWidget {
   const PropertyRequestForm({super.key});
@@ -57,13 +61,20 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   String furnished = '';
   String garage = '';
   List<String> images = [];
+  bool loading = false;
 
   Future<void> onSendRequest() async {
+    File requestFile = await assetImageToFile(AppImages.propertySearch);
+    setState(() {
+      loading = true;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id')!;
+
     String response = await addPropertyRequest(
       title: title.text,
       country: country.text,
+      address: address.text,
       district: state.text,
       city: city.text,
       shortDescription: description.text,
@@ -84,13 +95,20 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
       qualityOfEquipment: qualityOfEquipment.text,
       isFurnished: furnished == 'yes' ? true : false,
       garage: garage == 'yes' ? true : false,
-      pictures: images,
+      pictures: selectedRequestType == 'requesting'
+          ? [
+              requestFile.path,
+            ]
+          : images,
       postedBy: id,
       parkingPlaces:
           parkingPlaces.text.isNotEmpty ? int.parse(parkingPlaces.text) : 0,
     );
     if (response == 'Success') {
       showToast(message: 'Listing added Successfully', context: context);
+      setState(() {
+        loading = false;
+      });
       Navigator.pop(context);
     } else {
       showToast(
@@ -99,6 +117,9 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         isAlert: true,
         color: Colors.redAccent,
       );
+      setState(() {
+        loading = false;
+      });
     }
   }
 
@@ -113,166 +134,174 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        leading: const CustomBackButton(
-          color: AppColors.black,
+    return Screen(
+      overlayWidgets: [
+        if (loading)
+          const FullScreenLoader(
+            loading: true,
+          )
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          leading: const CustomBackButton(
+            color: AppColors.black,
+          ),
         ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(top: 12.w, right: 12.w, left: 12.w),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Offer or Request\nProperty",
-                style: AppStyles.screenTitle.copyWith(
-                  color: AppColors.darkBlue,
+        body: Padding(
+          padding: EdgeInsets.only(top: 12.w, right: 12.w, left: 12.w),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Offer or Request\nProperty",
+                  style: AppStyles.screenTitle.copyWith(
+                    color: AppColors.darkBlue,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 16.w,
-              ),
-              CustomTextField(
-                controller: title,
-                label: "Title",
-                hintText: "Title",
-                inputType: TextInputType.text,
-                horizontalSpacing: 0,
-                verticalSpacing: 3,
-              ),
-              SizedBox(
-                height: 3.w,
-              ),
-              CustomTextField(
-                controller: address,
-                label: "Address",
-                hintText: "Address",
-                inputType: TextInputType.text,
-                horizontalSpacing: 0,
-                verticalSpacing: 3,
-              ),
-              CountryPickerField(
-                country: country,
-                state: state,
-                city: city,
-              ),
-              CustomTextField(
-                controller: description,
-                label: "Description",
-                hintText: "Description",
-                inputType: TextInputType.text,
-                horizontalSpacing: 0,
-                verticalSpacing: 3,
-                maxLines: 4,
-              ),
-              SizedBox(
-                height: 10.w,
-              ),
-              questionText(
-                "Do you want to offer property or requesting for it?",
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ...requestTypeList.map(
-                      (e) => CustomTabButton(
-                        type: e,
-                        selected: (value) {
-                          setState(() {
-                            selectedRequestType = value;
-                          });
-                        },
-                        current: selectedRequestType,
+                SizedBox(
+                  height: 16.w,
+                ),
+                CustomTextField(
+                  controller: title,
+                  label: "Title",
+                  hintText: "Title",
+                  inputType: TextInputType.text,
+                  horizontalSpacing: 0,
+                  verticalSpacing: 3,
+                ),
+                SizedBox(
+                  height: 3.w,
+                ),
+                CustomTextField(
+                  controller: address,
+                  label: "Address",
+                  hintText: "Address",
+                  inputType: TextInputType.text,
+                  horizontalSpacing: 0,
+                  verticalSpacing: 3,
+                ),
+                CountryPickerField(
+                  country: country,
+                  state: state,
+                  city: city,
+                ),
+                CustomTextField(
+                  controller: description,
+                  label: "Description",
+                  hintText: "Description",
+                  inputType: TextInputType.text,
+                  horizontalSpacing: 0,
+                  verticalSpacing: 3,
+                  maxLines: 4,
+                ),
+                SizedBox(
+                  height: 10.w,
+                ),
+                questionText(
+                  "Do you want to offer property or requesting for it?",
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ...requestTypeList.map(
+                        (e) => CustomTabButton(
+                          type: e,
+                          selected: (value) {
+                            setState(() {
+                              selectedRequestType = value;
+                            });
+                          },
+                          current: selectedRequestType,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 8.w,
-              ),
-              questionText(
-                "Condition",
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ...conditions.map(
-                      (e) => CustomTabButton(
-                        type: e,
-                        selected: (value) {
-                          setState(() {
-                            selectedCondition = value;
-                          });
-                        },
-                        current: selectedCondition,
+                SizedBox(
+                  height: 8.w,
+                ),
+                questionText(
+                  "Condition",
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ...conditions.map(
+                        (e) => CustomTabButton(
+                          type: e,
+                          selected: (value) {
+                            setState(() {
+                              selectedCondition = value;
+                            });
+                          },
+                          current: selectedCondition,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 8.w,
-              ),
-              questionText(
-                "Purchase",
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ...sellingTypes.map(
-                      (e) => CustomTabButton(
-                        type: e,
-                        selected: (value) {
-                          setState(() {
-                            selectedPurchaseType = value;
-                          });
-                        },
-                        current: selectedPurchaseType,
+                SizedBox(
+                  height: 8.w,
+                ),
+                questionText(
+                  "Purchase",
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ...sellingTypes.map(
+                        (e) => CustomTabButton(
+                          type: e,
+                          selected: (value) {
+                            setState(() {
+                              selectedPurchaseType = value;
+                            });
+                          },
+                          current: selectedPurchaseType,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 8.w,
-              ),
-              questionText(
-                "Type",
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ...propertyTypes.map(
-                      (e) => CustomTabButton(
-                        type: e,
-                        selected: (value) {
-                          setState(() {
-                            selectedPropertyType = value;
-                          });
-                        },
-                        current: selectedPropertyType,
+                SizedBox(
+                  height: 8.w,
+                ),
+                questionText(
+                  "Type",
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ...propertyTypes.map(
+                        (e) => CustomTabButton(
+                          type: e,
+                          selected: (value) {
+                            setState(() {
+                              selectedPropertyType = value;
+                            });
+                          },
+                          current: selectedPropertyType,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              selectedPropertyType == 'commercial'
-                  ? commercialContent()
-                  : selectedPropertyType == 'conventional'
-                      ? conventionalContent()
-                      : const SizedBox(),
-              SizedBox(
-                height: 20.w,
-              ),
-            ],
+                selectedPropertyType == 'commercial'
+                    ? commercialContent()
+                    : selectedPropertyType == 'conventional'
+                        ? conventionalContent()
+                        : const SizedBox(),
+                SizedBox(
+                  height: 20.w,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -424,40 +453,47 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         SizedBox(
           height: 10.w,
         ),
-        questionText("Add pictures"),
-        SizedBox(
-          height: 6.w,
-        ),
-        GestureDetector(
-          onTap: () {
-            _pickFile(context).then((pickedImages) {
-              setState(() {
-                images.addAll(pickedImages);
-              });
-            });
-          },
-          child: Container(
-            height: 100.w,
-            width: 100.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.w),
-              border: Border.all(
-                width: 1,
-                color: AppColors.lightGrey,
+        selectedRequestType == 'requesting'
+            ? const SizedBox()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  questionText("Add pictures"),
+                  SizedBox(
+                    height: 6.w,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _pickFile(context).then((pickedImages) {
+                        setState(() {
+                          images.addAll(pickedImages);
+                        });
+                      });
+                    },
+                    child: Container(
+                      height: 100.w,
+                      width: 100.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.w),
+                        border: Border.all(
+                          width: 1,
+                          color: AppColors.lightGrey,
+                        ),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.add,
+                          color: AppColors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.w,
+                  ),
+                  imagesContainer(context),
+                ],
               ),
-            ),
-            child: const Center(
-              child: Icon(
-                Icons.add,
-                color: AppColors.blue,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 10.w,
-        ),
-        imagesContainer(context),
         SizedBox(
           height: 10.w,
         ),
@@ -586,40 +622,47 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         SizedBox(
           height: 10.w,
         ),
-        questionText("Add pictures"),
-        SizedBox(
-          height: 6.w,
-        ),
-        GestureDetector(
-          onTap: () {
-            _pickFile(context).then((pickedImages) {
-              setState(() {
-                images.addAll(pickedImages);
-              });
-            });
-          },
-          child: Container(
-            height: 100.w,
-            width: 100.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.w),
-              border: Border.all(
-                width: 1,
-                color: AppColors.lightGrey,
+        selectedRequestType == 'requesting'
+            ? const SizedBox()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  questionText("Add pictures"),
+                  SizedBox(
+                    height: 6.w,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _pickFile(context).then((pickedImages) {
+                        setState(() {
+                          images.addAll(pickedImages);
+                        });
+                      });
+                    },
+                    child: Container(
+                      height: 100.w,
+                      width: 100.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.w),
+                        border: Border.all(
+                          width: 1,
+                          color: AppColors.lightGrey,
+                        ),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.add,
+                          color: AppColors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.w,
+                  ),
+                  imagesContainer(context),
+                ],
               ),
-            ),
-            child: const Center(
-              child: Icon(
-                Icons.add,
-                color: AppColors.blue,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 10.w,
-        ),
-        imagesContainer(context),
         SizedBox(
           height: 10.w,
         ),

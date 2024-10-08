@@ -7,12 +7,16 @@ import 'package:stargate/config/constants.dart';
 import 'package:stargate/models/profile.dart';
 
 Future<String?> loginUser(String email, String pass) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('accessToken');
+  print(token);
   var headers = {
     'Content-Type': 'application/json',
   };
   var request = http.Request('POST', Uri.parse('${server}user/login'));
 
   try {
+    print("inside");
     request.body = json.encode({"email": email, "password": pass});
     request.headers.addAll(headers);
 
@@ -37,6 +41,7 @@ Future<String?> loginUser(String email, String pass) async {
       return errorMessage;
     }
   } catch (e) {
+    print(e.toString());
     return e.toString();
   }
 }
@@ -64,14 +69,17 @@ Future<String?> registerUser(
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200 || response.statusCode == 201) {
       String jsonString = await response.stream.bytesToString();
-      final Map<String, dynamic> responseData = jsonDecode(jsonString);
-      String? token = responseData['data']['accessToken'] as String?;
+      print('ok');
+      var responseData = jsonDecode(jsonString);
+      String? token = responseData['data']['accessToken'];
+      print('done');
       storeUserData(
         name: responseData['data']['user']['name'],
         email: email,
         id: responseData['data']['user']['_id'],
-        membership: responseData['data']['user']['membership'],
+        membership: responseData['data']['user']['membership']['_id'],
       );
+      print("anothe");
       storeAccessToken(token!);
       return 'token';
     } else {
@@ -81,6 +89,7 @@ Future<String?> registerUser(
       return errorMessage;
     }
   } catch (e) {
+    print(e.toString());
     return e.toString();
   }
 }
@@ -90,7 +99,8 @@ Future<User?> myProfile() async {
   String? token = prefs.getString('accessToken');
   var headers = {
     'Content-Type': 'application/json',
-    'Cookie': "accessToken=${token!}",
+    // 'Cookie': "accessToken=${token!}",
+    'Authorization': token!,
   };
   var request = http.Request('GET', Uri.parse('${server}user/my-profile'));
 
@@ -128,15 +138,17 @@ Future<String> updateProfile({
   required String city,
   required String country,
   required List<Service> professions,
-  required List<String> references,
+  required List<dynamic> references,
   required String websiteLink,
-  required String profile,
+  String? profile,
 }) async {
+  print(professions);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('accessToken');
   var headers = {
     'Content-Type': 'application/json',
-    'Cookie': "accessToken=${token!}",
+    // 'Cookie': "accessToken=${token!}",
+    'Authorization': token!,
   };
   var request =
       http.MultipartRequest('PATCH', Uri.parse('${server}user/update-profile'));
@@ -148,7 +160,7 @@ Future<String> updateProfile({
       "country": country,
       "websiteLink": websiteLink,
     });
-    if (profile != '') {
+    if (profile != '' && profile != null) {
       request.files
           .add(await http.MultipartFile.fromPath('profilePicture', profile));
     }
@@ -188,7 +200,8 @@ Future<String> updateProfessions({required List<Service> professions}) async {
   String? token = prefs.getString('accessToken');
   var headers = {
     'Content-Type': 'application/json',
-    'Cookie': "accessToken=${token!}",
+    // 'Cookie': "accessToken=${token!}",
+    'Authorization': token!,
   };
   var request =
       http.Request('PATCH', Uri.parse('${server}user/update-profile'));

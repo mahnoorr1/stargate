@@ -11,35 +11,44 @@ class RealEstateListingsCubit extends Cubit<RealEstateListingsState> {
   RealEstateListingsCubit() : super(GetAllRealEstateListingsInitial());
 
   final dataProvider = RealEstateDataProvider();
+
+  // Store current listings to manage dynamic updates
+  List<RealEstateListing> currentListings = [];
+
   Future<void> getAllRealEstateListings() async {
     try {
-      emit(GetAllRealEstateListingsLoading());
-      List<RealEstateListing> listings =
+      emit(GetAllRealEstateListingsLoading(currentListings));
+      List<RealEstateListing> newListings =
           await dataProvider.getAllRealEstateListings();
-      emit(GetAllRealEstateListingsSuccess(listings));
+
+      // Update the current listings
+      currentListings = newListings;
+      emit(GetAllRealEstateListingsSuccess(currentListings));
     } catch (e) {
-      emit(GetAllRealEstateListingsFailure(e.toString()));
+      emit(GetAllRealEstateListingsFailure(e.toString(), currentListings));
     }
   }
 
   Future<void> deleteListing(String id) async {
     try {
-      emit(PropertyDeletionLoading());
+      emit(PropertyDeletionLoading(currentListings));
       String deletion = await dataProvider.deleteListing(id);
-      emit(PropertyDeletionSuccess(deletion));
-      getUserProfileAlongWithProperty();
+
+      // Remove the deleted property from the current listings
+      currentListings.removeWhere((listing) => listing.id == id);
+      emit(PropertyDeletionSuccess(deletion, currentListings));
     } catch (e) {
-      emit(PropertyDeletionFailure(e.toString()));
+      emit(PropertyDeletionFailure(e.toString(), currentListings));
     }
   }
 
   Future<void> getUserProfileAlongWithProperty() async {
     try {
-      emit(UserProfileWithPropertyLoading());
+      emit(UserProfileWithPropertyLoading(currentListings));
       User user = await dataProvider.getUserProfileAlongWithProperty();
-      emit(UserProfileWithPropertySuccess(user));
+      emit(UserProfileWithPropertySuccess(user, currentListings));
     } catch (e) {
-      emit(UserProfileWithPropertyFailure(e.toString()));
+      emit(UserProfileWithPropertyFailure(e.toString(), currentListings));
     }
   }
 }

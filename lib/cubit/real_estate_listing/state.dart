@@ -1,47 +1,62 @@
 part of 'cubit.dart';
 
-sealed class RealEstateListingsState {}
-
-class GetAllRealEstateListingsInitial extends RealEstateListingsState {}
-
-class GetAllRealEstateListingsLoading extends RealEstateListingsState {}
-
-class GetAllRealEstateListingsSuccess extends RealEstateListingsState {
+abstract class RealEstateListingsState {
   final List<RealEstateListing> listings;
 
-  GetAllRealEstateListingsSuccess(this.listings);
+  RealEstateListingsState(this.listings);
+}
+
+class GetAllRealEstateListingsInitial extends RealEstateListingsState {
+  GetAllRealEstateListingsInitial() : super([]);
+}
+
+class GetAllRealEstateListingsLoading extends RealEstateListingsState {
+  GetAllRealEstateListingsLoading(List<RealEstateListing> listings)
+      : super(listings);
+}
+
+class GetAllRealEstateListingsSuccess extends RealEstateListingsState {
+  GetAllRealEstateListingsSuccess(List<RealEstateListing> listings)
+      : super(listings);
 }
 
 class GetAllRealEstateListingsFailure extends RealEstateListingsState {
   final String errorMessage;
 
-  GetAllRealEstateListingsFailure(this.errorMessage);
+  GetAllRealEstateListingsFailure(
+      this.errorMessage, List<RealEstateListing> listings)
+      : super(listings);
 }
 
-class PropertyDeletionInitial extends RealEstateListingsState {}
-
-class PropertyDeletionLoading extends RealEstateListingsState {}
+class PropertyDeletionLoading extends RealEstateListingsState {
+  PropertyDeletionLoading(List<RealEstateListing> listings) : super(listings);
+}
 
 class PropertyDeletionSuccess extends RealEstateListingsState {
   final String message;
-  PropertyDeletionSuccess(this.message);
+  PropertyDeletionSuccess(this.message, List<RealEstateListing> listings)
+      : super(listings);
 }
 
 class PropertyDeletionFailure extends RealEstateListingsState {
   final String error;
-  PropertyDeletionFailure(this.error);
+  PropertyDeletionFailure(this.error, List<RealEstateListing> listings)
+      : super(listings);
 }
 
-class UserProfileWithPropertyInitial extends RealEstateListingsState {}
-
-class UserProfileWithPropertyLoading extends RealEstateListingsState {}
+class UserProfileWithPropertyLoading extends RealEstateListingsState {
+  UserProfileWithPropertyLoading(List<RealEstateListing> listings)
+      : super(listings);
+}
 
 class UserProfileWithPropertySuccess extends RealEstateListingsState {
   final User user;
-  UserProfileWithPropertySuccess(this.user);
+  UserProfileWithPropertySuccess(this.user, List<RealEstateListing> listings)
+      : super(listings);
 }
 
 class UserProfileWithPropertyFailure extends RealEstateListingsState {
   final String message;
-  UserProfileWithPropertyFailure(this.message);
+  UserProfileWithPropertyFailure(this.message, List<RealEstateListing> listings)
+      : super(listings);
 }

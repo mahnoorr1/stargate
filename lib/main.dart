@@ -10,6 +10,8 @@ import 'package:stargate/routes/app_routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import 'providers/user_info_provider.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
@@ -22,6 +24,7 @@ void main() {
           BlocProvider(
             create: (context) => RealEstateListingsCubit(),
           ),
+          ChangeNotifierProvider(create: (_) => UserProfileProvider()),
         ],
         child: const MyApp(),
       );
@@ -42,37 +45,6 @@ class _MyAppState extends State<MyApp> {
   String route = '';
   bool loaded = false;
 
-  void checkOnBoardCheck() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      onboardDone = prefs.getBool('onboardDone') ?? false;
-      accessToken = prefs.getString('accessToken') ?? '';
-    });
-    setState(() {});
-  }
-
-  String initialRoute() {
-    if (accessToken != '') {
-      return AppRoutes.drawer;
-    } else if (accessToken == '' ||
-        accessToken.isEmpty && onboardDone == true) {
-      return AppRoutes.login;
-    } else {
-      return AppRoutes.onboarding;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    checkOnBoardCheck();
-    setState(() {
-      route = initialRoute();
-      loaded = true;
-    });
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -81,7 +53,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           builder: EasyLoading.init(),
           title: 'Stargate',
-          initialRoute: loaded ? route : null,
+          initialRoute: AppRoutes.splash,
           debugShowCheckedModeBanner: false,
           routes: AppRoutes.routes,
           theme: ThemeData(

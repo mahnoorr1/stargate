@@ -79,8 +79,8 @@ class User {
 
   bool containsServiceUserType(UserType userType) {
     return services.any((service) =>
-        service.details['name'].toString().toLowerCase() ==
-        userType.toString().split('.').last.toLowerCase());
+        service.details['name'].toLowerCase() ==
+        userType.toCamelCaseString().toLowerCase());
   }
 }
 

@@ -474,6 +474,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         ),
         widget.listing.propertyType == 'commercial'
             ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     "Equipment Details",
@@ -494,9 +495,11 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
               )
             : widget.listing.propertyType == 'commercial'
                 ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       widget.listing.equipment != ''
                           ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
                                   "equipment",
@@ -514,6 +517,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                           : const SizedBox(),
                       widget.listing.equipment != ''
                           ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
                                   "Quality of equipment",
