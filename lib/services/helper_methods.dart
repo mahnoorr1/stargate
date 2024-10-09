@@ -11,3 +11,18 @@ Future<File> assetImageToFile(String assetPath) async {
   await file.writeAsBytes(byteData.buffer.asUint8List());
   return file;
 }
+
+String getFileName(String filePath) {
+  String fileName = filePath.split('/').last;
+  return fileName.replaceFirst(RegExp(r'^\d+-'), '');
+}
+
+class AppFailure {
+  final String message;
+
+  AppFailure(
+      [this.message = 'Sorry, something went wrong. Please try again later.']);
+
+  @override
+  String toString() => 'AppFailure(message: $message)';
+}
