@@ -19,9 +19,20 @@ class FullScreenLoader extends StatelessWidget {
         width: double.infinity,
         height: double.infinity,
         child: Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator.adaptive(),
         ),
       ),
+    );
+  }
+}
+
+class Loader extends StatelessWidget {
+  const Loader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator.adaptive(),
     );
   }
 }

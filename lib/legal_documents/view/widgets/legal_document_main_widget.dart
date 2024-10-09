@@ -1,60 +1,48 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stargate/legal_documents/view/widgets/pdf_viewer.dart';
 
 import '../../../config/core.dart';
-import '../../../drawer/widgets/widgets.dart';
+
 import '../../../services/helper_methods.dart';
 import '../../../utils/app_images.dart';
 
-class LegalDocumentMainWidget extends StatefulWidget {
-  final String label;
+class LegalDocumentDataWidget extends StatelessWidget {
   final String text;
   String fileUrl;
-  final String filter;
 
-  LegalDocumentMainWidget({
+  LegalDocumentDataWidget({
     super.key,
-    required this.label,
     required this.text,
     required this.fileUrl,
-    required this.filter,
   });
 
   @override
-  State<LegalDocumentMainWidget> createState() =>
-      _LegalDocumentMainWidgetState();
-}
-
-class _LegalDocumentMainWidgetState extends State<LegalDocumentMainWidget> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    void openPDFViewer(BuildContext context, String filePath) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PDFViewerScreen(filePath: filePath),
+        ),
+      );
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Heading(heading: widget.label),
-                  SizedBox(height: 30.h),
-                  Stack(
-                    children: [
-                      Container(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: fileUrl != "" ? 10.h : 20.h),
+                fileUrl != ""
+                    ? Container(
                         height: 200,
                         width: 200,
                         decoration: BoxDecoration(
@@ -69,12 +57,14 @@ class _LegalDocumentMainWidgetState extends State<LegalDocumentMainWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  openPDFViewer(context, fileUrl);
+                                },
                                 child: SvgPicture.asset(AppIcons.pdfIcon),
                               ),
                               SizedBox(height: 10.h),
                               Text(
-                                getFileName(widget.fileUrl),
+                                getFileName(fileUrl),
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 3,
@@ -83,34 +73,18 @@ class _LegalDocumentMainWidgetState extends State<LegalDocumentMainWidget> {
                             ],
                           ),
                         ),
-                      ),
-                      Positioned(
-                        right: 10,
-                        top: 10,
-                        child: InkWell(
-                          onTap: () {},
-                          child: const Icon(
-                            Icons.delete_outline_rounded,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Text(
-              widget.text,
-              style: AppStyles.normalText,
+                      )
+                    : const SizedBox(),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Text(
+                  text,
+                  style: AppStyles.normalText,
+                ),
+              ],
             ),
           ],
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 40),
         ),
       ],
     );

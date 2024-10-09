@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:stargate/config/core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stargate/cubit/real_estate_listing/cubit.dart';
 import 'package:stargate/cubit/service_providers/cubit.dart';
+import 'package:stargate/legal_documents/providers/legal_document_provider.dart';
 import 'package:stargate/routes/app_routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -25,6 +26,7 @@ void main() {
             create: (context) => RealEstateListingsCubit(),
           ),
           ChangeNotifierProvider(create: (_) => UserProfileProvider()),
+          ChangeNotifierProvider(create: (_) => LegalDocumentProvider()),
         ],
         child: const MyApp(),
       );

@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+import '../../../widgets/loader/loader.dart';
+
 class PDFViewerScreen extends StatefulWidget {
   final String filePath;
 
@@ -53,7 +55,7 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
           ? PDFView(
               filePath: localFilePath!,
             )
-          : const Center(child: CircularProgressIndicator()),
+          : const Center(child: Loader()),
     );
   }
 }
