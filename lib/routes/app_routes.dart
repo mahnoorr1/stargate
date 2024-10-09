@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stargate/drawer/drawer.dart';
-import 'package:stargate/drawer/screens/faq.dart';
+
+import 'package:stargate/faqs/view/pages/faq_page.dart';
 
 import 'package:stargate/legal_documents/view/pages/legal_notice.dart';
 import 'package:stargate/legal_documents/view/pages/privacy_policy.dart';

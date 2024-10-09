@@ -27,9 +27,9 @@ class LegalDocumentProvider with ChangeNotifier {
     } catch (e) {
       _errorMessage = e.toString();
       _legalDocument = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 }

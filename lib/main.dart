@@ -11,6 +11,7 @@ import 'package:stargate/routes/app_routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import 'faqs/providers/faq_provider.dart';
 import 'providers/user_info_provider.dart';
 
 void main() {
@@ -27,6 +28,7 @@ void main() {
           ),
           ChangeNotifierProvider(create: (_) => UserProfileProvider()),
           ChangeNotifierProvider(create: (_) => LegalDocumentProvider()),
+          ChangeNotifierProvider(create: (_) => FaqProvider()),
         ],
         child: const MyApp(),
       );
