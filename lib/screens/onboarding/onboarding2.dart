@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/screens/onboarding/widgets/onboard_content.dart';
 
+import '../../content_management/providers/getting_started_content_provider.dart';
 import 'onboarding3.dart';
 
 class OnBoardingScreen2 extends StatefulWidget {
@@ -20,6 +22,9 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen2> {
 
   @override
   Widget build(BuildContext context) {
+    final gettingStartedProvider = Provider.of<GettingStartedProvider>(context);
+    final remoteOnboardData = gettingStartedProvider.gettingStartedContent;
+
     return Scaffold(
       appBar: OnBoardAppBar(index: 1),
       body: Container(
@@ -27,8 +32,8 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen2> {
         width: double.infinity,
         padding: EdgeInsets.all(20.w),
         child: OnboardContent(
-          image: onboardData[1].imagePath,
-          isNetworkImage: false,
+          image: remoteOnboardData![1].picture,
+          isNetworkImage: true,
           title: onboardData[1].title,
           description: onboardData[1].description,
           index: 1,
