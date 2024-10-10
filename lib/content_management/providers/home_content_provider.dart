@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/home_content_model.dart';
+import '../models/home_content_model.dart';
 import '../repositories/content_management_repository.dart';
 
 class HomeContentProvider with ChangeNotifier {

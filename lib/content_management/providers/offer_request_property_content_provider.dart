@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/offer_request_property_content_model.dart';
+import '../models/offer_request_property_content_model.dart';
 import '../repositories/content_management_repository.dart';
 
 class OfferRequestPropertyContentProvider with ChangeNotifier {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/listing_model.dart';
+import '../models/listing_model.dart';
 import '../repositories/content_management_repository.dart';
 
 class ListingContentProvider with ChangeNotifier {

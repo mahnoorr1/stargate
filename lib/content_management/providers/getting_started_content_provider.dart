@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../model/getting_started_model.dart';
+import '../models/getting_started_model.dart';
 import '../repositories/content_management_repository.dart';
 
 class GettingStartedProvider with ChangeNotifier {

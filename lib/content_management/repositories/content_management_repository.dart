@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:stargate/content_management/model/home_content_model.dart';
-import 'package:stargate/content_management/model/listing_model.dart';
-import 'package:stargate/content_management/model/offer_request_property_content_model.dart';
+import 'package:stargate/content_management/models/home_content_model.dart';
+import 'package:stargate/content_management/models/listing_model.dart';
+import 'package:stargate/content_management/models/offer_request_property_content_model.dart';
 
 import '../../config/constants.dart';
 
-import '../model/getting_started_model.dart';
+import '../models/getting_started_model.dart';
 
 import 'package:http/http.dart' as http;
 
-import '../model/profile_content_model.dart';
+import '../models/profile_content_model.dart';
 
 class ContentManagementRepository {
   Future<List<GettingStartedModel>> getGettingStartedContent({

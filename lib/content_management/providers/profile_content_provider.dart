@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/profile_content_model.dart';
+import '../models/profile_content_model.dart';
 import '../repositories/content_management_repository.dart';
 
 class ProfileContentProvider with ChangeNotifier {
