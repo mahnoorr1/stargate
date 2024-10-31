@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     String? loggedIn = await loginUser(email.text, password.text);
     if (loggedIn == 'token') {
+      await AllUsersProvider.c(context).fetchUsers();
       Navigator.popAndPushNamed(context, '/navbar');
       showToast(message: "Login successful", context: context);
     } else {

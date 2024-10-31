@@ -7,7 +7,7 @@ import 'package:stargate/utils/app_images.dart';
 class ExperienceCard extends StatelessWidget {
   final String title;
   final String? subTitle;
-  final int noOfYears;
+  final int? noOfYears;
   const ExperienceCard(
       {super.key,
       required this.title,
@@ -33,7 +33,7 @@ class ExperienceCard extends StatelessWidget {
           SizedBox(
             width: 16.w,
           ),
-          subTitle != null
+          subTitle != ''
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -62,16 +62,19 @@ class ExperienceCard extends StatelessWidget {
             width: 16.w,
           ),
           const Spacer(),
-          Align(
-            alignment:
-                subTitle != null ? Alignment.topLeft : Alignment.centerLeft,
-            child: Text(
-              "$noOfYears years",
-              style: AppStyles.heading4.copyWith(
-                color: AppColors.blue,
-              ),
-            ),
-          )
+          title != 'Investor'
+              ? Align(
+                  alignment: subTitle != null
+                      ? Alignment.topLeft
+                      : Alignment.centerLeft,
+                  child: Text(
+                    "$noOfYears years",
+                    style: AppStyles.heading4.copyWith(
+                      color: AppColors.blue,
+                    ),
+                  ),
+                )
+              : const SizedBox(),
         ],
       ),
     );

@@ -30,8 +30,7 @@ class _PostCardState extends State<PostCard> {
     try {
       await cubit.deleteListing(widget.listing.id!);
 
-      if (!mounted)
-        return; // Ensure the widget is still mounted before proceeding
+      if (!mounted) return;
 
       showToast(message: "Deletion Successful", context: context);
     } catch (e) {

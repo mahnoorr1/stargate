@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stargate/config/constants.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/user.dart';
 import 'package:stargate/screens/services_screen/widgets/experience_card.dart';
@@ -37,7 +38,7 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                         bottomLeft: Radius.circular(30.w),
                         bottomRight: Radius.circular(30.w),
                       ),
-                      child: widget.user.image != null
+                      child: widget.user.image != ''
                           ? Image(
                               width: double.infinity,
                               height: MediaQuery.of(context).size.height * 0.45,
@@ -47,7 +48,10 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                               ),
                             )
                           : Container(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height * 0.45,
                               color: AppColors.lightGrey,
+                              child: Image.asset(AppImages.user),
                             ),
                     ),
                     Container(
@@ -174,27 +178,51 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
   }
 
   Widget investorContent() {
+    // Find the investor service from the user's services
+    Service? investorService = widget.user.services.firstWhere(
+      (service) => service.details['name'] == 'Investor',
+    );
+
+    // Check if investorService is found and if it contains investment range
+    var min = 0;
+    var max = 0;
+    if (investorService != null) {
+      // Ensure investment range exists and has valid values
+      if (investorService.details['investmentRange'] != null) {
+        min = investorService.details['investmentRange']['min'] ?? 0;
+        max = investorService.details['investmentRange']['max'] ?? 0;
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Investment Range",
-          style: AppStyles.supportiveText.copyWith(
-            color: AppColors.primaryGrey,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: 6.w),
-        Row(
-          children: [
-            Image.asset(AppIcons.cash, width: 30.w),
-            SizedBox(width: 8.w),
-            Text(
-              "10000 - 200000",
-              style: AppStyles.heading4.copyWith(color: AppColors.blue),
-            ),
-          ],
-        ),
+        investorService != null
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Investment Range",
+                    style: AppStyles.supportiveText.copyWith(
+                      color: AppColors.primaryGrey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 6.w),
+                  Row(
+                    children: [
+                      Image.asset(AppIcons.cash, width: 30.w),
+                      SizedBox(width: 8.w),
+                      Text(
+                        "$min - $max", // Show min and max values
+                        style:
+                            AppStyles.heading4.copyWith(color: AppColors.blue),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            : const SizedBox(),
         SizedBox(height: 12.w),
         Text(
           "Investment priorities",
@@ -221,7 +249,7 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
         const PdfThumbnail(),
         SizedBox(height: 16.w),
         Text(
-          "contact on my website",
+          "Contact on my website",
           style: AppStyles.heading4.copyWith(color: AppColors.blue),
         ),
         SizedBox(height: 16.w),
@@ -271,6 +299,20 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
   }
 
   Widget investorAndMoreContent() {
+    // Check if the user has an investment service
+    Service? investmentService = widget.user.services.firstWhere((service) =>
+        service.details['name'] == 'Investor' &&
+        service.details['investmentRange']['min'] != 0 &&
+        service.details['investmentRange']['max'] != 0);
+
+    // Fetch min and max investment values
+    var min = investmentService != null
+        ? investmentService.details['investmentRange']['min']
+        : 0;
+    var max = investmentService != null
+        ? investmentService.details['investmentRange']['max']
+        : 0;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -287,7 +329,7 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
             Image.asset(AppIcons.cash, width: 30.w),
             SizedBox(width: 8.w),
             Text(
-              "10000 - 200000",
+              "$min - $max", // Dynamically display the investment range
               style: AppStyles.heading4.copyWith(color: AppColors.blue),
             ),
           ],
@@ -306,9 +348,7 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
             BubbleTextButton(text: "commercial"),
           ],
         ),
-        SizedBox(
-          height: 12.w,
-        ),
+        SizedBox(height: 12.w),
         Text(
           "Specialized Experience",
           style: AppStyles.supportiveText.copyWith(

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/user.dart';
 import 'package:stargate/screens/services_screen/service_provider_details.dart';
+import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/blurred_rectangle.dart';
 
 class ServiceProviderListingCard extends StatelessWidget {
@@ -31,14 +32,18 @@ class ServiceProviderListingCard extends StatelessWidget {
             Radius.circular(30.w),
           ),
           color: AppColors.lightGrey,
-          image: user.image != null
+          image: user.image != null && user.image != ''
               ? DecorationImage(
                   image: NetworkImage(
                     user.image!,
                   ),
                   fit: BoxFit.cover,
                 )
-              : null,
+              : const DecorationImage(
+                  image: AssetImage(
+                    AppImages.user,
+                  ),
+                ),
         ),
         child: Column(
           mainAxisAlignment: user.verified ?? false

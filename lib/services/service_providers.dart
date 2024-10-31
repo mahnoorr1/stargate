@@ -34,6 +34,7 @@ Future<List<User>> getAllServiceUsers() async {
       throw Exception('Failed to get users: ${response.statusCode}');
     }
   } catch (e) {
+    print(e.toString());
     return [];
   }
 }
@@ -42,7 +43,9 @@ Future<List<User>> filterServiceUsers({
   String? country,
   String? city,
   String? experience,
+  String? profession,
 }) async {
+  print("entered");
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('accessToken');
   var headers = {
@@ -50,31 +53,37 @@ Future<List<User>> filterServiceUsers({
     // 'Cookie': "accessToken=${token!}",
     'Authorization': token!,
   };
-  var queryParameters = <String, String>{};
+  print(token);
+  Map<String, String> queryParams = {};
 
+  if (profession != null && profession.isNotEmpty) {
+    queryParams['profession'] = profession;
+  }
   if (country != null && country.isNotEmpty) {
-    queryParameters['country'] = country;
+    queryParams['country'] = country;
   }
   if (city != null && city.isNotEmpty) {
-    queryParameters['city'] = city;
+    queryParams['city'] = city;
   }
   if (experience != null && experience.isNotEmpty) {
-    queryParameters['experience'] = experience;
+    queryParams['experience'] = experience;
   }
 
   try {
-    var uri = Uri.http(server, 'user/filter', queryParameters);
-    var request = http.Request('GET', uri);
-    request.headers.addAll(headers);
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      var jsonString = await response.stream.bytesToString();
-      try {
-        final decodedData = jsonDecode(jsonString);
+    String baseUrl = "${server}user/filter";
+    Uri uri = Uri.parse(baseUrl).replace(queryParameters: queryParams);
 
-        final users = (decodedData['data'] as List<dynamic>)
+    final response = await http.get(uri);
+    print("sent");
+    if (response.statusCode == 200) {
+      print(200);
+      var data = json.decode(response.body);
+      print(data);
+      try {
+        final users = (data['data'] as List<dynamic>)
             .map((userJson) => User.fromJson(userJson as Map<String, dynamic>))
             .toList();
+        print(users);
         return users;
       } catch (e) {
         return [];
@@ -83,6 +92,7 @@ Future<List<User>> filterServiceUsers({
       throw Exception('Failed to get users: ${response.statusCode}');
     }
   } catch (e) {
+    print("errorrr  $e");
     return [];
   }
 }

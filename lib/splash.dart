@@ -6,7 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/cubit/real_estate_listing/cubit.dart';
+import 'package:stargate/cubit/service_providers/cubit.dart';
 import 'package:stargate/navbar/navbar.dart';
+import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/widgets/animated/entrance_fader.dart';
 
@@ -48,6 +50,10 @@ class _SplashScreenState extends State<SplashScreen> {
               BlocProvider.of<RealEstateListingsCubit>(context);
           UserProfileProvider.c(context).getUserDetails();
           await listingCubit.getAllRealEstateListings();
+          // AllUsersCubit serviceProviders =
+          //     BlocProvider.of<AllUsersCubit>(context);
+          // await serviceProviders.getAllUsers();
+          await AllUsersProvider.c(context).fetchUsers();
 
           Navigator.pushReplacementNamed(context, '/navbar');
         }

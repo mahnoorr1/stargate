@@ -150,28 +150,28 @@ class _SliderView extends StatelessWidget {
                   title: menu.title, iconData: menu.iconData, path: menu.path)),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 40.w),
-            child: Row(
-              children: [
-                const Icon(Icons.logout, color: AppColors.blue),
-                SizedBox(
-                  width: 20.w,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    deleteAccessToken();
-                    deleteUserData();
-                    UserProfileProvider().resetUserDetails();
-                    Navigator.popAndPushNamed(context, '/login');
-                    showToast(message: "Logged Out", context: context);
-                  },
-                  child: const Text('Logout',
+          GestureDetector(
+            onTap: () {
+              deleteAccessToken();
+              deleteUserData();
+              UserProfileProvider().resetUserDetails();
+              Navigator.popAndPushNamed(context, '/login');
+              showToast(message: "Logged Out", context: context);
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 40.w),
+              child: Row(
+                children: [
+                  const Icon(Icons.logout, color: AppColors.blue),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  const Text('Logout',
                       style: TextStyle(
                         color: AppColors.blue,
                       )),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

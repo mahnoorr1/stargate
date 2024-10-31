@@ -29,7 +29,6 @@ Future<List<RealEstateListing>> getAllListings() async {
 
         if (decodedData is Map<String, dynamic>) {
           final List<dynamic> data = decodedData['data'];
-          print(data);
           if (data.isNotEmpty) {
             final listings = data.map((json) {
               return RealEstateListing.fromJson(

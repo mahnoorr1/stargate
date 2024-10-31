@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stargate/cubit/service_providers/cubit.dart';
+import 'package:provider/provider.dart';
 import 'package:stargate/models/user.dart';
 import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
@@ -12,6 +11,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:stargate/screens/services_screen/widgets/user_listing_card.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/utils/app_enums.dart';
+
+import '../../providers/service_providers_provider.dart';
 
 class ServicesScreen extends StatefulWidget {
   const ServicesScreen({super.key});
@@ -35,31 +36,12 @@ class _ServicesScreenState extends State<ServicesScreen> {
   TextEditingController city = TextEditingController();
   String selectedExperience = '';
   bool filterApplied = false;
-  List<User> allUsers = [];
   List<User> filteredUsers = [];
 
   @override
   void initState() {
     super.initState();
-    getUsers();
-  }
-
-  Future<void> getUsers() async {
-    AllUsersCubit cubit = BlocProvider.of<AllUsersCubit>(context);
-    try {
-      await cubit.getAllUsers();
-      // // Listen to the users from the state
-      // cubit.stream.listen((state) {
-      //   if (state is GetAllUsersSuccess) {
-      //     // setState(() {
-      //     allUsers = state.users;
-      //     filterUsersByType(users, UserType.investor);
-      //     // });
-      //   }
-      // });
-    } catch (e) {
-      // Handle error
-    }
+    Provider.of<AllUsersProvider>(context, listen: false).fetchUsers();
   }
 
   List<User> filterUsersByType(List<User> users, UserType selectedType) {
@@ -68,28 +50,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
         .toList();
   }
 
-  Future<void> filterUsers() async {
-    AllUsersCubit cubit = BlocProvider.of<AllUsersCubit>(context);
-    try {
-      print("entered filters");
-      await cubit.filterUsers();
-      // cubit.stream.listen((state) {
-      //   if (state is GetFilteredUsersSuccess) {
-      //     setState(() {
-      //       allUsers = state.filteredUsers;
-      //       filterUsersByType(users, UserType.investor);
-      //     });
-      //   }
-      // });
-    } catch (e) {
-      print(e.toString());
-      // Handle error
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AllUsersCubit>();
+    final allUsersProvider = Provider.of<AllUsersProvider>(context);
+
+    if (!filterApplied) {
+      filteredUsers = filterUsersByType(allUsersProvider.users, selectedUser);
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -104,101 +72,74 @@ class _ServicesScreenState extends State<ServicesScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(10.w),
-        child: BlocBuilder<AllUsersCubit, AllUsersState>(
-          bloc: cubit,
-          builder: (context, state) {
-            if (!filterApplied) {
-              if (state is GetAllUsersInitial) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is GetAllUsersLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is GetAllUsersSuccess) {
-                final users = state.users;
-
-                filteredUsers = filterUsersByType(users, selectedUser);
-              } else {
-                if (state is GetFilteredUsersInitial) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is GetFilteredUsersLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is GetFilteredUsersSuccess) {
-                  final users = state.filteredUsers;
-
-                  filteredUsers = filterUsersByType(users, selectedUser);
-                }
-              }
-
-              // Filter users based on the selected user type
-
-              return Column(
-                children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        ...userTypes.map(
-                          (type) => CustomTabButton(
-                            type: type.toString().split('.').last,
-                            current: selectedUser.toString().split('.').last,
-                            selected: (value) {
-                              setState(() {
-                                selectedUser = UserType.values.firstWhere((e) =>
-                                    e.toString().split('.').last == value);
-                              });
-                            },
-                          ),
+        child: allUsersProvider.loading
+            ? const Center(child: CircularProgressIndicator())
+            : allUsersProvider.noUsers
+                ? const Center(child: Text("No users found"))
+                : Column(
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            ...userTypes.map(
+                              (type) => CustomTabButton(
+                                type: type.toString().split('.').last,
+                                current:
+                                    selectedUser.toString().split('.').last,
+                                selected: (value) {
+                                  setState(() {
+                                    selectedUser = UserType.values.firstWhere(
+                                        (e) =>
+                                            e.toString().split('.').last ==
+                                            value);
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 6.w),
-                  filteredUsers.isNotEmpty
-                      ? Expanded(
-                          child: SingleChildScrollView(
-                            child: StaggeredGrid.count(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 8.w,
-                              mainAxisSpacing: 8.w,
-                              children: List.generate(filteredUsers.length + 1,
-                                  (index) {
-                                if (index == 1) {
-                                  return FilterButton(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return bottomSheetContent();
+                      ),
+                      SizedBox(height: 6.w),
+                      filteredUsers.isNotEmpty
+                          ? Expanded(
+                              child: SingleChildScrollView(
+                                child: StaggeredGrid.count(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 8.w,
+                                  mainAxisSpacing: 8.w,
+                                  children: List.generate(
+                                      filteredUsers.length + 1, (index) {
+                                    if (index == 1) {
+                                      return FilterButton(
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return bottomSheetContent();
+                                            },
+                                          );
                                         },
                                       );
-                                    },
-                                  );
-                                } else {
-                                  int itemIndex = index > 1 ? index - 1 : index;
-                                  return ServiceProviderListingCard(
-                                      user: filteredUsers[itemIndex]);
-                                }
-                              }),
+                                    } else {
+                                      int itemIndex =
+                                          index > 1 ? index - 1 : index;
+                                      return ServiceProviderListingCard(
+                                          user: filteredUsers[itemIndex]);
+                                    }
+                                  }),
+                                ),
+                              ),
+                            )
+                          : const Expanded(
+                              child: Center(
+                                  child: Text(
+                                "No users under selected category",
+                                style: AppStyles.supportiveText,
+                              )),
                             ),
-                          ),
-                        )
-                      : const Expanded(
-                          child: Center(
-                              child: Text(
-                            "No users under selected category",
-                            style: AppStyles.supportiveText,
-                          )),
-                        ),
-                ],
-              );
-            } else if (state is GetAllUsersFailure) {
-              return Center(
-                child: Text(state.errorMessage),
-              );
-            } else {
-              return const Text('Unexpected state'); // Handle unexpected states
-            }
-          },
-        ),
+                    ],
+                  ),
       ),
     );
   }
@@ -282,7 +223,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       setState(() {
                         filterApplied = true;
                       });
-                      filterUsers();
+                      applyFilters();
                     } else {
                       Navigator.pop(context);
                     }
@@ -303,8 +244,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
       city.clear();
       selectedExperience = '';
       filterApplied = false;
-      // Optionally reset the filtered users to show all users again
-      filteredUsers = filterUsersByType(allUsers, selectedUser);
+      filteredUsers = filterUsersByType(
+          Provider.of<AllUsersProvider>(context, listen: false).users,
+          selectedUser);
     });
+  }
+
+  void applyFilters() {
+    AllUsersProvider.c(context)
+        .filterUsers(country.text, city.text, selectedExperience, selectedUser);
   }
 }

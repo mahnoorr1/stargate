@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stargate/config/core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/screens/home/widgets/property_card.dart';
+import 'package:stargate/screens/home/widgets/service_provider_card.dart';
 import 'package:stargate/screens/property_request_screen/property_request_screen.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/loader/loader.dart';
@@ -66,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Stack(
                   children: [
@@ -227,6 +230,30 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 16.w,
+                      ),
+                      Text(
+                        "Service Providers",
+                        style: AppStyles.heading4.copyWith(
+                          color: AppColors.blue,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8.w,
+                      ),
+                      ServiceProviderHomeCard(
+                        user: AllUsersProvider.c(context).users.firstWhere(
+                            (user) => user.image != '' && user.address != ''),
+                      ),
                     ],
                   ),
                 ),

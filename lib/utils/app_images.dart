@@ -8,7 +8,8 @@ class AppImages {
   static const String room = 'assets/images/room.png';
   static const String bath = 'assets/images/bath.png';
   static const String sale = 'assets/images/sale.png';
-  static const String propertySearch = 'assets/images/property_search.jpeg';
+  static const String propertySearch = 'assets/images/property_search.jpg';
+  static const String user = 'assets/images/user.png';
 }
 
 class AppIcons {
