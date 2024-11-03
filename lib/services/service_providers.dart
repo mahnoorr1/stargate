@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/constants.dart';
 import 'package:stargate/models/user.dart';
@@ -88,5 +89,30 @@ Future<List<User>> filterServiceUsers({
     }
   } catch (e) {
     return [];
+  }
+}
+
+Future<bool> sendEmailMessage(
+    {required String userId, required String message}) async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('accessToken');
+    var headers = {'Content-Type': 'application/json', 'Authorization': token!};
+    var request = http.Request('POST', Uri.parse('${server}user/contact'));
+    request.body = json.encode({"userId": userId, "message": message});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      log(await response.stream.bytesToString());
+      return true;
+    } else {
+      log(response.reasonPhrase.toString());
+      return false;
+    }
+  } catch (error) {
+    log('sendEmailMessage Catched Error: $error');
+    return false;
   }
 }

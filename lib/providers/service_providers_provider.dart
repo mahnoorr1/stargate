@@ -1,7 +1,9 @@
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+import 'package:stargate/config/core.dart';
 import 'package:stargate/utils/app_enums.dart';
 import '../models/user.dart';
 import '../services/service_providers.dart';
@@ -126,5 +128,15 @@ class AllUsersProvider extends ChangeNotifier {
     _filteredUsers = _users; // Reset to display all users
     _noUsers = _filteredUsers.isEmpty; // Update _noUsers based on all users
     notifyListeners();
+  }
+
+  Future<bool> sendEmail({
+    required String userId,
+    required String message,
+  }) async {
+    easyLoading();
+    var res = await sendEmailMessage(userId: userId, message: message);
+    EasyLoading.dismiss();
+    return res;
   }
 }
