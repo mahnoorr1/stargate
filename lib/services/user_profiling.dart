@@ -268,3 +268,27 @@ void deleteUserData() async {
   prefs.setString('email', '');
   prefs.setString('membership', '');
 }
+
+Future<String> verifyOTP(String otp, String email) async {
+  var request = http.Request('POST', Uri.parse('${server}user/verify-otp'));
+
+  try {
+    request.body = json.encode({
+      "otp": otp,
+      "email": email,
+    });
+
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      return "Email verified, login to continue!";
+    } else {
+      final errorResponse = await response.stream.bytesToString();
+      final Map<String, dynamic> errorData = jsonDecode(errorResponse);
+      final String errorMessage = errorData['message'] as String;
+      print(errorData);
+      return errorMessage;
+    }
+  } catch (e) {
+    return e.toString();
+  }
+}

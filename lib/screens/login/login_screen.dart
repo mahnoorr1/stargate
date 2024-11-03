@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
+import 'package:stargate/screens/otp_screen/otp_Screen.dart';
 import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,6 +48,17 @@ class _LoginScreenState extends State<LoginScreen> {
         isAlert: true,
         color: Colors.redAccent,
       );
+      if (loggedIn == 'Email not verified') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OTPScreen(
+              email: email.text,
+              password: password.text,
+            ),
+          ),
+        );
+      }
     }
   }
 
