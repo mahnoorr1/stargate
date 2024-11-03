@@ -9,6 +9,7 @@ import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/underlined_textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 
+import '../../services/user_profiling.dart';
 import '../../widgets/screen/screen.dart';
 
 // ignore: must_be_immutable
@@ -34,7 +35,29 @@ class _OTPScreenState extends State<OTPScreen> {
   final formKey = GlobalKey<FormState>();
   bool verifying = false;
 
-  void verifyOTP() async {}
+  void verifyOtp() async {
+    setState(() {
+      verifying = true;
+    });
+    String? result = await verifyOTP(otp.text, widget.email);
+    if (result == 'Email verified, login to continue!') {
+      showToast(message: result, context: context);
+      setState(() {
+        verifying = false;
+      });
+      Navigator.pushReplacementNamed(context, '/login');
+    } else {
+      setState(() {
+        verifying = false;
+      });
+      showToast(
+        message: result,
+        context: context,
+        isAlert: true,
+        color: Colors.redAccent,
+      );
+    }
+  }
 
   void onVerfified() {
     Navigator.popAndPushNamed(context, '/navbar');
@@ -123,7 +146,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               text: "Verify",
                               onPressed: () {
                                 if (otp.text.isNotEmpty) {
-                                  verifyOTP();
+                                  verifyOtp();
                                 } else {
                                   showToast(
                                     message: "Please Enter OTP!",

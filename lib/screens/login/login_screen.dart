@@ -28,36 +28,57 @@ class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
 
   void onForgetPassword() {}
+  bool isValidEmail() {
+    final RegExp emailRegex =
+        RegExp(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
+    return emailRegex.hasMatch(email.text);
+  }
 
   void onSignIn() async {
-    setState(() {
-      login = true;
-    });
-    String? loggedIn = await loginUser(email.text, password.text);
-    if (loggedIn == 'token') {
-      await AllUsersProvider.c(context).fetchUsers();
-      Navigator.popAndPushNamed(context, '/navbar');
-      showToast(message: "Login successful", context: context);
-    } else {
-      setState(() {
-        login = false;
-      });
+    if (email.text.isEmpty || password.text.isEmpty) {
       showToast(
-        message: loggedIn!,
+        message: "Please enter all fields!",
         context: context,
         isAlert: true,
         color: Colors.redAccent,
       );
-      if (loggedIn == 'Email not verified') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OTPScreen(
-              email: email.text,
-              password: password.text,
-            ),
-          ),
+    } else if (!isValidEmail()) {
+      showToast(
+        message: "Invalid Email!",
+        context: context,
+        isAlert: true,
+        color: Colors.redAccent,
+      );
+    } else {
+      setState(() {
+        login = true;
+      });
+      String? loggedIn = await loginUser(email.text, password.text);
+      if (loggedIn == 'token') {
+        await AllUsersProvider.c(context).fetchUsers();
+        Navigator.popAndPushNamed(context, '/navbar');
+        showToast(message: "Login successful", context: context);
+      } else {
+        setState(() {
+          login = false;
+        });
+        showToast(
+          message: loggedIn!,
+          context: context,
+          isAlert: true,
+          color: Colors.redAccent,
         );
+        if (loggedIn == 'Email not verified') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OTPScreen(
+                email: email.text,
+                password: password.text,
+              ),
+            ),
+          );
+        }
       }
     }
   }

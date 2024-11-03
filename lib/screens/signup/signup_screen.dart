@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/screens/otp_screen/otp_Screen.dart';
 import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,8 @@ import 'package:stargate/widgets/inputfields/dropdown.dart';
 import 'package:stargate/widgets/inputfields/underlined_textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
+
+import '../../utils/app_enums.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -29,12 +32,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   List<String> professions = [
     'Select Profession',
-    'Notary',
-    'Investor',
-    'Real Estate Agent',
-    'Lawyer',
-    'Appraiser',
-    'Other'
+    UserType.investor.toCamelCaseString(),
+    UserType.agent.toCamelCaseString(),
+    UserType.consultant.toCamelCaseString(),
+    UserType.lawyer.toCamelCaseString(),
+    UserType.notary.toCamelCaseString(),
+    UserType.appraiser.toCamelCaseString(),
+    UserType.manager.toCamelCaseString(),
+    UserType.loanBroker.toCamelCaseString(),
+    UserType.economist.toCamelCaseString(),
+    UserType.drawingMaker.toCamelCaseString(),
+    UserType.propertyAdmin.toCamelCaseString(),
   ];
 
   bool registerSuccess = false;
@@ -43,29 +51,81 @@ class _SignUpScreenState extends State<SignUpScreen> {
     Navigator.popAndPushNamed(context, '/login');
   }
 
+  bool isValidEmail() {
+    final RegExp emailRegex =
+        RegExp(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
+    return emailRegex.hasMatch(email.text);
+  }
+
   @override
   Widget build(BuildContext context) {
     void onSignUp() async {
       setState(() {
         loading = true;
       });
-      String? register = await registerUser(
-          name.text, email.text, password.text, profession.text);
-      if (register == 'token') {
-        registerSuccess = true;
-        setState(() {
-          loading = false;
-        });
-        Navigator.pushReplacementNamed(context, '/navbar');
-      } else {
+      if (name.text.isEmpty ||
+          email.text.isEmpty ||
+          password.text.isEmpty ||
+          confirmPassword.text.isEmpty ||
+          profession.text == 'Select Profession') {
         setState(() {
           loading = false;
         });
         showToast(
-            message: register!,
-            context: context,
-            color: Colors.redAccent,
-            isAlert: true);
+          message: "Please enter valid fields!",
+          context: context,
+          isAlert: true,
+          color: Colors.redAccent,
+        );
+      } else if (!isValidEmail()) {
+        setState(() {
+          loading = false;
+        });
+        showToast(
+          message: "Invalid Email",
+          context: context,
+          isAlert: true,
+          color: Colors.redAccent,
+        );
+      } else if (password.text != confirmPassword.text) {
+        setState(() {
+          loading = false;
+        });
+        showToast(
+          message: "Password does not match!",
+          context: context,
+          isAlert: true,
+          color: Colors.redAccent,
+        );
+      } else {
+        String? register = await registerUser(
+            name.text, email.text, password.text, profession.text);
+        if (register ==
+            'User registered successfully. Please check your email for the OTP.') {
+          registerSuccess = true;
+          setState(() {
+            loading = false;
+          });
+          showToast(message: register!, context: context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OTPScreen(
+                email: email.text,
+                password: password.text,
+              ),
+            ),
+          );
+        } else {
+          setState(() {
+            loading = false;
+          });
+          showToast(
+              message: register!,
+              context: context,
+              color: Colors.redAccent,
+              isAlert: true);
+        }
       }
     }
 

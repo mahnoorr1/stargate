@@ -57,6 +57,7 @@ Future<String?> registerUser(
   var request = http.Request('POST', Uri.parse('${server}user/register'));
 
   try {
+    print("inside");
     request.body = json.encode({
       "name": name,
       "email": email,
@@ -69,15 +70,15 @@ Future<String?> registerUser(
     if (response.statusCode == 200 || response.statusCode == 201) {
       String jsonString = await response.stream.bytesToString();
       var responseData = jsonDecode(jsonString);
-      String? token = responseData['data']['accessToken'];
-      storeUserData(
-        name: responseData['data']['user']['name'],
-        email: email,
-        id: responseData['data']['user']['_id'],
-        membership: responseData['data']['user']['membership']['_id'],
-      );
-      storeAccessToken(token!);
-      return 'token';
+      String? code = responseData['message'];
+      // storeUserData(
+      //   name: responseData['data']['user']['name'],
+      //   email: email,
+      //   id: responseData['data']['user']['_id'],
+      //   membership: responseData['data']['user']['membership']['_id'],
+      // );
+      // storeAccessToken(token!);
+      return code;
     } else {
       final errorResponse = await response.stream.bytesToString();
       final Map<String, dynamic> errorData = jsonDecode(errorResponse);
@@ -85,6 +86,7 @@ Future<String?> registerUser(
       return errorMessage;
     }
   } catch (e) {
+    print(e.toString());
     return e.toString();
   }
 }
@@ -270,6 +272,8 @@ void deleteUserData() async {
 }
 
 Future<String> verifyOTP(String otp, String email) async {
+  print("\"${email}\"");
+  print(otp);
   var request = http.Request('POST', Uri.parse('${server}user/verify-otp'));
 
   try {
@@ -279,7 +283,7 @@ Future<String> verifyOTP(String otp, String email) async {
     });
 
     http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       return "Email verified, login to continue!";
     } else {
       final errorResponse = await response.stream.bytesToString();
