@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/user.dart';
+import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/screens/services_screen/widgets/experience_card.dart';
 import 'package:stargate/utils/app_enums.dart';
 import 'package:stargate/utils/app_images.dart';
@@ -12,7 +14,10 @@ import 'package:stargate/widgets/buttons/back_button.dart';
 import 'package:stargate/widgets/buttons/bubble_text_button.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
 import 'package:stargate/widgets/buttons/membership_button.dart';
+import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/pdf_thumbnail.dart';
+
+import '../../widgets/inputfields/textfield.dart';
 
 class ServiceProviderDetails extends StatefulWidget {
   final User user;
@@ -23,6 +28,18 @@ class ServiceProviderDetails extends StatefulWidget {
 }
 
 class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
+  final TextEditingController _emailMessageController = TextEditingController();
+  _onEmailMessageSendSuccess() {
+    Navigator.pop(context);
+    showToast(
+        message: "Message Sent Successfully to ${widget.user.name}",
+        context: context);
+  }
+
+  _onError() {
+    showToast(message: "Something Went Wrong", context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -253,7 +270,12 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
           style: AppStyles.heading4.copyWith(color: AppColors.blue),
         ),
         SizedBox(height: 16.w),
-        const CustomButton(text: "Send Mail"),
+        CustomButton(
+            onPressed: () {
+              showCustomBottomSheet(
+                  context: context, child: _sendEmailMessage());
+            },
+            text: "Send Mail"),
       ],
     );
   }
@@ -293,7 +315,12 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
           style: AppStyles.heading4.copyWith(color: AppColors.blue),
         ),
         SizedBox(height: 16.w),
-        const CustomButton(text: "Send Mail"),
+        CustomButton(
+            onPressed: () {
+              showCustomBottomSheet(
+                  context: context, child: _sendEmailMessage());
+            },
+            text: "Send Mail"),
       ],
     );
   }
@@ -384,4 +411,72 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
       ],
     );
   }
+
+  Widget _sendEmailMessage() {
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Send Message",
+                  style: AppStyles.heading3,
+                ),
+                SizedBox(height: 12.w),
+                CustomTextField(
+                  controller: _emailMessageController,
+                  label: "Message",
+                  hintText: "Write your Message",
+                  inputType: TextInputType.text,
+                  horizontalSpacing: 0,
+                  maxLines: 3,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  child: CustomButton(
+                    text: "Send",
+                    onPressed: () async {
+                      if (_emailMessageController.text.isEmpty) {
+                        showToast(
+                            message: "Please Enter Message", context: context);
+                      } else {
+                        var res = await context
+                            .read<AllUsersProvider>()
+                            .sendEmail(
+                                userId: widget.user.id,
+                                message: _emailMessageController.text);
+
+                        res ? _onEmailMessageSendSuccess() : _onError();
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+void showCustomBottomSheet(
+    {required BuildContext context, required Widget child}) {
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.white,
+    isScrollControlled:
+        true, // Allows the bottom sheet to resize when the keyboard opens
+    builder: (context) => Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context)
+            .viewInsets
+            .bottom, // Adjusts for the keyboard
+      ),
+      child: child,
+    ),
+  );
 }
