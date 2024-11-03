@@ -6,6 +6,7 @@ import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
 import 'package:stargate/widgets/buttons/custom_tab_button.dart';
 import 'package:stargate/widgets/buttons/filter_button.dart';
+import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/country_textfield.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:stargate/screens/services_screen/widgets/user_listing_card.dart';
@@ -23,20 +24,26 @@ class ServicesScreen extends StatefulWidget {
 
 class _ServicesScreenState extends State<ServicesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  UserType selectedUser = UserType.investor;
+  UserType selectedUser = UserType.all;
   List<UserType> userTypes = [
+    UserType.all,
     UserType.investor,
     UserType.agent,
+    UserType.consultant,
     UserType.lawyer,
     UserType.notary,
     UserType.appraiser,
+    UserType.manager,
+    UserType.loanBroker,
+    UserType.economist,
+    UserType.drawingMaker,
+    UserType.propertyAdmin,
   ];
   TextEditingController country = TextEditingController();
   TextEditingController state = TextEditingController();
   TextEditingController city = TextEditingController();
   String selectedExperience = '';
   bool filterApplied = false;
-  List<User> filteredUsers = [];
 
   @override
   void initState() {
@@ -44,28 +51,32 @@ class _ServicesScreenState extends State<ServicesScreen> {
     Provider.of<AllUsersProvider>(context, listen: false).fetchUsers();
   }
 
-  List<User> filterUsersByType(List<User> users, UserType selectedType) {
-    return users
-        .where((user) => user.containsServiceUserType(selectedType))
-        .toList();
+  void resetFilters() {
+    setState(() {
+      country.clear();
+      state.clear();
+      city.clear();
+      selectedExperience = '';
+      filterApplied = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final allUsersProvider = Provider.of<AllUsersProvider>(context);
-
-    if (!filterApplied) {
-      filteredUsers = filterUsersByType(allUsersProvider.users, selectedUser);
-    }
+  
+    List<User> displayedUsers = selectedUser == UserType.all
+        ? allUsersProvider.filteredUsers
+        : allUsersProvider.filteredUsers
+            .where((user) => user.containsServiceUserType(selectedUser))
+            .toList();
 
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
           "Search",
-          style: AppStyles.heading3.copyWith(
-            color: AppColors.darkBlue,
-          ),
+          style: AppStyles.heading3.copyWith(color: AppColors.darkBlue),
         ),
         centerTitle: true,
         surfaceTintColor: Colors.transparent,
@@ -74,7 +85,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
         padding: EdgeInsets.all(10.w),
         child: allUsersProvider.loading
             ? const Center(child: CircularProgressIndicator())
-            : allUsersProvider.noUsers
+            : (allUsersProvider.noUsers && !filterApplied)
                 ? const Center(child: Text("No users found"))
                 : Column(
                     children: [
@@ -101,7 +112,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         ),
                       ),
                       SizedBox(height: 6.w),
-                      filteredUsers.isNotEmpty
+                      displayedUsers.isNotEmpty
                           ? Expanded(
                               child: SingleChildScrollView(
                                 child: StaggeredGrid.count(
@@ -109,7 +120,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                   crossAxisSpacing: 8.w,
                                   mainAxisSpacing: 8.w,
                                   children: List.generate(
-                                      filteredUsers.length + 1, (index) {
+                                      displayedUsers.length + 1, (index) {
                                     if (index == 1) {
                                       return FilterButton(
                                         onTap: () {
@@ -125,18 +136,42 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                       int itemIndex =
                                           index > 1 ? index - 1 : index;
                                       return ServiceProviderListingCard(
-                                          user: filteredUsers[itemIndex]);
+                                          user: displayedUsers[itemIndex]);
                                     }
                                   }),
                                 ),
                               ),
                             )
-                          : const Expanded(
-                              child: Center(
-                                  child: Text(
-                                "No users under selected category",
-                                style: AppStyles.supportiveText,
-                              )),
+                          : Expanded(
+                              child: Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.45,
+                                      child: FilterButton(
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return bottomSheetContent();
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.6,
+                                    child: const Center(
+                                      child:
+                                          Text("No users available on filter"),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                     ],
                   ),
@@ -161,40 +196,33 @@ class _ServicesScreenState extends State<ServicesScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Apply search filters for Service Providers',
-                  style: AppStyles.heading4,
-                ),
+                const Text('Apply search filters for Service Providers',
+                    style: AppStyles.heading4),
                 SizedBox(height: 12.h),
                 filterApplied
                     ? GestureDetector(
                         onTap: () {
+                          setState(() {
+                            filterApplied = false;
+                          });
+                          AllUsersProvider.c(context).resetFilters();
                           resetFilters();
-                          setState(() {});
                         },
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: Text(
                             "clear filters",
-                            style: AppStyles.heading4.copyWith(
-                              color: AppColors.blue,
-                            ),
+                            style: AppStyles.heading4
+                                .copyWith(color: AppColors.blue),
                           ),
                         ),
                       )
                     : const SizedBox(),
-                CountryPickerField(
-                  country: country,
-                  state: state,
-                  city: city,
-                ),
+                CountryPickerField(country: country, state: state, city: city),
                 SizedBox(height: 12.w),
-                Text(
-                  "Experience",
-                  style: AppStyles.normalText.copyWith(
-                    color: AppColors.primaryGrey,
-                  ),
-                ),
+                Text("Experience",
+                    style: AppStyles.normalText
+                        .copyWith(color: AppColors.primaryGrey)),
                 SizedBox(height: 6.w),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -219,13 +247,21 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   text: 'Apply Filters',
                   onPressed: () {
                     Navigator.pop(context);
-                    if (country.text.isNotEmpty || selectedExperience != '') {
-                      setState(() {
-                        filterApplied = true;
-                      });
-                      applyFilters();
-                    } else {
-                      Navigator.pop(context);
+                    setState(() {
+                      filterApplied = true;
+                    });
+                    AllUsersProvider.c(context).filterUsers(
+                      country.text,
+                      city.text,
+                      selectedExperience,
+                      selectedUser,
+                    );
+                    if (AllUsersProvider.c(context).filteredUsers.isEmpty) {
+                      showToast(
+                        message: "No users available on filter",
+                        context: context,
+                        isAlert: true,
+                      );
                     }
                   },
                 ),
@@ -235,23 +271,5 @@ class _ServicesScreenState extends State<ServicesScreen> {
         );
       },
     );
-  }
-
-  void resetFilters() {
-    setState(() {
-      country.clear();
-      state.clear();
-      city.clear();
-      selectedExperience = '';
-      filterApplied = false;
-      filteredUsers = filterUsersByType(
-          Provider.of<AllUsersProvider>(context, listen: false).users,
-          selectedUser);
-    });
-  }
-
-  void applyFilters() {
-    AllUsersProvider.c(context)
-        .filterUsers(country.text, city.text, selectedExperience, selectedUser);
   }
 }

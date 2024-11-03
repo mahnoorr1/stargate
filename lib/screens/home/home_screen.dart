@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getListing();
+      getUsers();
     });
   }
 
@@ -39,6 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       //
     }
+  }
+
+  void getUsers() async {
+    await AllUsersProvider.c(context).fetchUsers();
   }
 
   @override
@@ -54,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppColors.backgroundColor,
         body: BlocListener<RealEstateListingsCubit, RealEstateListingsState>(
           listener: (context, state) {
-            // Manage loading state based on Bloc state changes
             if (state is GetAllRealEstateListingsLoading &&
                 state.listings.isEmpty) {
               setState(() {

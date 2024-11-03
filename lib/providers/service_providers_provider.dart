@@ -1,8 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stargate/config/constants.dart';
-import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/utils/app_enums.dart';
 import '../models/user.dart';
 import '../services/service_providers.dart';
@@ -30,7 +28,8 @@ class AllUsersProvider extends ChangeNotifier {
   String selectedExperience = '';
   UserType? selectedUserType;
 
-  List<User> get users => _filteredUsers.isNotEmpty ? _filteredUsers : _users;
+  List<User> get users => _users;
+  List<User> get filteredUsers => _filteredUsers;
   bool get loading => _loading;
   bool get noUsers => _noUsers;
 
@@ -103,7 +102,7 @@ class AllUsersProvider extends ChangeNotifier {
         country: selectedCountry,
         city: selectedCity,
         experience: selectedExperience,
-        profession: selectedUserType!.toCamelCaseString(),
+        profession: selectedUserType!.name,
       );
 
       _filteredUsers = filteredUsers;
@@ -122,7 +121,8 @@ class AllUsersProvider extends ChangeNotifier {
     selectedCity = '';
     selectedExperience = '';
     selectedUserType = null;
-    _filteredUsers = _users; // Reset to all users
+    _filteredUsers = _users; // Reset to display all users
+    _noUsers = _filteredUsers.isEmpty; // Update _noUsers based on all users
     notifyListeners();
   }
 }
