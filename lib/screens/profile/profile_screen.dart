@@ -1,18 +1,17 @@
 // ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
-import 'package:stargate/cubit/real_estate_listing/cubit.dart';
 import 'package:stargate/models/profile.dart';
+import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 import 'edit_profile_screen.dart';
 import 'package:stargate/widgets/buttons/membership_button.dart';
-
 import 'widgets/post_card.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -23,19 +22,17 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  User? user;
-  bool loading = false;
+  bool hasShownNoPropertiesToast = false;
   @override
   void initState() {
     super.initState();
-    getProfile();
+    fetchUserProfile();
   }
 
-  Future<void> getProfile() async {
-    RealEstateListingsCubit cubit =
-        BlocProvider.of<RealEstateListingsCubit>(context);
+  Future<void> fetchUserProfile() async {
+    UserProfileProvider provider = UserProfileProvider.c(context);
     try {
-      await cubit.getUserProfileAlongWithProperty();
+      await provider.fetchUserProfile();
     } catch (e) {
       showToast(
         message: "Unable to fetch details",
@@ -49,32 +46,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Screen(
       overlayWidgets: [
-        BlocBuilder<RealEstateListingsCubit, RealEstateListingsState>(
-            builder: (context, state) {
-          if (state is UserProfileWithPropertyLoading) {
-            return const FullScreenLoader(
-              loading: true,
-            );
+        Consumer<UserProfileProvider>(builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return const FullScreenLoader(loading: true);
           }
-          if (state is UserProfileWithPropertySuccess) {
-            return buildContent(state.user);
+
+          if (provider.properties.isEmpty && !hasShownNoPropertiesToast) {
+            hasShownNoPropertiesToast = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              showToast(
+                message: "No properties found",
+                context: context,
+                isAlert: true,
+                color: Colors.redAccent,
+              );
+            });
           }
-          if (state is UserProfileWithPropertyFailure) {
-            showToast(
-              message: state.message,
-              context: context,
-              isAlert: true,
-              color: Colors.redAccent,
-            );
-          }
+
           return const SizedBox();
         })
       ],
-      child: buildContent(user),
+      child: Consumer<UserProfileProvider>(builder: (context, provider, child) {
+        return buildContent(provider);
+      }),
     );
   }
 
-  Widget buildContent(User? user) {
+  Widget buildContent(UserProfileProvider provider) {
+    final user = User(
+      services: provider.services,
+      id: provider.id,
+      name: provider.name,
+      email: provider.email,
+      image: provider.profileImage,
+      properties: provider.properties,
+      address: provider.address,
+      city: provider.city,
+      country: provider.countryName,
+    );
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Stack(
@@ -89,13 +99,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         bottomLeft: Radius.circular(30.w),
                         bottomRight: Radius.circular(30.w),
                       ),
-                      child: user?.image != null
+                      child: user.image != null
                           ? Image(
                               width: double.infinity,
                               height: MediaQuery.of(context).size.height * 0.45,
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                user!.image!,
+                                user.image!,
                               ),
                             )
                           : Container(
@@ -137,9 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   .width *
                                               0.65,
                                           child: Text(
-                                            user?.name != null
-                                                ? user!.name
-                                                : "",
+                                            user.name,
                                             style: AppStyles.heading3.copyWith(
                                               color: AppColors.white,
                                             ),
@@ -147,9 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         Text(
-                                          user?.email != null
-                                              ? user!.email
-                                              : "",
+                                          user.email,
                                           style:
                                               AppStyles.supportiveText.copyWith(
                                             color: AppColors.white,
@@ -168,19 +174,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             color: AppColors.white,
                                           ),
                                         ),
-                                        user == null || user.properties == null
-                                            ? Text(
-                                                '0',
-                                                style: AppStyles.heading4
-                                                    .copyWith(
-                                                        color: Colors.white),
-                                              )
-                                            : Text(
-                                                user.properties!.length
-                                                    .toString(),
-                                                style: AppStyles.heading4
-                                                    .copyWith(
-                                                        color: Colors.white))
+                                        Text(
+                                          user.properties?.length.toString() ??
+                                              '0',
+                                          style: AppStyles.heading4
+                                              .copyWith(color: Colors.white),
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -208,8 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             height: 12.w,
                           ),
-                          // ignore: prefer_is_empty
-                          user?.properties == null || user!.properties!.isEmpty
+                          user.properties == null || user.properties!.isEmpty
                               ? SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.3,
@@ -252,11 +250,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final result =
                     await Navigator.of(context, rootNavigator: false).push(
                   MaterialPageRoute(
-                    builder: (context) => EditProfile(user: user!),
+                    builder: (context) => EditProfile(user: user),
                   ),
                 );
                 if (result == 'success') {
-                  getProfile();
+                  fetchUserProfile(); // Fetch updated profile after editing
                 }
               },
               child: Container(
@@ -286,5 +284,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    hasShownNoPropertiesToast = false; // Reset flag when disposing
+    super.dispose();
   }
 }

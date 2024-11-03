@@ -1,11 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
-import 'package:stargate/cubit/real_estate_listing/cubit.dart';
+import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/widgets/animated/entrance_fader.dart';
@@ -44,14 +43,11 @@ class _SplashScreenState extends State<SplashScreen> {
             AppRoutes.login,
           );
         } else {
-          RealEstateListingsCubit listingCubit =
-              BlocProvider.of<RealEstateListingsCubit>(context);
-          UserProfileProvider.c(context).getUserDetails();
-          await listingCubit.getAllRealEstateListings();
           // AllUsersCubit serviceProviders =
           //     BlocProvider.of<AllUsersCubit>(context);
           // await serviceProviders.getAllUsers();
           await AllUsersProvider.c(context).fetchUsers();
+          await RealEstateProvider.c(context).fetchAllListings();
 
           Navigator.pushReplacementNamed(context, '/navbar');
         }

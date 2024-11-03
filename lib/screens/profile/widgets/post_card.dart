@@ -1,11 +1,11 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'dart:ui';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
-import 'package:stargate/cubit/real_estate_listing/cubit.dart';
+import 'package:stargate/providers/real_estate_provider.dart';
+import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/models/real_estate_listing.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,10 +25,12 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   Future<void> deleteListing() async {
-    RealEstateListingsCubit cubit =
-        BlocProvider.of<RealEstateListingsCubit>(context);
     try {
-      await cubit.deleteListing(widget.listing.id!);
+      await UserProfileProvider.c(context)
+          .deleteUserProperty(widget.listing.id!);
+      RealEstateProvider.c(context)
+          .deletePropertyInProvider(widget.listing.id!);
+      await RealEstateProvider.c(context).fetchAllListings();
 
       if (!mounted) return;
 

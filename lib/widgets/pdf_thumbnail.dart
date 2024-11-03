@@ -56,6 +56,7 @@ class _PdfThumbnail extends State<PdfThumbnail> {
                 Radius.circular(20.w),
               ),
               boxShadow: [AppStyles.boxShadow],
+              // ignore: deprecated_member_use
               color: AppColors.lightGrey.withOpacity(0.5),
             ),
             child: const PDF(

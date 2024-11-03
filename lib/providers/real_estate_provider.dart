@@ -1,0 +1,288 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
+import 'package:stargate/providers/user_info_provider.dart';
+import 'package:stargate/services/real_estate_listings.dart';
+import '../models/real_estate_listing.dart';
+
+class RealEstateProvider extends ChangeNotifier {
+  static RealEstateProvider c(BuildContext context, [bool listen = false]) =>
+      Provider.of<RealEstateProvider>(context, listen: listen);
+
+  static final RealEstateProvider _instance = RealEstateProvider._internal();
+
+  factory RealEstateProvider() {
+    return _instance;
+  }
+
+  RealEstateProvider._internal() {
+    _initializeProvider();
+  }
+
+  List<RealEstateListing> _allProperties = [];
+  List<RealEstateListing> _filteredProperties = [];
+  bool _loading = false;
+  bool _noListings = false;
+  bool _initialLoadComplete = false; // Flag for initial load
+
+  // Filter criteria
+  String selectedCountry = '';
+  String selectedCity = '';
+  String selectedOfferType = '';
+  String selectedPriceRange = '';
+  String selectedInvestmentType = '';
+  String selectedInvestmentSubcategory = '';
+  String selectedPurchaseType = '';
+  String selectedCondition = '';
+
+  List<RealEstateListing> get allProperties => _allProperties;
+  List<RealEstateListing> get filteredProperties => _filteredProperties;
+  bool get loading => _loading;
+  bool get noListings => _noListings;
+
+  Future<void> _initializeProvider() async {
+    await fetchAllListings(initialLoad: true);
+  }
+
+  Future<void> fetchAllListings({bool initialLoad = false}) async {
+    if (_initialLoadComplete && initialLoad) {
+      _noListings = _allProperties.isEmpty;
+      notifyListeners();
+      return;
+    }
+
+    if (_initialLoadComplete) {
+      await checkForNewListings();
+      return;
+    }
+
+    _loading = true;
+    _noListings = false;
+    notifyListeners();
+
+    try {
+      List<RealEstateListing> listings = await getAllListings();
+      if (listings.isNotEmpty) {
+        _updateListings(listings, isInitialLoad: true);
+      } else {
+        _noListings = true;
+      }
+    } catch (e) {
+      _noListings = true;
+      if (kDebugMode) print(e.toString());
+    } finally {
+      _loading = false;
+      _initialLoadComplete = true;
+      notifyListeners();
+    }
+  }
+
+  Future<void> checkForNewListings() async {
+    try {
+      List<RealEstateListing> newListings = await getAllListings();
+      final isEqual = const DeepCollectionEquality.unordered()
+          .equals(_allProperties, newListings);
+
+      if (!isEqual) {
+        _updateListings(newListings);
+      }
+    } catch (e) {
+      if (kDebugMode) print("Failed to check for new listings: $e");
+    }
+  }
+
+  void _updateListings(List<RealEstateListing> newListings,
+      {bool isInitialLoad = false}) {
+    if (isInitialLoad) {
+      _allProperties = newListings;
+    } else {
+      for (var newListing in newListings) {
+        if (!_allProperties.any((listing) => listing.id == newListing.id)) {
+          _allProperties.add(newListing);
+        }
+      }
+    }
+
+    _filteredProperties = _allProperties;
+    _noListings = _allProperties.isEmpty;
+    notifyListeners();
+  }
+
+  Future<void> filterProperties({
+    String? country,
+    String? city,
+    String? offerType,
+    String? priceRange,
+    String? investmentType,
+    String? investmentSubcategory,
+    String? purchaseType,
+    String? condition,
+  }) async {
+    selectedCountry = country ?? '';
+    selectedCity = city ?? '';
+    selectedOfferType = offerType ?? '';
+    selectedPriceRange = priceRange ?? '';
+    selectedInvestmentType = investmentType ?? '';
+    selectedInvestmentSubcategory = investmentSubcategory ?? '';
+    selectedPurchaseType = purchaseType ?? '';
+    selectedCondition = condition ?? '';
+
+    _loading = true;
+    notifyListeners();
+
+    try {
+      _filteredProperties = await filterProperty(
+        country: selectedCountry,
+        city: selectedCity,
+        offerType: selectedOfferType,
+        priceRange: selectedPriceRange,
+        investmentType: selectedInvestmentType,
+        investmentSubcategory: selectedInvestmentSubcategory,
+        purchaseType: selectedPurchaseType,
+        condition: selectedCondition,
+      );
+      _noListings = _filteredProperties.isEmpty;
+    } catch (e) {
+      _noListings = true;
+      if (kDebugMode) print(e.toString());
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<Map<String, dynamic>> addProperty({
+    required String title,
+    String? address,
+    required String country,
+    String? district,
+    String? city,
+    String? shortDescription,
+    required String requestType,
+    required String condition,
+    required String purchaseType,
+    required String propertyType,
+    String? investmentType,
+    String? investmentSubcategory,
+    required double landArea,
+    required double buildingUsageArea,
+    required double buildableArea,
+    required int bathrooms,
+    int? beds,
+    int? rooms,
+    required double price,
+    bool? isFurnished,
+    bool? garage,
+    String? equipment,
+    String? qualityOfEquipment,
+    int? parkingPlaces,
+    required List<String> pictures,
+    required String postedBy,
+  }) async {
+    Map<String, dynamic> result = await addPropertyRequest(
+      title: title,
+      address: address,
+      country: country,
+      district: district,
+      city: city,
+      shortDescription: shortDescription,
+      requestType: requestType,
+      condition: condition,
+      purchaseType: purchaseType,
+      propertyType: propertyType,
+      investmentType: investmentType,
+      investmentSubcategory: investmentSubcategory,
+      landArea: landArea,
+      buildingUsageArea: buildingUsageArea,
+      buildableArea: buildableArea,
+      bathrooms: bathrooms,
+      beds: beds,
+      rooms: rooms,
+      price: price,
+      isFurnished: isFurnished,
+      garage: garage,
+      equipment: equipment,
+      qualityOfEquipment: qualityOfEquipment,
+      parkingPlaces: parkingPlaces,
+      pictures: pictures,
+      postedBy: postedBy,
+    );
+
+    if (result['message'] == 'Property added successfully') {
+      RealEstateListing newProperty = RealEstateListing(
+        id: result['_id'],
+        title: title,
+        address: address!,
+        price: price,
+        country: country,
+        city: city,
+        landAreaInTotal: landArea,
+        requestType: requestType,
+        rooms: rooms,
+        sellingType: purchaseType,
+        propertyCategory: investmentType ?? '',
+        propertySubCategory: investmentSubcategory ?? '',
+        garage: garage ?? false,
+        furnished: isFurnished ?? false,
+        description: shortDescription ?? '',
+        condition: condition,
+        propertyType: propertyType,
+        pictures: pictures,
+        parkingPlaces: parkingPlaces,
+        state: district,
+        noOfBathrooms: bathrooms,
+        userEmail: UserProfileProvider().email,
+        userID: UserProfileProvider().id,
+        userName: UserProfileProvider().name,
+      );
+      print(newProperty.userName);
+
+      notifyListeners();
+      return result;
+    } else {
+      if (kDebugMode) print('Error adding property: $result');
+      return {};
+    }
+  }
+
+  void resetFilters() {
+    selectedCountry = '';
+    selectedCity = '';
+    selectedOfferType = '';
+    selectedPriceRange = '';
+    selectedInvestmentType = '';
+    selectedInvestmentSubcategory = '';
+    selectedPurchaseType = '';
+    selectedCondition = '';
+    _filteredProperties = _allProperties;
+    _noListings = _filteredProperties.isEmpty;
+    notifyListeners();
+  }
+
+  Future<void> deleteListing(String id) async {
+    try {
+      String result = await deleteProperty(id: id);
+      if (result == 'Success') {
+        _allProperties.removeWhere((listing) => listing.id == id);
+        _filteredProperties = _allProperties;
+        _noListings = _filteredProperties.isEmpty;
+        notifyListeners();
+      }
+    } catch (e) {
+      if (kDebugMode) print(e.toString());
+    }
+  }
+
+  Future<void> refreshListings() async {
+    _initialLoadComplete = false;
+    await fetchAllListings();
+  }
+
+  void deletePropertyInProvider(String id) {
+    _allProperties.removeWhere((listing) => listing.id == id);
+    _filteredProperties = _allProperties;
+    _noListings = _allProperties.isEmpty;
+    notifyListeners();
+  }
+}

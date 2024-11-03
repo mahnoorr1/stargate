@@ -6,8 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
-import 'package:stargate/services/real_estate_listings.dart';
 import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/buttons/back_button.dart';
@@ -71,7 +71,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id')!;
 
-    String response = await addPropertyRequest(
+    Map<String, dynamic> response =
+        await RealEstateProvider.c(context).addProperty(
       title: title.text,
       country: country.text,
       address: address.text,
@@ -104,15 +105,16 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
       parkingPlaces:
           parkingPlaces.text.isNotEmpty ? int.parse(parkingPlaces.text) : 0,
     );
-    if (response == 'Success') {
-      showToast(message: 'Listing added Successfully', context: context);
+    if (response['message'] == 'Property added successfully') {
+      showToast(message: response['message'], context: context);
       setState(() {
         loading = false;
       });
+      await RealEstateProvider.c(context).fetchAllListings();
       Navigator.pop(context);
     } else {
       showToast(
-        message: response,
+        message: response['message'],
         context: context,
         isAlert: true,
         color: Colors.redAccent,

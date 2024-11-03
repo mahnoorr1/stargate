@@ -12,6 +12,7 @@ import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/underlined_textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 
+import '../../providers/real_estate_provider.dart';
 import '../../widgets/screen/screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -56,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
       String? loggedIn = await loginUser(email.text, password.text);
       if (loggedIn == 'token') {
         await AllUsersProvider.c(context).fetchUsers();
+        await RealEstateProvider.c(context).fetchAllListings();
         Navigator.popAndPushNamed(context, '/navbar');
         showToast(message: "Login successful", context: context);
       } else {

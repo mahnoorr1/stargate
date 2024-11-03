@@ -7,8 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/profile.dart';
+import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
-import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/buttons/back_button.dart';
@@ -99,7 +99,7 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       loading = true;
     });
-    String save = await updateProfile(
+    String save = await UserProfileProvider.c(context).updateUserProfile(
       name: name.text,
       address: address.text,
       city: city.text,
@@ -107,14 +107,13 @@ class _EditProfileState extends State<EditProfile> {
       professions: services,
       references: references,
       websiteLink: websiteLink.text,
-      profile: image!.contains('https') ? null : image,
+      profileImage: image!.contains('https') ? null : image,
     );
     if (save == 'Success') {
       showToast(message: save, context: context);
       setState(() {
         loading = false;
       });
-      // Pop the screen and return 'success' to trigger profile refresh
       Navigator.pop(context, 'success');
     } else {
       showToast(message: save, context: context, isAlert: true);

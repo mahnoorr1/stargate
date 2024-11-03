@@ -57,7 +57,7 @@ Future<List<RealEstateListing>> getAllListings() async {
   }
 }
 
-Future<String> addPropertyRequest({
+Future<Map<String, dynamic>> addPropertyRequest({
   required String title,
   String? address,
   required String country,
@@ -141,15 +141,17 @@ Future<String> addPropertyRequest({
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      return 'Success';
+      String responseBody = await response.stream.bytesToString();
+      final data = json.decode(responseBody);
+      print(data);
+      return data;
     } else {
       String responseBody = await response.stream.bytesToString();
       final data = json.decode(responseBody);
-      String message = data['message'];
-      return message;
+      return data;
     }
   } catch (e) {
-    return e.toString();
+    return {};
   }
 }
 
@@ -184,5 +186,75 @@ Future<String> deleteProperty({
       print(e.toString());
     }
     return '';
+  }
+}
+
+Future<List<RealEstateListing>> filterProperty({
+  String? country,
+  String? city,
+  String? offerType,
+  String? priceRange,
+  String? investmentType,
+  String? investmentSubcategory,
+  String? purchaseType,
+  String? condition,
+}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('accessToken');
+  var headers = {
+    'Content-Type': 'application/json',
+    'Authorization': token!,
+  };
+  Map<String, String> queryParams = {};
+
+  if (offerType != null && offerType.isNotEmpty) {
+    queryParams['offerType'] = offerType;
+  }
+  if (country != null && country.isNotEmpty) {
+    queryParams['country'] = country;
+  }
+  if (city != null && city.isNotEmpty) {
+    queryParams['city'] = city;
+  }
+  if (priceRange != null && priceRange.isNotEmpty) {
+    queryParams['priceRange'] = priceRange;
+  }
+  if (investmentType != null && investmentType.isNotEmpty) {
+    queryParams['investmentType'] = investmentType;
+  }
+  if (investmentSubcategory != null && investmentSubcategory.isNotEmpty) {
+    queryParams['investmentSubcategory'] = investmentSubcategory;
+  }
+  if (purchaseType != null && purchaseType.isNotEmpty) {
+    queryParams['purchaseType'] = purchaseType;
+  }
+  if (condition != null && condition.isNotEmpty) {
+    queryParams['condition'] = condition;
+  }
+
+  try {
+    String baseUrl = "${server}property/filter";
+    Uri uri = Uri.parse(baseUrl).replace(queryParameters: queryParams);
+
+    final response = await http.get(uri, headers: headers);
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      try {
+        final listings = (data['data'] as List<dynamic>)
+            .map((listing) => RealEstateListing.fromJson(
+                listing as Map<String, dynamic>, '', '', ''))
+            .toList();
+
+        return listings;
+      } catch (e) {
+        return [];
+      }
+    } else if (response.statusCode == 404) {
+      return [];
+    } else {
+      throw Exception('Failed to get users: ${response.statusCode}');
+    }
+  } catch (e) {
+    return [];
   }
 }

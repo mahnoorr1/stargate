@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stargate/cubit/real_estate_listing/cubit.dart';
 import 'package:stargate/cubit/service_providers/cubit.dart';
 import 'package:stargate/legal_documents/providers/legal_document_provider.dart';
+import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/routes/app_routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,6 +45,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => ListingContentProvider()),
           ChangeNotifierProvider(create: (_) => SearchContentProvider()),
           ChangeNotifierProvider(create: (_) => ProfileContentProvider()),
+          ChangeNotifierProvider(create: (_) => RealEstateProvider()),
         ],
         child: const MyApp(),
       );
@@ -96,6 +98,7 @@ class _MyAppState extends State<MyApp> {
       searchContentProvider.fetchSearchContent(),
       profileContentProvider.fetchProfileContent(),
       AllUsersProvider.c(context).fetchUsers(),
+      RealEstateProvider.c(context).fetchAllListings(),
     ]);
 
     setState(() {
