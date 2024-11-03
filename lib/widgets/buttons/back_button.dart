@@ -21,6 +21,7 @@ class CustomBackButton extends StatelessWidget implements PreferredSizeWidget {
         padding: EdgeInsets.all(8.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.w),
+          // ignore: deprecated_member_use
           color: AppColors.lightBlue.withOpacity(0.5),
         ),
         child: Center(

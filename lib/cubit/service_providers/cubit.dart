@@ -34,8 +34,6 @@ class AllUsersCubit extends Cubit<AllUsersState> {
         city: city,
         experience: experience,
       );
-      print(users);
-      print("success");
       emit(GetFilteredUsersSuccess(users));
     } catch (e) {
       emit(GetFilteredUsersFailure(e.toString()));

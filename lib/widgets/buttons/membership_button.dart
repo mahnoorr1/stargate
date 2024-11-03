@@ -67,6 +67,7 @@ class _MembershipButtonState extends State<MembershipButton> {
               borderRadius: BorderRadius.all(
                 Radius.circular(20.w),
               ),
+              // ignore: deprecated_member_use
               color: AppColors.lightBlue.withOpacity(0.5),
             ),
             child: Icon(

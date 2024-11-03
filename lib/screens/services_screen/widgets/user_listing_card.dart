@@ -62,6 +62,7 @@ class ServiceProviderListingCard extends StatelessWidget {
                           borderRadius: BorderRadius.all(
                             Radius.circular(20.w),
                           ),
+                          // ignore: deprecated_member_use
                           color: AppColors.black.withOpacity(0.2),
                         ),
                         child: const Center(

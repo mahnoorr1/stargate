@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -82,6 +83,7 @@ class AllUsersProvider extends ChangeNotifier {
         _updateUsers(newUsers);
       }
     } catch (e) {
+      // ignore: avoid_print
       print("Failed to check for new users: $e");
     }
   }

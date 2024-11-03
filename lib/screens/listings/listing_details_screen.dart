@@ -551,6 +551,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
               width: 50.w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.w),
+                // ignore: deprecated_member_use
                 color: AppColors.lightBlue.withOpacity(0.3),
               ),
               child: const Center(

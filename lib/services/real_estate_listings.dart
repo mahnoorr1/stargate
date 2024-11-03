@@ -85,12 +85,10 @@ Future<String> addPropertyRequest({
   required List<String> pictures,
   required String postedBy,
 }) async {
-  print(address);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('accessToken');
   var headers = {
     'Content-Type': 'application/json',
-    // 'Cookie': "accessToken=${token!}",
     'Authorization': token!,
   };
 

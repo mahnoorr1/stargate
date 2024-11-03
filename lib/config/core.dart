@@ -63,6 +63,7 @@ class AppStyles {
     fontSize: 12,
   );
   static BoxShadow boxShadow = BoxShadow(
+    // ignore: deprecated_member_use
     color: AppColors.black.withOpacity(0.01),
     spreadRadius: 5,
     blurRadius: 1,

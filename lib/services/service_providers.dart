@@ -32,7 +32,6 @@ Future<List<User>> getAllServiceUsers() async {
       throw Exception('Failed to get users: ${response.statusCode}');
     }
   } catch (e) {
-    print(e.toString());
     return [];
   }
 }

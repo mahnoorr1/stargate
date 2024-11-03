@@ -34,8 +34,7 @@ class _PostCardState extends State<PostCard> {
 
       showToast(message: "Deletion Successful", context: context);
     } catch (e) {
-      if (!mounted)
-        return; // Ensure the widget is still mounted before proceeding
+      if (!mounted) return;
 
       showToast(
         message: "Unable to delete property",

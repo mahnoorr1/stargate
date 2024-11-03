@@ -8,8 +8,6 @@ import 'package:stargate/models/profile.dart';
 
 Future<String?> loginUser(String email, String pass) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('accessToken');
-  print(token);
   var headers = {
     'Content-Type': 'application/json',
   };
@@ -32,8 +30,8 @@ Future<String?> loginUser(String email, String pass) async {
         image: responseData['data']['user']['profilePicture'],
       );
       storeAccessToken(token!);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       String? tokenn = prefs.getString('accessToken');
+      // ignore: avoid_print
       print(tokenn);
       return 'token';
     } else {

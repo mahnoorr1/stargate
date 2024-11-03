@@ -24,6 +24,7 @@ class BlurredRectangle extends StatelessWidget {
                   width: double.infinity,
                   height: 60,
                   decoration: BoxDecoration(
+                    // ignore: deprecated_member_use
                     color: AppColors.black.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(30),
                   ),

@@ -79,6 +79,7 @@ class _UnderlinedTextFieldState extends State<UnderlinedTextField> {
                 padding: EdgeInsets.only(top: 18.w, bottom: 10.w),
                 child: SvgPicture.asset(
                   widget.prefixSvgPath!,
+                  // ignore: deprecated_member_use
                   color: AppColors.white,
                 ),
               )

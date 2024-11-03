@@ -11,13 +11,11 @@ class GetAllRealEstateListingsInitial extends RealEstateListingsState {
 }
 
 class GetAllRealEstateListingsLoading extends RealEstateListingsState {
-  GetAllRealEstateListingsLoading(List<RealEstateListing> listings)
-      : super(listings);
+  GetAllRealEstateListingsLoading(super.listings);
 }
 
 class GetAllRealEstateListingsSuccess extends RealEstateListingsState {
-  GetAllRealEstateListingsSuccess(List<RealEstateListing> listings)
-      : super(listings);
+  GetAllRealEstateListingsSuccess(super.listings);
 }
 
 class GetAllRealEstateListingsFailure extends RealEstateListingsState {
@@ -29,7 +27,7 @@ class GetAllRealEstateListingsFailure extends RealEstateListingsState {
 }
 
 class PropertyDeletionLoading extends RealEstateListingsState {
-  PropertyDeletionLoading(List<RealEstateListing> listings) : super(listings);
+  PropertyDeletionLoading(super.listings);
 }
 
 class PropertyDeletionSuccess extends RealEstateListingsState {
@@ -45,8 +43,7 @@ class PropertyDeletionFailure extends RealEstateListingsState {
 }
 
 class UserProfileWithPropertyLoading extends RealEstateListingsState {
-  UserProfileWithPropertyLoading(List<RealEstateListing> listings)
-      : super(listings);
+  UserProfileWithPropertyLoading(super.listings);
 }
 
 class UserProfileWithPropertySuccess extends RealEstateListingsState {

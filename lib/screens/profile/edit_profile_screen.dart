@@ -425,7 +425,7 @@ class _EditProfileState extends State<EditProfile> {
 
                 SizedBox(height: 12.w),
                 referencesNames.isNotEmpty
-                    ? Container(
+                    ? SizedBox(
                         height: 200.w,
                         child: ListView.builder(
                             itemCount: referencesNames.length,

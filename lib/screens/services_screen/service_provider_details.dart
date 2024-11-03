@@ -1,7 +1,8 @@
+// ignore_for_file: unnecessary_null_comparison, duplicate_ignore
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:stargate/config/constants.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/user.dart';
 import 'package:stargate/screens/services_screen/widgets/experience_card.dart';
@@ -131,6 +132,7 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                                 width: 50.w,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30.w),
+                                  // ignore: deprecated_member_use
                                   color: AppColors.lightBlue.withOpacity(0.3),
                                 ),
                                 child: const Center(
@@ -178,16 +180,14 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
   }
 
   Widget investorContent() {
-    // Find the investor service from the user's services
     Service? investorService = widget.user.services.firstWhere(
       (service) => service.details['name'] == 'Investor',
     );
 
-    // Check if investorService is found and if it contains investment range
     var min = 0;
     var max = 0;
+    // ignore: unnecessary_null_comparison
     if (investorService != null) {
-      // Ensure investment range exists and has valid values
       if (investorService.details['investmentRange'] != null) {
         min = investorService.details['investmentRange']['min'] ?? 0;
         max = investorService.details['investmentRange']['max'] ?? 0;

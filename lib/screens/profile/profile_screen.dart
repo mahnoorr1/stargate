@@ -1,10 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/cubit/real_estate_listing/cubit.dart';
 import 'package:stargate/models/profile.dart';
@@ -227,7 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     crossAxisSpacing: 8.w,
                                     mainAxisSpacing: 8.w,
                                     children: List.generate(
-                                      user!.properties!.length,
+                                      user.properties!.length,
                                       (index) {
                                         return PostCard(
                                           listing: user.properties![index],

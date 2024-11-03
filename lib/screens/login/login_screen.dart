@@ -79,6 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               height: double.infinity,
               width: double.infinity,
+              // ignore: deprecated_member_use
               color: AppColors.black.withOpacity(0.5),
             ),
             Padding(

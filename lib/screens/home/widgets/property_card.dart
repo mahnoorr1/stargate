@@ -5,6 +5,7 @@ import 'package:stargate/models/real_estate_listing.dart';
 import 'package:stargate/screens/listings/widgets/listing_card.dart';
 import 'package:stargate/widgets/blurred_rectangle.dart';
 
+// ignore: must_be_immutable
 class PropertyCardHome extends StatelessWidget {
   RealEstateListing property;
   PropertyCardHome({

@@ -5,8 +5,7 @@ import 'package:stargate/config/core.dart';
 import 'package:stargate/models/user.dart';
 import 'package:stargate/utils/app_images.dart';
 
-import '../../../widgets/buttons/bubble_text_button.dart';
-
+// ignore: must_be_immutable
 class ServiceProviderHomeCard extends StatefulWidget {
   User user;
   ServiceProviderHomeCard({super.key, required this.user});
@@ -80,6 +79,7 @@ class _ServiceProviderHomeCardState extends State<ServiceProviderHomeCard> {
                   children: [
                     SvgPicture.asset(
                       AppIcons.location,
+                      // ignore: deprecated_member_use
                       color: AppColors.blue,
                     ),
                     SizedBox(

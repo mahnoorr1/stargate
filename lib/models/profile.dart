@@ -51,7 +51,7 @@ class User {
             .map((property) => RealEstateListing.fromJson(
                 property, json['email'], json['name'], json['_id']))
             .toList(),
-        references: json['references'] as List<dynamic> ?? []);
+        references: json['references'] as List<dynamic>);
   }
 
   Map<String, dynamic> toJson() {

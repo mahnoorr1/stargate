@@ -20,6 +20,7 @@ class BubbleTextButton extends StatelessWidget {
         borderRadius: BorderRadius.all(
           Radius.circular(40.w),
         ),
+        // ignore: deprecated_member_use
         color: AppColors.lightBlue.withOpacity(0.6),
       ),
       child: Text(
