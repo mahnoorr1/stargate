@@ -399,7 +399,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                   text: 'Apply Filters',
                   onPressed: () {
                     Navigator.pop(context);
-                    RealEstateProvider.c(context, true).filterProperties(
+
+                    RealEstateProvider.c(context, false).filterProperties(
                       country: country.text,
                       city: city.text,
                       condition: selectedCondition,

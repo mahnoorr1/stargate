@@ -1,4 +1,5 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -65,6 +66,8 @@ class _EditProfileState extends State<EditProfile> {
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
+
+    log("result: ${result?.files.first.name}");
 
     if (result != null && result.files.isNotEmpty) {
       if (referencesNames.any((value) => value == result.files.first.name)) {
@@ -486,7 +489,9 @@ class _EditProfileState extends State<EditProfile> {
                 //     : SizedBox(),
                 SizedBox(height: 12.w),
                 GestureDetector(
-                  onTap: saveData,
+                  onTap: () {
+                    print(references);
+                  },
                   child: const CustomButton(
                     text: "Save",
                   ),

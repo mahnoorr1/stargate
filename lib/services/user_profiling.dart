@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -272,8 +273,7 @@ void deleteUserData() async {
 }
 
 Future<String> verifyOTP(String otp, String email) async {
-  print("\"${email}\"");
-  print(otp);
+  var headers = {'Content-Type': 'application/json'};
   var request = http.Request('POST', Uri.parse('${server}user/verify-otp'));
 
   try {
@@ -281,6 +281,7 @@ Future<String> verifyOTP(String otp, String email) async {
       "otp": otp,
       "email": email,
     });
+    request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -289,7 +290,7 @@ Future<String> verifyOTP(String otp, String email) async {
       final errorResponse = await response.stream.bytesToString();
       final Map<String, dynamic> errorData = jsonDecode(errorResponse);
       final String errorMessage = errorData['message'] as String;
-      print(errorData);
+      log(errorData.toString());
       return errorMessage;
     }
   } catch (e) {
