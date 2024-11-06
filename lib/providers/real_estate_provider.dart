@@ -35,6 +35,7 @@ class RealEstateProvider extends ChangeNotifier {
   String selectedInvestmentSubcategory = '';
   String selectedPurchaseType = '';
   String selectedCondition = '';
+  String selectedPropertyType = '';
 
   List<RealEstateListing> get allProperties => _allProperties;
   List<RealEstateListing> get filteredProperties => _filteredProperties;
@@ -118,6 +119,7 @@ class RealEstateProvider extends ChangeNotifier {
     String? investmentSubcategory,
     String? purchaseType,
     String? condition,
+    String? propertyType,
   }) async {
     selectedCountry = country ?? '';
     selectedCity = city ?? '';
@@ -127,6 +129,7 @@ class RealEstateProvider extends ChangeNotifier {
     selectedInvestmentSubcategory = investmentSubcategory ?? '';
     selectedPurchaseType = purchaseType ?? '';
     selectedCondition = condition ?? '';
+    selectedPropertyType = propertyType ?? '';
 
     _loading = true;
     notifyListeners();
@@ -141,6 +144,7 @@ class RealEstateProvider extends ChangeNotifier {
         investmentSubcategory: selectedInvestmentSubcategory,
         purchaseType: selectedPurchaseType,
         condition: selectedCondition,
+        propertyType: selectedPropertyType,
       );
       _noListings = _filteredProperties.isEmpty;
     } catch (e) {
@@ -255,6 +259,7 @@ class RealEstateProvider extends ChangeNotifier {
     selectedInvestmentSubcategory = '';
     selectedPurchaseType = '';
     selectedCondition = '';
+    selectedPropertyType = '';
     _filteredProperties = _allProperties;
     _noListings = _filteredProperties.isEmpty;
     notifyListeners();

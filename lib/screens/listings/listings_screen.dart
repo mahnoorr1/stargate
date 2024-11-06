@@ -10,10 +10,11 @@ import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
 import 'package:stargate/widgets/buttons/custom_tab_button.dart';
 import 'package:stargate/widgets/buttons/filter_button.dart';
+import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/country_textfield.dart';
-import 'package:stargate/widgets/inputfields/outlined_dropdown.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import '../../providers/real_estate_provider.dart';
+import '../../widgets/inputfields/outlined_dropdown.dart';
 
 class ListingsScreen extends StatefulWidget {
   const ListingsScreen({super.key});
@@ -45,18 +46,30 @@ class _ListingsScreenState extends State<ListingsScreen> {
 
   void resetFilters() {
     setState(() {
+      filterApplied = false;
       country.clear();
       state.clear();
       city.clear();
-      selectedCondition = '';
+      selectedPropertyType = '';
       selectedPropertyCategory = '';
       selectedPropertySubcategory = '';
-      selectedPropertyType = '';
       selectedRequestType = '';
+      selectedCondition = '';
       selectedSellingType = '';
-      filterApplied = false;
     });
-    RealEstateProvider.c(context, true).resetFilters();
+    RealEstateProvider.c(
+      context,
+    ).resetFilters();
+  }
+
+  void showNoPropertiesToast() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showToast(
+        message: "No properties found for the selected filters.",
+        context: context,
+        isAlert: true,
+      );
+    });
   }
 
   @override
@@ -78,42 +91,57 @@ class _ListingsScreenState extends State<ListingsScreen> {
           builder: (context, provider, child) {
             if (provider.loading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (provider.noListings) {
+            } else if (provider.noListings && !filterApplied) {
               return const Center(child: Text("No Property Listing Available"));
+            } else if (provider.noListings && filterApplied) {
+              showNoPropertiesToast();
+
+              RealEstateProvider.c(
+                context,
+              ).resetFilters();
+              return buildContent(provider);
             } else {
-              return provider.filteredProperties.isEmpty
-                  ? const Center(child: Text("No listings found."))
-                  : SingleChildScrollView(
-                      child: StaggeredGrid.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 8.w,
-                        mainAxisSpacing: 8.w,
-                        children: List.generate(
-                            provider.filteredProperties.length + 1, (index) {
-                          if (index == 1) {
-                            return FilterButton(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return bottomSheet();
-                                  },
-                                );
-                              },
-                            );
-                          } else {
-                            int itemIndex = index > 1 ? index - 1 : index;
-                            return ListingCard(
-                              listing: provider.filteredProperties[itemIndex],
-                            );
-                          }
-                        }),
-                      ),
-                    );
+              return buildContent(provider);
             }
           },
         ),
       ),
+    );
+  }
+
+  Widget buildContent(RealEstateProvider provider) {
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: StaggeredGrid.count(
+              crossAxisCount: 2,
+              crossAxisSpacing: 8.w,
+              mainAxisSpacing: 8.w,
+              children: List.generate(provider.filteredProperties.length + 1,
+                  (index) {
+                if (index == 1) {
+                  return FilterButton(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return bottomSheet();
+                        },
+                      );
+                    },
+                  );
+                } else {
+                  int itemIndex = index > 1 ? index - 1 : index;
+                  return ListingCard(
+                    listing: provider.filteredProperties[itemIndex],
+                  );
+                }
+              }),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -399,16 +427,17 @@ class _ListingsScreenState extends State<ListingsScreen> {
                   text: 'Apply Filters',
                   onPressed: () {
                     Navigator.pop(context);
-
                     RealEstateProvider.c(context, false).filterProperties(
-                      country: country.text,
-                      city: city.text,
-                      condition: selectedCondition,
-                      investmentType: selectedPropertyCategory,
-                      investmentSubcategory: selectedPropertySubcategory,
-                      offerType: selectedPropertyType,
-                      purchaseType: selectedSellingType,
-                    );
+                        country: country.text,
+                        city: city.text,
+                        condition: selectedCondition,
+                        investmentType: selectedPropertyCategory,
+                        investmentSubcategory: selectedPropertySubcategory,
+                        offerType: selectedRequestType,
+                        purchaseType: selectedSellingType,
+                        propertyType: selectedPropertyType,
+                        priceRange:
+                            "${_priceRange.start.toInt()},${_priceRange.end.toInt()}");
                     setState(() {
                       filterApplied = true;
                     });

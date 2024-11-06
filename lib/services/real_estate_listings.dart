@@ -198,6 +198,7 @@ Future<List<RealEstateListing>> filterProperty({
   String? investmentSubcategory,
   String? purchaseType,
   String? condition,
+  String? propertyType,
 }) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('accessToken');
@@ -231,6 +232,9 @@ Future<List<RealEstateListing>> filterProperty({
   if (condition != null && condition.isNotEmpty) {
     queryParams['condition'] = condition;
   }
+  if (propertyType != null && propertyType.isNotEmpty) {
+    queryParams['propertyType'] = propertyType;
+  }
 
   try {
     String baseUrl = "${server}property/filter";
@@ -239,22 +243,27 @@ Future<List<RealEstateListing>> filterProperty({
     final response = await http.get(uri, headers: headers);
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
+      print(data);
       try {
         final listings = (data['data'] as List<dynamic>)
             .map((listing) => RealEstateListing.fromJson(
                 listing as Map<String, dynamic>, '', '', ''))
             .toList();
-
+        print(listings);
         return listings;
       } catch (e) {
         return [];
       }
     } else if (response.statusCode == 404) {
+      print("erroeee");
       return [];
     } else {
-      throw Exception('Failed to get users: ${response.statusCode}');
+      print("property error");
+      throw Exception('Failed to get property: ${response.statusCode}');
     }
   } catch (e) {
+    print("exception");
+    print(e.toString());
     return [];
   }
 }
