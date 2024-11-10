@@ -129,14 +129,14 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                                                   .size
                                                   .width *
                                               0.65,
-                                          child: widget.user.address != null
+                                          child: widget.user.address != ''
                                               ? Text(
                                                   widget.user.address!,
                                                   maxLines: 2,
                                                   style:
                                                       AppStyles.supportiveText,
                                                 )
-                                              : const Text(""),
+                                              : const Text("No Address"),
                                         ),
                                       ],
                                     )

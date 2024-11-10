@@ -124,6 +124,7 @@ class CustomDialog extends StatelessWidget {
                         ? Image.asset(
                             asset!,
                             fit: BoxFit.cover,
+                            color: AppColors.blue,
                           )
                         : SvgPicture.asset(AppIcons.alert),
                   ),

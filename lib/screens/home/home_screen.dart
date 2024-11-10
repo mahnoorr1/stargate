@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           circleBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
           titleText: "Incomplete Profile",
-          titleColor: const Color(0xFFFFB500),
+          titleColor: AppColors.black,
           descriptionText:
               "Your Profile Information is incomplete please go to profile section and edit your information",
           buttonText: "OK",

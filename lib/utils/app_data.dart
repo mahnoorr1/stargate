@@ -1,6 +1,7 @@
 import 'package:stargate/models/faq.dart';
 import 'package:stargate/models/membership.dart';
 import 'package:stargate/models/user.dart';
+import 'package:stargate/utils/app_enums.dart';
 
 List<User> users = [
   // User(
@@ -99,10 +100,17 @@ List<User> users = [
 //   ),
 // ];
 List<String> servicesList = [
-  'Investor',
-  'Agent',
-  'Notary',
-  'Lawyer',
+  UserType.investor.toCamelCaseString(),
+  UserType.agent.toCamelCaseString(),
+  UserType.consultant.toCamelCaseString(),
+  UserType.lawyer.toCamelCaseString(),
+  UserType.notary.toCamelCaseString(),
+  UserType.appraiser.toCamelCaseString(),
+  UserType.manager.toCamelCaseString(),
+  UserType.loanBroker.toCamelCaseString(),
+  UserType.economist.toCamelCaseString(),
+  UserType.drawingMaker.toCamelCaseString(),
+  UserType.propertyAdmin.toCamelCaseString(),
 ];
 List<String> propertyTypes = ['commercial', 'conventional'];
 List<String> sellingTypes = ['purchase', 'rental'];

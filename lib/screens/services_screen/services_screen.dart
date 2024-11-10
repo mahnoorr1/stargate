@@ -64,7 +64,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
   @override
   Widget build(BuildContext context) {
     final allUsersProvider = Provider.of<AllUsersProvider>(context);
-  
+
     List<User> displayedUsers = selectedUser == UserType.all
         ? allUsersProvider.filteredUsers
         : allUsersProvider.filteredUsers
@@ -95,15 +95,12 @@ class _ServicesScreenState extends State<ServicesScreen> {
                           children: [
                             ...userTypes.map(
                               (type) => CustomTabButton(
-                                type: type.toString().split('.').last,
-                                current:
-                                    selectedUser.toString().split('.').last,
+                                type: type.toCamelCaseString(),
+                                current: selectedUser.toCamelCaseString(),
                                 selected: (value) {
                                   setState(() {
                                     selectedUser = UserType.values.firstWhere(
-                                        (e) =>
-                                            e.toString().split('.').last ==
-                                            value);
+                                        (e) => e.toCamelCaseString() == value);
                                   });
                                 },
                               ),
