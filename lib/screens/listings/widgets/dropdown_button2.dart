@@ -30,7 +30,21 @@ class _DropdownButtonExampleState extends State<DropdownButton2Example> {
   }
 
   @override
+  void didUpdateWidget(DropdownButton2Example oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initial != oldWidget.initial) {
+      setState(() {
+        dropdownValue = widget.initial;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var seen = Set<String>();
+    List<String> uniquelist =
+        widget.list.where((item) => seen.add(item)).toList();
+
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
         value: dropdownValue,
@@ -72,7 +86,7 @@ class _DropdownButtonExampleState extends State<DropdownButton2Example> {
             widget.onSelected(value);
           }
         },
-        items: widget.list.map<DropdownMenuItem<String>>((String value) {
+        items: uniquelist.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(

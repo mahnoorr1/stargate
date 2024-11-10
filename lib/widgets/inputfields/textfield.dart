@@ -15,6 +15,7 @@ class CustomTextField extends StatefulWidget {
   final double? horizontalSpacing;
   final double? verticalSpacing;
   final int maxLines;
+  final bool isPasswordField;
   final Function(dynamic value)? onChanged;
 
   const CustomTextField({
@@ -26,6 +27,7 @@ class CustomTextField extends StatefulWidget {
     this.obscureText = false,
     this.textCapitalization = TextCapitalization.none,
     required this.inputType,
+    this.isPasswordField = false,
     this.horizontalSpacing,
     this.verticalSpacing,
     this.maxLines = 1,
@@ -39,12 +41,15 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   late FocusNode _focusNode;
   bool _isFocused = false;
+  bool _obscureText = true;
 
   @override
   void initState() {
     super.initState();
     _focusNode = FocusNode();
     _focusNode.addListener(_handleFocusChange);
+
+    _obscureText = widget.obscureText;
   }
 
   @override
@@ -56,6 +61,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
   void _handleFocusChange() {
     setState(() {
       _isFocused = _focusNode.hasFocus;
+    });
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
     });
   }
 
@@ -123,6 +134,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
             borderSide: BorderSide(color: AppColors.lightGrey),
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
+          suffixIcon: widget.isPasswordField
+              ? IconButton(
+                  icon: Icon(
+                    _obscureText
+                        ? Icons.visibility_off_outlined
+                        : Icons.remove_red_eye_outlined,
+                    color: AppColors.lightGrey,
+                  ),
+                  onPressed: _togglePasswordVisibility,
+                )
+              : null,
         ),
       ),
     );

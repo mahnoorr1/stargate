@@ -37,6 +37,7 @@ class UserProfileProvider with ChangeNotifier {
   List<RealEstateListing> _properties = [];
   List<dynamic> _references = [];
   bool _isLoading = true;
+  bool _firstProfileInfoAlertDone = false;
 
   String get id => _id;
   String get name => _name;
@@ -54,6 +55,7 @@ class UserProfileProvider with ChangeNotifier {
   List<RealEstateListing> get properties => _properties;
   List<dynamic> get references => _references;
   bool get isLoading => _isLoading;
+  bool get firstProfileInfoAlertDone => _firstProfileInfoAlertDone;
 
   Future<void> _loadInitialProfileData() async {
     _isLoading = true;
@@ -61,6 +63,11 @@ class UserProfileProvider with ChangeNotifier {
 
     await fetchUserProfile();
     _isLoading = false;
+    notifyListeners();
+  }
+
+  void setFirstTimeAlert() {
+    _firstProfileInfoAlertDone = true;
     notifyListeners();
   }
 

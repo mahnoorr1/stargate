@@ -48,6 +48,9 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   TextEditingController parkingPlaces = TextEditingController(text: '0');
 
   List<String> requestTypeList = ['offering', 'requesting'];
+  List<String> currentConventionalSubcategoryOptions = ['Select an Option'];
+  List<String> currentCommercialSubcategoryOptions = ['Select an Option'];
+
   String selectedRequestType = '';
   String selectedCondition = '';
   String selectedPurchaseType = '';
@@ -70,51 +73,21 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id')!;
+    print(address.text);
+    print(price);
+    print(bathroom);
+    print(beds);
+    print(furnished);
+    print(garage);
+    print(images[0]);
+    print(selectedPurchaseType);
 
-    Map<String, dynamic> response =
-        await RealEstateProvider.c(context).addProperty(
-      title: title.text,
-      country: country.text,
-      address: address.text,
-      district: state.text,
-      city: city.text,
-      shortDescription: description.text,
-      investmentType: selectedInvestmentType,
-      investmentSubcategory: selectedInvestmentSubcategory,
-      requestType: selectedRequestType,
-      condition: selectedCondition,
-      purchaseType: selectedPurchaseType,
-      propertyType: selectedPropertyType,
-      landArea: double.parse(selectedLandArea.text),
-      buildingUsageArea: double.parse(selectedBuildingArea.text),
-      buildableArea: double.parse(selectedBuildableArea.text),
-      bathrooms: bathroom,
-      beds: beds,
-      rooms: beds,
-      price: price.toDouble(),
-      equipment: equipment.text,
-      qualityOfEquipment: qualityOfEquipment.text,
-      isFurnished: furnished == 'yes' ? true : false,
-      garage: garage == 'yes' ? true : false,
-      pictures: selectedRequestType == 'requesting'
-          ? [
-              requestFile.path,
-            ]
-          : images,
-      postedBy: id,
-      parkingPlaces:
-          parkingPlaces.text.isNotEmpty ? int.parse(parkingPlaces.text) : 0,
-    );
-    if (response['message'] == 'Property added successfully') {
-      showToast(message: response['message'], context: context);
-      setState(() {
-        loading = false;
-      });
-      await RealEstateProvider.c(context).fetchAllListings();
-      Navigator.pop(context);
-    } else {
+    if (address.text.isEmpty ||
+        title.text.isEmpty ||
+        country.text.isEmpty ||
+        state.text.isEmpty) {
       showToast(
-        message: response['message'],
+        message: 'Incomplete property details',
         context: context,
         isAlert: true,
         color: Colors.redAccent,
@@ -122,6 +95,93 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
       setState(() {
         loading = false;
       });
+    } else if ((selectedRequestType == 'offering' && images.isEmpty)) {
+      showToast(
+        message: 'Provide Pictures',
+        context: context,
+        isAlert: true,
+        color: Colors.redAccent,
+      );
+      setState(() {
+        loading = false;
+      });
+    } else if (selectedInvestmentType == '' ||
+        // selectedInvestmentSubcategory == '' ||
+        selectedPurchaseType == '' ||
+        selectedCondition == '' ||
+        selectedRequestType == '' ||
+        selectedLandArea.text.isEmpty ||
+        selectedBuildingArea.text.isEmpty ||
+        selectedBuildableArea.text.isEmpty ||
+        beds == 0 ||
+        bathroom == 0 ||
+        price == 0 ||
+        furnished == '') {
+      print(selectedInvestmentSubcategory);
+      print(selectedInvestmentType);
+      showToast(
+        message: "Incomplete property details!",
+        context: context,
+        isAlert: true,
+        color: Colors.redAccent,
+      );
+      setState(() {
+        loading = false;
+      });
+    } else {
+      Map<String, dynamic> response =
+          await RealEstateProvider.c(context).addProperty(
+        title: title.text,
+        country: country.text,
+        address: address.text,
+        district: state.text,
+        city: city.text,
+        shortDescription: description.text,
+        investmentType: selectedInvestmentType,
+        // investmentSubcategory: selectedInvestmentSubcategory,
+        investmentSubcategory: 'Small House',
+        requestType: selectedRequestType,
+        condition: selectedCondition,
+        purchaseType: selectedPurchaseType,
+        propertyType: selectedPropertyType,
+        landArea: double.parse(selectedLandArea.text),
+        buildingUsageArea: double.parse(selectedBuildingArea.text),
+        buildableArea: double.parse(selectedBuildableArea.text),
+        bathrooms: bathroom,
+        beds: beds,
+        rooms: beds,
+        price: price.toDouble(),
+        equipment: equipment.text,
+        qualityOfEquipment: qualityOfEquipment.text,
+        isFurnished: furnished == 'yes' ? true : false,
+        garage: garage == 'yes' ? true : false,
+        pictures: selectedRequestType == 'requesting'
+            ? [
+                requestFile.path,
+              ]
+            : images,
+        postedBy: id,
+        parkingPlaces:
+            parkingPlaces.text.isNotEmpty ? int.parse(parkingPlaces.text) : 0,
+      );
+      if (response['message'] == 'Property added successfully') {
+        showToast(message: response['message'], context: context);
+        setState(() {
+          loading = false;
+        });
+        await RealEstateProvider.c(context).fetchAllListings();
+        Navigator.pop(context);
+      } else {
+        showToast(
+          message: response['message'],
+          context: context,
+          isAlert: true,
+          color: Colors.redAccent,
+        );
+        setState(() {
+          loading = false;
+        });
+      }
     }
   }
 
@@ -333,32 +393,47 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        questionText(
-          "Investment type",
-        ),
+        questionText("Investment type"),
         OutlinedDropdownButtonExample(
           list: commercialPropertyCategory,
           onSelected: (value) {
             setState(() {
               selectedInvestmentType = value;
+              int selectedCategoryIndex =
+                  commercialPropertyCategory.indexOf(value);
+              currentCommercialSubcategoryOptions =
+                  commercialPropertySubcategory[selectedCategoryIndex];
+
+              selectedInvestmentSubcategory =
+                  currentCommercialSubcategoryOptions.isNotEmpty
+                      ? currentCommercialSubcategoryOptions[0]
+                      : ''; // Empty if no subcategory available
             });
+            print(selectedInvestmentSubcategory);
           },
-          initial: commercialPropertyCategory[0],
+          initial: commercialPropertyCategory.isNotEmpty
+              ? commercialPropertyCategory[0]
+              : '',
           label: 'Investment Type',
         ),
         SizedBox(
           height: 8.w,
         ),
-        questionText(
-          "Investment subcategory",
-        ),
+        questionText("Investment subcategory"),
         OutlinedDropdownButtonExample(
-          list: commercialPropertySubcategory,
+          list: currentCommercialSubcategoryOptions,
           onSelected: (value) {
-            selectedInvestmentSubcategory = value;
+            setState(() {
+              selectedInvestmentSubcategory = value;
+            });
           },
-          initial: commercialPropertySubcategory[0],
-          label: 'Investment subcategory',
+          // Set the initial value for the subcategory dropdown to selectedInvestmentSubcategory
+          initial: currentCommercialSubcategoryOptions.isNotEmpty
+              ? selectedInvestmentSubcategory.isNotEmpty
+                  ? selectedInvestmentSubcategory
+                  : currentCommercialSubcategoryOptions[0]
+              : '', // If no subcategory selected, fallback to the first subcategory
+          label: 'Investment Subcategory',
         ),
         SizedBox(
           height: 6.w,
@@ -510,35 +585,51 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   }
 
   Widget conventionalContent() {
+    selectedInvestmentSubcategory = '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        questionText(
-          "Investment type",
-        ),
+        questionText("Investment type"),
         DropdownButton2Example(
           list: conventionalPropertyCategory,
           onSelected: (value) {
             setState(() {
               selectedInvestmentType = value;
+              int selectedCategoryIndex =
+                  conventionalPropertyCategory.indexOf(value);
+              currentConventionalSubcategoryOptions =
+                  conventionalPropertySubcategory[selectedCategoryIndex];
+              selectedInvestmentSubcategory =
+                  currentConventionalSubcategoryOptions.isNotEmpty
+                      ? currentConventionalSubcategoryOptions[0]
+                      : '';
             });
+            print(selectedInvestmentSubcategory);
           },
-          initial: conventionalPropertyCategory[0],
+          initial: conventionalPropertyCategory.isNotEmpty
+              ? conventionalPropertyCategory[0]
+              : '',
           label: 'Investment Type',
         ),
         SizedBox(
           height: 8.w,
         ),
-        questionText(
-          "Investment subcategory",
-        ),
+        questionText("Investment subcategory"),
         DropdownButton2Example(
-          list: conventionalPropertySubcategory,
+          list: currentConventionalSubcategoryOptions,
           onSelected: (value) {
-            selectedInvestmentSubcategory = value;
+            setState(() {
+              selectedInvestmentSubcategory = value;
+            });
+
+            print(selectedInvestmentSubcategory);
           },
-          initial: conventionalPropertySubcategory[0],
-          label: 'Investment subcategory',
+          initial: currentConventionalSubcategoryOptions.isNotEmpty
+              ? selectedInvestmentSubcategory.isNotEmpty
+                  ? selectedInvestmentSubcategory
+                  : currentConventionalSubcategoryOptions[0]
+              : '',
+          label: 'Investment Subcategory',
         ),
         SizedBox(
           height: 6.w,

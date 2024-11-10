@@ -18,23 +18,41 @@ class OutlinedDropdownButtonExample extends StatefulWidget {
 
   @override
   State<OutlinedDropdownButtonExample> createState() =>
-      _DropdownButtonExampleState();
+      _OutlinedDropdownButtonExampleState();
 }
 
-class _DropdownButtonExampleState extends State<OutlinedDropdownButtonExample> {
+class _OutlinedDropdownButtonExampleState
+    extends State<OutlinedDropdownButtonExample> {
   String? dropdownValue;
 
   @override
   void initState() {
     super.initState();
-    dropdownValue = widget.initial;
+    dropdownValue =
+        widget.list.contains(widget.initial) ? widget.initial : widget.list[0];
+  }
+
+  @override
+  void didUpdateWidget(OutlinedDropdownButtonExample oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initial != oldWidget.initial) {
+      setState(() {
+        dropdownValue = widget.list.contains(widget.initial)
+            ? widget.initial
+            : widget.list[0];
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    var seen = Set<String>();
+    List<String> uniquelist =
+        widget.list.where((item) => seen.add(item)).toList();
+
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
-        value: dropdownValue,
+        value: dropdownValue, // Use dropdownValue here
         isDense: true,
         isExpanded: false,
         buttonStyleData: ButtonStyleData(
@@ -73,7 +91,7 @@ class _DropdownButtonExampleState extends State<OutlinedDropdownButtonExample> {
             widget.onSelected(value);
           }
         },
-        items: widget.list.map<DropdownMenuItem<String>>((String value) {
+        items: uniquelist.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(

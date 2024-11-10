@@ -33,7 +33,8 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
   @override
   void initState() {
     super.initState();
-    dropdownValue = widget.initial;
+    dropdownValue =
+        widget.list.contains(widget.initial) ? widget.initial : widget.list[0];
   }
 
   @override

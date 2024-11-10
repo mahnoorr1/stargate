@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/profile.dart';
 import 'package:stargate/providers/user_info_provider.dart';
+import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
@@ -51,7 +52,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return const FullScreenLoader(loading: true);
           }
 
-          if (provider.properties.isEmpty && !hasShownNoPropertiesToast) {
+          if (provider.properties.isEmpty &&
+              !hasShownNoPropertiesToast &&
+              !provider.isLoading) {
             hasShownNoPropertiesToast = true;
             WidgetsBinding.instance.addPostFrameCallback((_) {
               showToast(
@@ -99,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         bottomLeft: Radius.circular(30.w),
                         bottomRight: Radius.circular(30.w),
                       ),
-                      child: user.image != null
+                      child: user.image != null && user.image != ''
                           ? Image(
                               width: double.infinity,
                               height: MediaQuery.of(context).size.height * 0.45,
@@ -112,6 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               width: double.infinity,
                               height: MediaQuery.of(context).size.height * 0.45,
                               color: AppColors.lightGrey,
+                              child: Image.asset(AppImages.user),
                             ),
                     ),
                     Container(

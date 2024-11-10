@@ -12,7 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 
 class CustomDrawer extends StatefulWidget {
-  const CustomDrawer({super.key});
+  final Function(int)? onNavigate;
+  const CustomDrawer({super.key, this.onNavigate});
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
@@ -117,7 +118,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             });
           },
         ),
-        child: const HomeScreen(),
+        child: HomeScreen(onNavigate: widget.onNavigate),
       ),
     );
   }

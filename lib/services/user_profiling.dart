@@ -238,6 +238,36 @@ Future<String> updateProfessions({required List<Service> professions}) async {
   }
 }
 
+Future<String> changePassword(
+  String currentPass,
+  String newPass,
+) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('accessToken');
+  var headers = {
+    'Content-Type': 'application/json',
+    'Authorization': token!,
+  };
+  var request =
+      http.Request('POST', Uri.parse('${server}user/change-password'));
+  request.body = json.encode({
+    "currentPassword": currentPass,
+    "newPassword": newPass,
+  });
+  request.headers.addAll(headers);
+
+  http.StreamedResponse response = await request.send();
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    return "Password Changed Successfully!";
+  } else {
+    final errorResponse = await response.stream.bytesToString();
+    final Map<String, dynamic> errorData = jsonDecode(errorResponse);
+    final String errorMessage = errorData['message'] as String;
+    return errorMessage;
+  }
+}
+
 void storeAccessToken(String token) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString('accessToken', token);

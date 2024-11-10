@@ -109,15 +109,124 @@ List<String> sellingTypes = ['purchase', 'rental'];
 List<String> conditions = ['new', 'old', 'renovating'];
 List<String> requestType = ['offering', 'requesting'];
 List<String> furnishedTypes = ['yes', 'no'];
-List<String> commercialPropertyCategory = ['Select an Option', 'Hotel'];
+List<String> commercialPropertyCategory = [
+  'Select an Option',
+  'Office Building',
+  'Retail Space',
+  'Hospitality',
+  'Industrial Property',
+  'Multifamily Residential',
+  'Investment Property',
+  'Mixed-Use Building',
+  'Special Purpose',
+];
+
+List<List<String>> commercialPropertySubcategory = [
+  [
+    'Select an Option',
+  ],
+  [
+    'Premium Workspace',
+    'Co-Working Space',
+    'Medical Office',
+    'Coorporate Campus',
+  ],
+  [
+    'Store',
+    'Shopping Center',
+    'Strip Mall',
+    'Power Center',
+  ],
+  [
+    'Hotel',
+    'Motel',
+    'Resort',
+  ],
+  [
+    'Warehouse',
+    'Manufacturing Facility',
+    'Data Center',
+    'Flex Space',
+  ],
+  [
+    'Apartment Complex',
+    'Student Hostel',
+    'Senior Living',
+  ],
+  [
+    'Office',
+    'Retail',
+    'Industrial',
+    'Multi-Purpose',
+  ],
+  [
+    'Urban Development',
+    'Lifestyle Center',
+    'Live-Work Space',
+  ],
+  [
+    'Storage Facility',
+    'Parking Facility',
+    'Entertainment Venues',
+    'Sports Center',
+    'Gas & Utility',
+  ],
+];
+
 List<String> conventionalPropertyCategory = [
   'Select an Option',
-  'Rental Building'
+  'House',
+  'Condominium',
+  'Building Plot',
+  'Agricultural Property',
+  'Recreational Land',
+  'Vacant land',
+  'Governmental Property',
 ];
-List<String> commercialPropertySubcategory = ['Select an Option', 'Town House'];
-List<String> conventionalPropertySubcategory = [
-  'Select an Option',
-  'Small House'
+List<List<String>> conventionalPropertySubcategory = [
+  [
+    'Select an Option',
+  ],
+  [
+    'Small House',
+    'Duplex',
+    'Triplex',
+    'Town House,',
+    'Luxury House',
+  ],
+  [
+    'Standard',
+    'Garden Condominium',
+    'High Rise',
+    'Pent House',
+  ],
+  [
+    'Residential Plot',
+    'Industrial Plot',
+  ],
+  [
+    'Farm',
+    'Ranch',
+    'Orchard',
+  ],
+  [
+    'Hunting Land',
+    'Fishing Property',
+    'Rural Retreat',
+  ],
+  [
+    'Residential Lot',
+    'Industrial Lot',
+    'Raw Land',
+    'Timber Land',
+    'Development Land',
+  ],
+  [
+    'Religious Building',
+    'Educational Building',
+    'Healthcare Facility',
+    'Government Building',
+  ],
 ];
 List<String> experiencesList = [
   'below 5 years',

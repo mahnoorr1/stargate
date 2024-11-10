@@ -25,17 +25,32 @@ class _NavBarScreenState extends State<NavBarScreen> {
   int selected = 0;
   bool heart = false;
   final controller = PageController();
-  List<Widget> screens = [
-    const CustomDrawer(),
-    const ServicesScreen(),
-    const ListingsScreen(),
-    const ProfileScreen(),
-  ];
+  List<Widget> screens = [];
+
+  @override
+  void initState() {
+    super.initState();
+    screens = [
+      CustomDrawer(
+        onNavigate: navigateTo,
+      ),
+      const ServicesScreen(),
+      const ListingsScreen(),
+      const ProfileScreen(),
+    ];
+  }
 
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+  void navigateTo(int index) {
+    setState(() {
+      selected = index;
+      controller.jumpToPage(index);
+    });
   }
 
   @override

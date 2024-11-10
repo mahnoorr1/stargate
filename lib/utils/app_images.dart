@@ -31,4 +31,5 @@ class AppIcons {
   static const String medal = 'assets/icons/medal.svg';
   static const String euro = 'assets/icons/euro.svg';
   static const String pdfIcon = 'assets/icons/pdf_icon.svg';
+  static const String alert = 'assets/icons/alert.svg';
 }

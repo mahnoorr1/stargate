@@ -35,6 +35,7 @@ class _ListingsScreenState extends State<ListingsScreen> {
   String selectedRequestType = '';
   String selectedCondition = '';
   String selectedSellingType = '';
+  List<String> currentSubcategoryOptions = ['Select an Option'];
 
   @override
   void initState() {
@@ -95,7 +96,6 @@ class _ListingsScreenState extends State<ListingsScreen> {
               return const Center(child: Text("No Property Listing Available"));
             } else if (provider.noListings && filterApplied) {
               showNoPropertiesToast();
-
               RealEstateProvider.c(
                 context,
               ).resetFilters();
@@ -251,6 +251,9 @@ class _ListingsScreenState extends State<ListingsScreen> {
                           selected: (value) {
                             setState(() {
                               selectedPropertyType = value;
+                              selectedPropertyCategory = '';
+                              selectedPropertySubcategory = '';
+                              currentSubcategoryOptions = ['Select an Option'];
                             });
                           },
                           current: selectedPropertyType,
@@ -282,6 +285,14 @@ class _ListingsScreenState extends State<ListingsScreen> {
                                   onSelected: (value) {
                                     setState(() {
                                       selectedPropertyCategory = value;
+                                      int selectedCategoryIndex =
+                                          commercialPropertyCategory
+                                              .indexOf(value);
+                                      currentSubcategoryOptions =
+                                          commercialPropertySubcategory[
+                                              selectedCategoryIndex];
+                                      selectedPropertySubcategory =
+                                          currentSubcategoryOptions[0];
                                     });
                                   },
                                   initial: commercialPropertyCategory[0],
@@ -292,6 +303,14 @@ class _ListingsScreenState extends State<ListingsScreen> {
                                   onSelected: (value) {
                                     setState(() {
                                       selectedPropertyCategory = value;
+                                      int selectedCategoryIndex =
+                                          conventionalPropertyCategory
+                                              .indexOf(value);
+                                      currentSubcategoryOptions =
+                                          conventionalPropertySubcategory[
+                                              selectedCategoryIndex];
+                                      selectedPropertySubcategory =
+                                          currentSubcategoryOptions[0];
                                     });
                                   },
                                   initial: conventionalPropertyCategory[0],
@@ -311,24 +330,30 @@ class _ListingsScreenState extends State<ListingsScreen> {
                           ),
                           selectedPropertyType == 'commercial'
                               ? OutlinedDropdownButtonExample(
-                                  list: commercialPropertySubcategory,
+                                  list: currentSubcategoryOptions,
                                   onSelected: (value) {
                                     setState(() {
                                       selectedPropertySubcategory = value;
                                     });
                                   },
-                                  initial: commercialPropertySubcategory[0],
-                                  label: 'Select Investment Subcategory',
+                                  initial:
+                                      selectedPropertySubcategory.isNotEmpty
+                                          ? selectedPropertySubcategory
+                                          : currentSubcategoryOptions[0],
+                                  label: 'Select Subcategory',
                                 )
                               : DropdownButton2Example(
-                                  list: conventionalPropertySubcategory,
+                                  list: currentSubcategoryOptions,
                                   onSelected: (value) {
                                     setState(() {
-                                      selectedPropertyCategory = value;
+                                      selectedPropertySubcategory = value;
                                     });
                                   },
-                                  initial: conventionalPropertySubcategory[0],
-                                  label: 'Select Investment Type',
+                                  initial:
+                                      selectedPropertySubcategory.isNotEmpty
+                                          ? selectedPropertySubcategory
+                                          : currentSubcategoryOptions[0],
+                                  label: 'Select Subcategory',
                                 ),
                         ],
                       ),
@@ -424,9 +449,11 @@ class _ListingsScreenState extends State<ListingsScreen> {
                 ),
                 SizedBox(height: 20.h),
                 CustomButton(
-                  text: 'Apply Filters',
+                  text: "Apply Filters",
                   onPressed: () {
-                    Navigator.pop(context);
+                    setState(() {
+                      filterApplied = true;
+                    });
                     RealEstateProvider.c(context, false).filterProperties(
                         country: country.text,
                         city: city.text,
@@ -441,6 +468,7 @@ class _ListingsScreenState extends State<ListingsScreen> {
                     setState(() {
                       filterApplied = true;
                     });
+                    Navigator.pop(context);
                   },
                 ),
               ],

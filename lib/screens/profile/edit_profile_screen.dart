@@ -10,6 +10,7 @@ import 'package:stargate/config/core.dart';
 import 'package:stargate/models/profile.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
+import 'package:stargate/screens/profile/change_password.dart';
 import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/buttons/back_button.dart';
@@ -185,6 +186,13 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {});
   }
 
+  void changePass() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => ChangePassword()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQuery.of(context).viewInsets.bottom;
@@ -266,24 +274,27 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(
                   height: 8.w,
                 ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: SvgPicture.asset(
-                        AppIcons.lock,
-                        color: AppColors.blue,
-                        width: 18,
+                GestureDetector(
+                  onTap: changePass,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: SvgPicture.asset(
+                          AppIcons.lock,
+                          color: AppColors.blue,
+                          width: 18,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 12.w,
-                    ),
-                    const Text(
-                      "change password",
-                      style: AppStyles.greyText,
-                    )
-                  ],
+                      SizedBox(
+                        width: 12.w,
+                      ),
+                      const Text(
+                        "change password",
+                        style: AppStyles.greyText,
+                      )
+                    ],
+                  ),
                 ),
                 SizedBox(height: 6.w),
                 CustomTextField(
@@ -490,7 +501,7 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(height: 12.w),
                 GestureDetector(
                   onTap: () {
-                    print(references);
+                    saveData();
                   },
                   child: const CustomButton(
                     text: "Save",

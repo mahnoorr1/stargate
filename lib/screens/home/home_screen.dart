@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
+import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/home/widgets/property_card.dart';
 import 'package:stargate/screens/home/widgets/service_provider_card.dart';
 import 'package:stargate/screens/property_request_screen/property_request_screen.dart';
@@ -12,8 +13,11 @@ import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
+import '../../widgets/dialog_box.dart';
+
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Function(int)? onNavigate;
+  const HomeScreen({super.key, this.onNavigate});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -25,6 +29,28 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getListing();
+    });
+    UserProfileProvider profileProvdier = UserProfileProvider.c(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!profileProvdier.firstProfileInfoAlertDone &&
+          (profileProvdier.address.isEmpty ||
+              profileProvdier.countryName.isEmpty ||
+              profileProvdier.profileImage == null ||
+              profileProvdier.profileImage == '')) {
+        profileProvdier.setFirstTimeAlert();
+        showCustomDialog(
+          context: context,
+          circleBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+          titleText: "Incomplete Profile",
+          titleColor: const Color(0xFFFFB500),
+          descriptionText:
+              "Your Profile Information is incomplete please go to profile section and edit your information",
+          buttonText: "OK",
+          onButtonPressed: () {
+            Navigator.pop(context);
+          },
+        );
+      }
     });
   }
 
@@ -84,11 +110,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           enableInfiniteScroll: false,
                           padEnds: false,
                         ),
-                        items: realEstateProvider.allProperties
-                            .take(3)
-                            .map((property) =>
-                                PropertyCardHome(property: property))
-                            .toList(),
+                        items: realEstateProvider.allProperties.length == 1
+                            ? realEstateProvider.allProperties
+                                .map((property) =>
+                                    PropertyCardHome(property: property))
+                                .toList()
+                            : realEstateProvider.allProperties
+                                .take(3)
+                                .map((property) =>
+                                    PropertyCardHome(property: property))
+                                .toList(),
                       ),
                     ),
                 ],
@@ -182,10 +213,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 16.w),
-                    Text(
-                      "Service Providers",
-                      style: AppStyles.heading4.copyWith(
-                        color: AppColors.blue,
+                    GestureDetector(
+                      onTap: () {
+                        widget.onNavigate!(1);
+                      },
+                      child: Text(
+                        "Service Providers",
+                        style: AppStyles.heading4.copyWith(
+                          color: AppColors.blue,
+                        ),
                       ),
                     ),
                     SizedBox(height: 8.w),
