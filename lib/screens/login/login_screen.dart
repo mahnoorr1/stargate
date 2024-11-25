@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
+import 'package:stargate/screens/forget%20password/forget_pass.dart';
 import 'package:stargate/screens/otp_screen/otp_Screen.dart';
 import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
@@ -28,7 +29,15 @@ class _LoginScreenState extends State<LoginScreen> {
   bool login = false;
   final formKey = GlobalKey<FormState>();
 
-  void onForgetPassword() {}
+  void onForgetPassword() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ForgetPass(),
+      ),
+    );
+  }
+
   bool isValidEmail() {
     final RegExp emailRegex =
         RegExp(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
