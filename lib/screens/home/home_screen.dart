@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/content_management/providers/home_content_provider.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/providers/user_info_provider.dart';
@@ -76,6 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final realEstateProvider = Provider.of<RealEstateProvider>(context);
     final allUsersProvider = Provider.of<AllUsersProvider>(context);
+    final homeContentProvider =
+        Provider.of<HomeContentProvider>(context, listen: false);
 
     return Screen(
       overlayWidgets: [
@@ -141,8 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Row(
                         children: [
-                          Image.asset(
-                            AppImages.sale,
+                          Image.network(
+                            homeContentProvider.homeContent!.picture,
                             width: MediaQuery.of(context).size.width * 0.25,
                           ),
                           SizedBox(width: 12.w),
@@ -151,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.55,
                                 child: Text(
-                                  "Do you want to sell property or request it?",
+                                  homeContentProvider.homeContent!.title,
                                   style: AppStyles.heading3.copyWith(
                                     color: AppColors.darkBlue,
                                     fontSize: 16,
@@ -162,8 +165,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(height: 8.w),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.45,
-                                child: const Text(
-                                  "Sell/rent your property at best price",
+                                child: Text(
+                                  homeContentProvider.homeContent!.subtitle,
                                   style: AppStyles.supportiveText,
                                   textAlign: TextAlign.center,
                                 ),
@@ -186,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      "Create Offer",
+                                      homeContentProvider.homeContent!.tagline,
                                       style: AppStyles.heading4
                                           .copyWith(color: AppColors.darkBlue),
                                     ),

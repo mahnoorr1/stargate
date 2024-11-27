@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:stargate/config/core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stargate/content_management/providers/membership_content.dart';
 import 'package:stargate/cubit/real_estate_listing/cubit.dart';
 import 'package:stargate/cubit/service_providers/cubit.dart';
 import 'package:stargate/legal_documents/providers/legal_document_provider.dart';
@@ -89,6 +90,8 @@ class _MyAppState extends State<MyApp> {
         Provider.of<SearchContentProvider>(context, listen: false);
     final profileContentProvider =
         Provider.of<ProfileContentProvider>(context, listen: false);
+    final membershipContentProvider =
+        Provider.of<MembershipContentProvider>(context, listen: false);
 
     await Future.wait([
       gettingStartedProvider.fetchGettingStartedContent(),
@@ -97,6 +100,7 @@ class _MyAppState extends State<MyApp> {
       listingContentProvider.fetchListingContent(),
       searchContentProvider.fetchSearchContent(),
       profileContentProvider.fetchProfileContent(),
+      membershipContentProvider.fetchMembershipContent(),
       AllUsersProvider.c(context).fetchUsers(),
       RealEstateProvider.c(context).fetchAllListings(),
     ]);

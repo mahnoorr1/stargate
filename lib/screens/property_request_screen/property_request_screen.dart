@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/content_management/providers/offer_request_property_content_provider.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
 import 'package:stargate/utils/app_data.dart';
@@ -196,6 +198,9 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
 
   @override
   Widget build(BuildContext context) {
+    final propertyRequestProvider =
+        Provider.of<OfferRequestPropertyContentProvider>(context,
+            listen: false);
     return Screen(
       overlayWidgets: [
         if (loading)
@@ -217,7 +222,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Offer or Request\nProperty",
+                  propertyRequestProvider.content!.title,
                   style: AppStyles.screenTitle.copyWith(
                     color: AppColors.darkBlue,
                   ),
@@ -262,7 +267,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                   height: 10.w,
                 ),
                 questionText(
-                  "Do you want to offer property or requesting for it?",
+                  propertyRequestProvider.content!.offerSelectionTagLine,
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -286,7 +291,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                   height: 8.w,
                 ),
                 questionText(
-                  "Condition",
+                  propertyRequestProvider.content!.conditionTagLine,
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -334,7 +339,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                   height: 8.w,
                 ),
                 questionText(
-                  "Type",
+                  propertyRequestProvider.content!.investmentTypeTagLine,
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,

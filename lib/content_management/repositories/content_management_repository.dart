@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:stargate/content_management/models/home_content_model.dart';
 import 'package:stargate/content_management/models/listing_model.dart';
 import 'package:stargate/content_management/models/offer_request_property_content_model.dart';
+import 'package:stargate/models/membership.dart';
 
 import '../../config/constants.dart';
 
@@ -14,17 +15,10 @@ import 'package:http/http.dart' as http;
 import '../models/profile_content_model.dart';
 
 class ContentManagementRepository {
-  Future<List<GettingStartedModel>> getGettingStartedContent({
-    required String token,
-  }) async {
+  Future<List<GettingStartedModel>> getGettingStartedContent() async {
     try {
-      var headers = {
-        'Authorization': token,
-      };
       var request =
           http.Request('GET', Uri.parse('$server/content/getting-started'));
-
-      request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
@@ -165,6 +159,32 @@ class ContentManagementRepository {
     } catch (e) {
       log("Error fetching profile content: $e");
       throw Exception("Error fetching profile content: $e");
+    }
+  }
+
+  Future<List<Membership>> getMembershipContent() async {
+    try {
+      var request =
+          http.Request('GET', Uri.parse('$server/content/memberships'));
+
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(await response.stream.bytesToString());
+        log("Membership Content: OK Responce");
+        final memberships = (decodedData['data'] as List<dynamic>)
+            .map((json) => Membership.fromMap(json as Map<String, dynamic>))
+            .toList();
+
+        return memberships;
+      } else {
+        log(response.reasonPhrase.toString());
+        throw Exception(
+            "Error fetching membership content: ${response.reasonPhrase}");
+      }
+    } catch (e) {
+      log("Error fetching membership content: $e");
+      throw Exception("Error fetching membership content: $e");
     }
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/content_management/providers/membership_content.dart';
 import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/widgets/buttons/back_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +12,8 @@ class MembershipScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final membershipContentProvider =
+        Provider.of<MembershipContentProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
@@ -35,10 +39,11 @@ class MembershipScreen extends StatelessWidget {
           SizedBox(
             height: 6.w,
           ),
-          ...memberships.map(
+          ...membershipContentProvider.membershipContent!.map(
             (item) => MembershipCard(
               membership: item,
-              activeMembership: "Free Trial",
+              activeMembership:
+                  membershipContentProvider.membershipContent![0].tag,
             ),
           ),
           SizedBox(

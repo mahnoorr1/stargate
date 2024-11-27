@@ -1,15 +1,19 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/content_management/providers/profile_content_provider.dart';
 import 'package:stargate/drawer/drawer.dart';
 import 'package:stargate/screens/listings/listings_screen.dart';
 import 'package:stargate/screens/profile/profile_screen.dart';
 import 'package:stargate/screens/services_screen/services_screen.dart';
-import 'package:stargate/utils/app_images.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../content_management/providers/home_content_provider.dart';
+import '../content_management/providers/listing_content_provider.dart';
+import '../content_management/providers/search_content_provider.dart';
 
 // ignore: must_be_immutable
 class NavBarScreen extends StatefulWidget {
@@ -55,6 +59,14 @@ class _NavBarScreenState extends State<NavBarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final homeContentProvider =
+        Provider.of<HomeContentProvider>(context, listen: false);
+    final listingContentProvider =
+        Provider.of<ListingContentProvider>(context, listen: false);
+    final servicesContentProvider =
+        Provider.of<SearchContentProvider>(context, listen: false);
+    final profileContentProvider =
+        Provider.of<ProfileContentProvider>(context, listen: false);
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: StylishBottomBar(
@@ -71,14 +83,16 @@ class _NavBarScreenState extends State<NavBarScreen> {
         ),
         items: [
           BottomBarItem(
-            icon: SvgPicture.asset(
-              AppIcons.home,
+            icon: Image.network(
+              homeContentProvider.homeContent!.homeIcon,
               width: 20,
+              height: 24,
               color: AppColors.primaryGrey,
             ),
-            selectedIcon: SvgPicture.asset(
-              AppIcons.home,
+            selectedIcon: Image.network(
+              homeContentProvider.homeContent!.homeIcon,
               width: 22,
+              height: 24,
               color: AppColors.blue,
             ),
             selectedColor: AppColors.blue,
@@ -89,13 +103,15 @@ class _NavBarScreenState extends State<NavBarScreen> {
             ),
           ),
           BottomBarItem(
-            icon: SvgPicture.asset(
-              AppIcons.services,
+            icon: Image.network(
+              servicesContentProvider.searchContent!,
               width: 20,
+              height: 24,
             ),
-            selectedIcon: SvgPicture.asset(
-              AppIcons.services,
+            selectedIcon: Image.network(
+              servicesContentProvider.searchContent!,
               width: 22,
+              height: 24,
               color: AppColors.blue,
             ),
             selectedColor: AppColors.blue,
@@ -106,14 +122,17 @@ class _NavBarScreenState extends State<NavBarScreen> {
             ),
           ),
           BottomBarItem(
-              icon: SvgPicture.asset(
-                AppIcons.listing,
+              icon: Image.network(
+                listingContentProvider.listingContent!.icon,
                 width: 22,
+                height: 24,
               ),
-              selectedIcon: SvgPicture.asset(
-                AppIcons.listing,
+              selectedIcon: Image.network(
+                listingContentProvider.listingContent!.icon,
                 color: AppColors.blue,
                 width: 24,
+                height: 24,
+                fit: BoxFit.contain,
               ),
               selectedColor: AppColors.blue,
               unSelectedColor: AppColors.primaryGrey,
@@ -122,14 +141,16 @@ class _NavBarScreenState extends State<NavBarScreen> {
                 style: TextStyle(fontSize: 12),
               )),
           BottomBarItem(
-              icon: SvgPicture.asset(
-                AppIcons.profile,
+              icon: Image.network(
+                profileContentProvider.profileContent!.profileIcon,
                 width: 18,
+                height: 24,
               ),
-              selectedIcon: SvgPicture.asset(
-                AppIcons.profile,
+              selectedIcon: Image.network(
+                profileContentProvider.profileContent!.profileIcon,
                 color: AppColors.blue,
                 width: 20,
+                height: 24,
               ),
               selectedColor: AppColors.blue,
               unSelectedColor: AppColors.primaryGrey,

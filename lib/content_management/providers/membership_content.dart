@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
-import '../models/getting_started_model.dart';
+import 'package:stargate/models/membership.dart';
 import '../repositories/content_management_repository.dart';
 
-class GettingStartedProvider with ChangeNotifier {
-  List<GettingStartedModel>? _gettingStartedContent;
+class MembershipContentProvider with ChangeNotifier {
+  List<Membership>? _membershipContent;
   String? _errorMessage;
   bool _isLoading = false;
 
-  List<GettingStartedModel>? get gettingStartedContent =>
-      _gettingStartedContent;
+  List<Membership>? get membershipContent => _membershipContent;
   String? get errorMessage => _errorMessage;
   bool get isLoading => _isLoading;
 
-  Future<void> fetchGettingStartedContent() async {
+  Future<void> fetchMembershipContent() async {
     _isLoading = true;
     notifyListeners();
 
     try {
       final content =
-          await ContentManagementRepository().getGettingStartedContent();
-      _gettingStartedContent = content;
+          await ContentManagementRepository().getMembershipContent();
+      _membershipContent = content;
       _errorMessage = null;
     } catch (e) {
       _errorMessage = e.toString();
-      _gettingStartedContent = null;
+      _membershipContent = null;
     } finally {
       _isLoading = false;
       notifyListeners();

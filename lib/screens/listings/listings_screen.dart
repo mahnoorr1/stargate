@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:stargate/config/core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stargate/content_management/providers/listing_content_provider.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
 import 'package:stargate/screens/listings/widgets/listing_card.dart';
 import 'package:stargate/utils/app_data.dart';
@@ -146,6 +147,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
   }
 
   Widget bottomSheet() {
+    final listingContentProvider =
+        Provider.of<ListingContentProvider>(context, listen: false);
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return SingleChildScrollView(
@@ -162,8 +165,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Apply search filters for Real Estate Listings',
+                Text(
+                  listingContentProvider.listingContent!.searchFilterTagLine,
                   style: AppStyles.heading4,
                 ),
                 SizedBox(height: 12.h),

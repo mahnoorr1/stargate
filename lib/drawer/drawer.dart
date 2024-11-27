@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/home/home_screen.dart';
@@ -10,6 +11,8 @@ import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/custom_toast.dart';
+
+import '../content_management/providers/home_content_provider.dart';
 
 class CustomDrawer extends StatefulWidget {
   final Function(int)? onNavigate;
@@ -38,6 +41,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final homeContentProvider =
+        Provider.of<HomeContentProvider>(context, listen: false);
     return GestureDetector(
       child: SliderDrawer(
         key: _sliderDrawerKey,
@@ -71,21 +76,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                     );
                   },
-                  child: Icon(
-                    _isDrawerOpen
-                        ? Icons.close
-                        : Icons.format_list_bulleted_rounded,
-                    key: ValueKey(_isDrawerOpen ? 'icon1' : 'icon2'),
-                    color: AppColors.white,
-                    size: 24,
-                  ),
+                  child: !_isDrawerOpen
+                      ? Image.network(
+                          homeContentProvider.homeContent!.drawerIcon)
+                      : Icon(
+                          Icons.close,
+                          key: ValueKey(_isDrawerOpen ? 'icon1' : 'icon2'),
+                          color: AppColors.white,
+                          size: 24,
+                        ),
                 ),
                 onPressed: _toggleDrawer,
               ),
             ),
           ),
-          title: Image.asset(
-            AppImages.logo,
+          title: Image.network(
+            homeContentProvider.homeContent!.appLogo,
             height: 45.w,
           ),
           trailing: Row(

@@ -242,37 +242,37 @@ List<String> experiencesList = [
   'above 5 years',
 ];
 
-List<Membership> memberships = [
-  Membership(
-    tag: "Free Trial",
-    points: [
-      "access to real estate section",
-      "view property listing and inquiries",
-      "post property listing and inquiries",
-    ],
-  ),
-  Membership(
-    tag: "Regular",
-    points: [
-      "free trial privileges",
-      "access to listed service providers",
-    ],
-  ),
-  Membership(
-    tag: "Premium",
-    points: [
-      "regular privileges",
-      "access to listed investors",
-    ],
-  ),
-  Membership(
-    tag: "Special Member",
-    points: [
-      "premium privileges",
-      "access to view and contact all users",
-    ],
-  ),
-];
+// List<Membership> memberships = [
+//   Membership(
+//     tag: "Free Trial",
+//     points: [
+//       "access to real estate section",
+//       "view property listing and inquiries",
+//       "post property listing and inquiries",
+//     ],
+//   ),
+//   Membership(
+//     tag: "Regular",
+//     points: [
+//       "free trial privileges",
+//       "access to listed service providers",
+//     ],
+//   ),
+//   Membership(
+//     tag: "Premium",
+//     points: [
+//       "regular privileges",
+//       "access to listed investors",
+//     ],
+//   ),
+//   Membership(
+//     tag: "Special Member",
+//     points: [
+//       "premium privileges",
+//       "access to view and contact all users",
+//     ],
+//   ),
+// ];
 
 List<FAQ> faqs = [
   FAQ(

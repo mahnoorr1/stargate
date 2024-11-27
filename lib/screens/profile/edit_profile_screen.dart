@@ -6,7 +6,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/content_management/providers/profile_content_provider.dart';
 import 'package:stargate/models/profile.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
@@ -195,6 +197,8 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final profileContentProvider =
+        Provider.of<ProfileContentProvider>(context, listen: false);
     MediaQuery.of(context).viewInsets.bottom;
     return Screen(
       overlayWidgets: [
@@ -325,7 +329,10 @@ class _EditProfileState extends State<EditProfile> {
                   height: 12.w,
                 ),
                 supportiveText(
-                    AppIcons.profession, "provide multiple services", 'svg'),
+                    AppIcons.profession,
+                    profileContentProvider
+                        .profileContent!.occupationSelectionTagLine,
+                    'svg'),
                 DropdownButton2Example(
                   list: servicesList,
                   onSelected: (value) {
@@ -405,8 +412,8 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(
                   height: 12.w,
                 ),
-                const Text(
-                  "Add references",
+                Text(
+                  profileContentProvider.profileContent!.referencesTagLine,
                   style: AppStyles.heading4,
                 ),
                 SizedBox(
@@ -519,6 +526,8 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Widget serviceDetails(Map<String, dynamic> profession, int index) {
+    final profileContentProvider =
+        Provider.of<ProfileContentProvider>(context, listen: false);
     // Ensure the index is within bounds
     if (index >= experience.length) {
       // If not, add a new controller
@@ -575,8 +584,9 @@ class _EditProfileState extends State<EditProfile> {
                     children: [
                       Image.asset(AppIcons.cash, width: 32),
                       SizedBox(width: 12.w),
-                      const Text(
-                        "Your Investment Range",
+                      Text(
+                        profileContentProvider
+                            .profileContent!.investmentTagLine,
                         style: AppStyles.heading4,
                       ),
                       SizedBox(height: 8.w),
@@ -590,8 +600,9 @@ class _EditProfileState extends State<EditProfile> {
                       const Icon(Icons.category_outlined,
                           color: AppColors.blue),
                       SizedBox(width: 12.w),
-                      const Text(
-                        "Your Preferred Investment Categories",
+                      Text(
+                        profileContentProvider
+                            .profileContent!.investmentCategoryTagLine,
                         style: AppStyles.heading4,
                       ),
                     ],

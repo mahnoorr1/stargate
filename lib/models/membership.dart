@@ -3,9 +3,13 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class Membership {
+  String id;
+  String identifier;
   String tag;
   List<String> points;
   Membership({
+    required this.id,
+    required this.identifier,
     required this.tag,
     required this.points,
   });
@@ -13,8 +17,12 @@ class Membership {
   Membership copyWith({
     String? tag,
     List<String>? points,
+    String? identifier,
+    String? id,
   }) {
     return Membership(
+      identifier: identifier ?? this.identifier,
+      id: id ?? this.id,
       tag: tag ?? this.tag,
       points: points ?? this.points,
     );
@@ -22,6 +30,8 @@ class Membership {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
+      'identifier': identifier,
       'tag': tag,
       'points': points,
     };
@@ -29,9 +39,11 @@ class Membership {
 
   factory Membership.fromMap(Map<String, dynamic> map) {
     return Membership(
-        tag: map['tag'] as String,
+        id: map['id'] as String,
+        identifier: map['identifier'] as String,
+        tag: map['name'] as String,
         points: List<String>.from(
-          (map['points'] as List<String>),
+          (map['privileges'] as List<String>),
         ));
   }
 
