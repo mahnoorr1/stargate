@@ -268,6 +268,65 @@ Future<String> changePassword(
   }
 }
 
+Future<String> forgetPassword(
+  String email,
+) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('accessToken');
+  var headers = {
+    'Content-Type': 'application/json',
+    'Authorization': token!,
+  };
+  var request =
+      http.Request('POST', Uri.parse('${server}user/forgot-password'));
+  request.body = json.encode({
+    "email": email,
+  });
+  request.headers.addAll(headers);
+
+  http.StreamedResponse response = await request.send();
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    final stringResponse = await response.stream.bytesToString();
+    final Map<String, dynamic> data = jsonDecode(stringResponse);
+    return data['message'];
+  } else {
+    final errorResponse = await response.stream.bytesToString();
+    final Map<String, dynamic> errorData = jsonDecode(errorResponse);
+    final String errorMessage = errorData['message'] as String;
+    return errorMessage;
+  }
+}
+
+Future<String> resetForgottenPassword(
+  String email,
+  String newPass,
+) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('accessToken');
+  var headers = {
+    'Content-Type': 'application/json',
+    'Authorization': token!,
+  };
+  var request = http.Request('POST', Uri.parse('${server}user/reset-password'));
+  request.body = json.encode({
+    "email": email,
+    "newPassword": newPass,
+  });
+  request.headers.addAll(headers);
+
+  http.StreamedResponse response = await request.send();
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    return "Password Changed, Login to Continue!";
+  } else {
+    final errorResponse = await response.stream.bytesToString();
+    final Map<String, dynamic> errorData = jsonDecode(errorResponse);
+    final String errorMessage = errorData['message'] as String;
+    return errorMessage;
+  }
+}
+
 void storeAccessToken(String token) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString('accessToken', token);
@@ -316,6 +375,33 @@ Future<String> verifyOTP(String otp, String email) async {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200 || response.statusCode == 201) {
       return "Email verified, login to continue!";
+    } else {
+      final errorResponse = await response.stream.bytesToString();
+      final Map<String, dynamic> errorData = jsonDecode(errorResponse);
+      final String errorMessage = errorData['message'] as String;
+      log(errorData.toString());
+      return errorMessage;
+    }
+  } catch (e) {
+    return e.toString();
+  }
+}
+
+Future<String> verifyForgetPassOTP(String otp, String email) async {
+  var headers = {'Content-Type': 'application/json'};
+  var request =
+      http.Request('POST', Uri.parse('${server}user/verify-password-otp'));
+
+  try {
+    request.body = json.encode({
+      "otp": otp,
+      "email": email,
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return "Email verified!";
     } else {
       final errorResponse = await response.stream.bytesToString();
       final Map<String, dynamic> errorData = jsonDecode(errorResponse);
