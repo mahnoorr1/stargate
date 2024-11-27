@@ -45,5 +45,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+    <string>Access to the camera is required to capture photos</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Access to the photo library is required to select photos</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Access to the microphone is required to record videos with audio</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Access to add photos to the photo library is required</string>
 </dict>
 </plist>
