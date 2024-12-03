@@ -19,9 +19,11 @@ class MembershipContentProvider with ChangeNotifier {
       final content =
           await ContentManagementRepository().getMembershipContent();
       _membershipContent = content;
+      print(content);
       _errorMessage = null;
     } catch (e) {
       _errorMessage = e.toString();
+      print(e.toString());
       _membershipContent = null;
     } finally {
       _isLoading = false;

@@ -14,6 +14,7 @@ import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/routes/app_routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:stargate/widgets/animated/widget_animator.dart';
 
 import 'content_management/providers/getting_started_content_provider.dart';
 import 'content_management/providers/home_content_provider.dart';
@@ -169,6 +170,7 @@ class _MyAppState extends State<MyApp> {
       AllUsersProvider.c(context).fetchUsers(),
       RealEstateProvider.c(context).fetchAllListings(),
     ]);
+    Future.delayed(const Duration(seconds: 3));
 
     setState(() {
       loaded = true;

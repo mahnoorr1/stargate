@@ -96,18 +96,36 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           trailing: Row(
             children: [
-              SvgPicture.asset(
-                AppIcons.notificationBell,
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/notifications'),
+                child: SvgPicture.asset(
+                  AppIcons.notificationBell,
+                ),
               ),
               SizedBox(
                 width: 6.w,
               ),
-              Container(
-                height: 40.w,
-                width: 40.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30.w),
-                  color: AppColors.blue,
+              GestureDetector(
+                onTap: () {
+                  widget.onNavigate!(3);
+                },
+                child: Container(
+                  height: 40.w,
+                  width: 40.w,
+                  decoration: UserProfileProvider.c(context).profileImage ==
+                              null ||
+                          UserProfileProvider.c(context).profileImage == ""
+                      ? BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.w),
+                          color: AppColors.lightBlue,
+                          image: const DecorationImage(
+                              image: AssetImage(AppImages.user)))
+                      : BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.w),
+                          color: AppColors.lightBlue,
+                          image: DecorationImage(
+                              image: NetworkImage(UserProfileProvider.c(context)
+                                  .profileImage!))),
                 ),
               ),
               SizedBox(
