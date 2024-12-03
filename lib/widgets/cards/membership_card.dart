@@ -34,7 +34,7 @@ class MembershipCard extends StatelessWidget {
                     )
                   : const SizedBox(),
               Text(
-                membership.tag,
+                membership.tag ?? '',
                 style: AppStyles.heading3.copyWith(
                   color: AppColors.darkBlue,
                 ),
@@ -71,7 +71,7 @@ class MembershipCard extends StatelessWidget {
           SizedBox(
             height: 6.w,
           ),
-          ...membership.points.map(
+          ...membership.points!.map(
             (item) => Container(
               padding: EdgeInsets.only(bottom: 6.w),
               child: Row(

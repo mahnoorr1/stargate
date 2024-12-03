@@ -140,8 +140,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         city: city.text,
         shortDescription: description.text,
         investmentType: selectedInvestmentType,
-        // investmentSubcategory: selectedInvestmentSubcategory,
-        investmentSubcategory: 'Small House',
+        investmentSubcategory: selectedInvestmentSubcategory,
+        // investmentSubcategory: 'Small House',
         requestType: selectedRequestType,
         condition: selectedCondition,
         purchaseType: selectedPurchaseType,
@@ -623,6 +623,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         DropdownButton2Example(
           list: currentConventionalSubcategoryOptions,
           onSelected: (value) {
+            print(value);
             setState(() {
               selectedInvestmentSubcategory = value;
             });

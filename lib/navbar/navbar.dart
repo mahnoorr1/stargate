@@ -87,7 +87,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
               homeContentProvider.homeContent!.homeIcon,
               width: 20,
               height: 24,
-              color: AppColors.primaryGrey,
+              color: AppColors.primaryGrey, // Ensure grey for unselected state
             ),
             selectedIcon: Image.network(
               homeContentProvider.homeContent!.homeIcon,
@@ -107,6 +107,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
               servicesContentProvider.searchContent!,
               width: 20,
               height: 24,
+              color: AppColors.primaryGrey, // Ensure grey for unselected state
             ),
             selectedIcon: Image.network(
               servicesContentProvider.searchContent!,
@@ -122,42 +123,46 @@ class _NavBarScreenState extends State<NavBarScreen> {
             ),
           ),
           BottomBarItem(
-              icon: Image.network(
-                listingContentProvider.listingContent!.icon,
-                width: 22,
-                height: 24,
-              ),
-              selectedIcon: Image.network(
-                listingContentProvider.listingContent!.icon,
-                color: AppColors.blue,
-                width: 24,
-                height: 24,
-                fit: BoxFit.contain,
-              ),
-              selectedColor: AppColors.blue,
-              unSelectedColor: AppColors.primaryGrey,
-              title: const Text(
-                'Listings',
-                style: TextStyle(fontSize: 12),
-              )),
+            icon: Image.network(
+              listingContentProvider.listingContent!.icon,
+              width: 22,
+              height: 24,
+              color: AppColors.primaryGrey, // Ensure grey for unselected state
+            ),
+            selectedIcon: Image.network(
+              listingContentProvider.listingContent!.icon,
+              color: AppColors.blue,
+              width: 24,
+              height: 24,
+              fit: BoxFit.contain,
+            ),
+            selectedColor: AppColors.blue,
+            unSelectedColor: AppColors.primaryGrey,
+            title: const Text(
+              'Listings',
+              style: TextStyle(fontSize: 12),
+            ),
+          ),
           BottomBarItem(
-              icon: Image.network(
-                profileContentProvider.profileContent!.profileIcon,
-                width: 18,
-                height: 24,
-              ),
-              selectedIcon: Image.network(
-                profileContentProvider.profileContent!.profileIcon,
-                color: AppColors.blue,
-                width: 20,
-                height: 24,
-              ),
-              selectedColor: AppColors.blue,
-              unSelectedColor: AppColors.primaryGrey,
-              title: const Text(
-                'Profile',
-                style: TextStyle(fontSize: 12),
-              )),
+            icon: Image.network(
+              profileContentProvider.profileContent!.profileIcon,
+              width: 18,
+              height: 24,
+              color: AppColors.primaryGrey, // Ensure grey for unselected state
+            ),
+            selectedIcon: Image.network(
+              profileContentProvider.profileContent!.profileIcon,
+              color: AppColors.blue,
+              width: 20,
+              height: 24,
+            ),
+            selectedColor: AppColors.blue,
+            unSelectedColor: AppColors.primaryGrey,
+            title: const Text(
+              'Profile',
+              style: TextStyle(fontSize: 12),
+            ),
+          ),
         ],
         currentIndex: selected,
         notchStyle: NotchStyle.square,

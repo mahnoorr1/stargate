@@ -171,10 +171,27 @@ class ContentManagementRepository {
 
       if (response.statusCode == 200) {
         final decodedData = json.decode(await response.stream.bytesToString());
-        log("Membership Content: OK Responce");
-        final memberships = (decodedData['data'] as List<dynamic>)
+        log("Membership Content: OK Response");
+
+        // Explicitly cast the map result to List<Membership>
+        final memberships = (decodedData['data'] as List)
             .map((json) => Membership.fromMap(json as Map<String, dynamic>))
             .toList();
+
+// Reorder the list: 'free_trial' first, 'restricted_access' last
+        memberships.sort((a, b) {
+          if (a.identifier == 'free_trial')
+            return -1; // Move 'free_trial' to the top
+          if (b.identifier == 'free_trial')
+            return 1; // Keep 'free_trial' on top
+
+          if (a.identifier == 'restricted_access')
+            return 1; // Move 'restricted_access' to the bottom
+          if (b.identifier == 'restricted_access')
+            return -1; // Keep 'restricted_access' at the bottom
+
+          return 0; // Preserve order for others
+        });
 
         return memberships;
       } else {

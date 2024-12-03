@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class Membership {
-  String id;
-  String identifier;
-  String tag;
-  List<String> points;
+  String? id;
+  String? identifier;
+  String? tag;
+  List<String>? points;
   Membership({
     required this.id,
     required this.identifier,
@@ -39,12 +39,14 @@ class Membership {
 
   factory Membership.fromMap(Map<String, dynamic> map) {
     return Membership(
-        id: map['id'] as String,
-        identifier: map['identifier'] as String,
-        tag: map['name'] as String,
-        points: List<String>.from(
-          (map['privileges'] as List<String>),
-        ));
+      id: map['_id'] ??
+          '', // Fixed to match the actual field name in the response
+      identifier: map['identifier'] ?? '',
+      tag: map['name'] ?? '',
+      points: map['privileges'] != null
+          ? List<String>.from(map['privileges'] as List)
+          : [], // Explicitly convert privileges to List<String>
+    );
   }
 
   String toJson() => json.encode(toMap());
