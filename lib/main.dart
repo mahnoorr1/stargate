@@ -47,6 +47,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => SearchContentProvider()),
           ChangeNotifierProvider(create: (_) => ProfileContentProvider()),
           ChangeNotifierProvider(create: (_) => RealEstateProvider()),
+          ChangeNotifierProvider(create: (_) => MembershipContentProvider()),
         ],
         child: const MyApp(),
       );

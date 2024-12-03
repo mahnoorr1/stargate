@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
@@ -9,8 +10,16 @@ import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/widgets/animated/entrance_fader.dart';
 
+import 'content_management/providers/membership_content.dart';
 import 'routes/app_routes.dart';
 import 'utils/app_images.dart';
+
+import 'content_management/providers/getting_started_content_provider.dart';
+import 'content_management/providers/home_content_provider.dart';
+import 'content_management/providers/listing_content_provider.dart';
+import 'content_management/providers/offer_request_property_content_provider.dart';
+import 'content_management/providers/profile_content_provider.dart';
+import 'content_management/providers/search_content_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,6 +30,35 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool? onboardDone;
+
+  Future<void> _initializeProviders() async {
+    final gettingStartedProvider =
+        Provider.of<GettingStartedProvider>(context, listen: false);
+    final offerRequestProvider =
+        Provider.of<OfferRequestPropertyContentProvider>(context,
+            listen: false);
+    final homeContentProvider =
+        Provider.of<HomeContentProvider>(context, listen: false);
+    final listingContentProvider =
+        Provider.of<ListingContentProvider>(context, listen: false);
+    final searchContentProvider =
+        Provider.of<SearchContentProvider>(context, listen: false);
+    final profileContentProvider =
+        Provider.of<ProfileContentProvider>(context, listen: false);
+    final membershipContentProvider =
+        Provider.of<MembershipContentProvider>(context, listen: false);
+
+    await Future.wait([
+      gettingStartedProvider.fetchGettingStartedContent(),
+      offerRequestProvider.fetchOfferRequestPropertyContent(),
+      homeContentProvider.fetchHomeContent(),
+      listingContentProvider.fetchListingContent(),
+      searchContentProvider.fetchSearchContent(),
+      profileContentProvider.fetchProfileContent(),
+      membershipContentProvider.fetchMembershipContent(),
+    ]);
+  }
+
   void next() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -36,6 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
     });
 
     Future.delayed(const Duration(seconds: 2), () async {
+      _initializeProviders();
       if (onboardDone == true) {
         if (authData == null || authData == '') {
           Navigator.pushReplacementNamed(
@@ -48,6 +87,7 @@ class _SplashScreenState extends State<SplashScreen> {
           // await serviceProviders.getAllUsers();
           await AllUsersProvider.c(context).fetchUsers();
           await RealEstateProvider.c(context).fetchAllListings();
+          _initializeProviders();
 
           Navigator.pushReplacementNamed(context, '/navbar');
         }
