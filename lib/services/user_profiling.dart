@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,6 +35,7 @@ Future<String?> loginUser(String email, String pass) async {
       String? tokenn = prefs.getString('accessToken');
       // ignore: avoid_print
       print(tokenn);
+      saveDeviceToekn(userId: responseData['data']['user']['_id']);
       return 'token';
     } else {
       final errorResponse = await response.stream.bytesToString();
@@ -411,5 +413,35 @@ Future<String> verifyForgetPassOTP(String otp, String email) async {
     }
   } catch (e) {
     return e.toString();
+  }
+}
+
+Future<void> saveDeviceToekn({
+  required String userId,
+}) async {
+  try {
+    var deviceToken = await FirebaseMessaging.instance.getToken();
+    log('Token: $deviceToken');
+    log('------------------------------------');
+
+    var headers = {'Content-Type': 'application/json'};
+    var request =
+        http.Request('POST', Uri.parse('${server}user/save-device-token'));
+    request.body = json.encode({
+      "userId": userId,
+      "deviceToken": deviceToken,
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      log(await response.stream.bytesToString());
+      log('Device Token Saved Successfully');
+    } else {
+      log(response.reasonPhrase.toString());
+    }
+  } catch (error) {
+    log('saveDeviceToekn Catched Error: $error');
   }
 }

@@ -12,6 +12,8 @@ import 'package:stargate/screens/onboarding/onboarding1.dart';
 import 'package:stargate/screens/signup/signup_screen.dart';
 import 'package:stargate/splash.dart';
 
+import '../screens/notification/notification_screen.dart';
+
 class AppRoutes {
   static const String onboarding = '/onboarding';
   static const String splash = '/splash';
@@ -24,6 +26,7 @@ class AppRoutes {
   static const String policy = '/policy';
   static const String legalNotice = '/legalNotice';
   static const String faq = '/faq';
+  static const String notification = '/notifications';
 
   static Map<String, WidgetBuilder> routes = {
     onboarding: (context) => const OnBoardingScreen1(),
@@ -36,5 +39,6 @@ class AppRoutes {
     policy: (context) => const PrivacyPolicyScreen(),
     legalNotice: (context) => const LegalNoticeScreen(),
     faq: (context) => const FAQScreen(),
+    notification: (context) => const NotificationScreen(),
   };
 }

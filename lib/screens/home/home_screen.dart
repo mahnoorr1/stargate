@@ -10,11 +10,11 @@ import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/home/widgets/property_card.dart';
 import 'package:stargate/screens/home/widgets/service_provider_card.dart';
 import 'package:stargate/screens/property_request_screen/property_request_screen.dart';
-import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
 import '../../widgets/dialog_box.dart';
+import '../notification/notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(int)? onNavigate;

@@ -24,7 +24,7 @@ import 'content_management/providers/search_content_provider.dart';
 import 'faqs/providers/faq_provider.dart';
 import 'providers/user_info_provider.dart';
 import 'dart:convert';
-import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -35,9 +35,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseMessaging.instance.getToken().then((token) {
-    log("Device Token: $token");
-  });
 
   // If Application is in background or terminated
   FirebaseMessaging.onMessageOpenedApp.listen(
@@ -58,13 +55,27 @@ void main() async {
       print("App launched via notification: ${message.notification?.title}");
       if (message.data.isNotEmpty) {
         navigatorKey.currentState!.pushNamed(
-          '/push-page',
+          '/notifications',
           arguments: {"message": json.encode(message.data)},
         );
       }
     }
   });
 
+  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+    if (message != null) {
+      print("App launched via notification: ${message.notification?.title}");
+      if (message.data.isNotEmpty) {
+        navigatorKey.currentState!.pushNamed(
+          '/notifications',
+          arguments: {"message": json.encode(message.data)},
+        );
+      }
+    }
+  });
+
+  RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
   runApp(
     Builder(builder: (context) {
       return MultiProvider(
@@ -89,14 +100,15 @@ void main() async {
           ChangeNotifierProvider(create: (_) => RealEstateProvider()),
           ChangeNotifierProvider(create: (_) => MembershipContentProvider()),
         ],
-        child: const MyApp(),
+        child: MyApp(initialMessage: initialMessage),
       );
     }),
   );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.initialMessage});
+  final RemoteMessage? initialMessage;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -114,6 +126,16 @@ class _MyAppState extends State<MyApp> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeProviders();
+    });
+
+    // Handle when app is opened from a notification
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      if (message.data.isNotEmpty) {
+        navigatorKey.currentState!.pushNamed(
+          '/notifications',
+          arguments: {"message": json.encode(message.data)},
+        );
+      }
     });
   }
 
@@ -159,6 +181,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           builder: EasyLoading.init(),
           title: 'Stargate',
+          navigatorKey: navigatorKey,
           initialRoute: AppRoutes.splash,
           debugShowCheckedModeBanner: false,
           routes: AppRoutes.routes,
