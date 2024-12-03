@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stargate/content_management/providers/membership_content.dart';
 import 'package:stargate/cubit/real_estate_listing/cubit.dart';
 import 'package:stargate/cubit/service_providers/cubit.dart';
+import 'package:stargate/firebase_options.dart';
 import 'package:stargate/legal_documents/providers/legal_document_provider.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
@@ -22,9 +23,48 @@ import 'content_management/providers/profile_content_provider.dart';
 import 'content_management/providers/search_content_provider.dart';
 import 'faqs/providers/faq_provider.dart';
 import 'providers/user_info_provider.dart';
+import 'dart:convert';
+import 'dart:developer';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
-void main() {
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseMessaging.instance.getToken().then((token) {
+    log("Device Token: $token");
+  });
+
+  // If Application is in background or terminated
+  FirebaseMessaging.onMessageOpenedApp.listen(
+    (RemoteMessage message) async {
+      print("Notification opened: ${message.notification?.title}");
+      if (message.data.isNotEmpty) {
+        navigatorKey.currentState!.pushNamed(
+          '/push-page',
+          arguments: {"message": json.encode(message.data)},
+        );
+      }
+    },
+  );
+
+  // If Application is Closed
+  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+    if (message != null) {
+      print("App launched via notification: ${message.notification?.title}");
+      if (message.data.isNotEmpty) {
+        navigatorKey.currentState!.pushNamed(
+          '/push-page',
+          arguments: {"message": json.encode(message.data)},
+        );
+      }
+    }
+  });
+
   runApp(
     Builder(builder: (context) {
       return MultiProvider(
