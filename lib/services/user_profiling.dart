@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/constants.dart';
 import 'package:stargate/models/profile.dart';
 
+import '../models/notification_model.dart';
+
 Future<String?> loginUser(String email, String pass) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var headers = {
@@ -443,5 +445,45 @@ Future<void> saveDeviceToekn({
     }
   } catch (error) {
     log('saveDeviceToekn Catched Error: $error');
+  }
+}
+
+Future<List<NotificationModel>> getNotifications() async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('accessToken');
+
+    if (token == null || token.isEmpty) {
+      throw Exception("Access token not found");
+    }
+
+    var headers = {
+      'Authorization': token,
+    };
+
+    var response = await http.get(
+      Uri.parse('${server}user/notifications'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      // Parse the response body
+      final List<dynamic> notificationsJson =
+          json.decode(response.body)['data'];
+
+      // Map each JSON object to a Notification model
+      List<NotificationModel> notifications = notificationsJson
+          .map((notification) => NotificationModel.fromMap(notification))
+          .toList();
+
+      log("Notifications retrieved: $notifications");
+      return notifications;
+    } else {
+      log("Failed to fetch notifications: ${response.reasonPhrase}");
+      return [];
+    }
+  } catch (error) {
+    log('getNotifications Catched Error: $error');
+    return [];
   }
 }

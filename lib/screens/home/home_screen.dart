@@ -13,6 +13,7 @@ import 'package:stargate/screens/property_request_screen/property_request_screen
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
+import '../../routes/app_routes.dart';
 import '../../widgets/dialog_box.dart';
 import '../notification/notification_screen.dart';
 
@@ -90,6 +91,15 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationScreen()));
+                },
+                child: Icon(Icons.notification_add),
+              ),
               Stack(
                 children: [
                   Container(

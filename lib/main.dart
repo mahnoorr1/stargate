@@ -22,6 +22,7 @@ import 'content_management/providers/offer_request_property_content_provider.dar
 import 'content_management/providers/profile_content_provider.dart';
 import 'content_management/providers/search_content_provider.dart';
 import 'faqs/providers/faq_provider.dart';
+import 'providers/notification_provider.dart';
 import 'providers/user_info_provider.dart';
 import 'dart:convert';
 
@@ -99,6 +100,7 @@ void main() async {
           ChangeNotifierProvider(create: (_) => ProfileContentProvider()),
           ChangeNotifierProvider(create: (_) => RealEstateProvider()),
           ChangeNotifierProvider(create: (_) => MembershipContentProvider()),
+          ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ],
         child: MyApp(initialMessage: initialMessage),
       );
