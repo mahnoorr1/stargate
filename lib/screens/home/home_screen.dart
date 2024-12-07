@@ -14,6 +14,7 @@ import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
 import '../../routes/app_routes.dart';
+import '../../utils/notifications_permission_handler.dart';
 import '../../widgets/dialog_box.dart';
 import '../notification/notification_screen.dart';
 
@@ -31,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getListing();
+      NotificationPermissionHelper.requestNotificationPermission(context);
     });
     UserProfileProvider profileProvdier = UserProfileProvider.c(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
