@@ -36,33 +36,58 @@ class AllUsersProvider extends ChangeNotifier {
   bool get loading => _loading;
   bool get noUsers => _noUsers;
 
+  // Future<void> fetchUsers() async {
+  //   if (_users.isEmpty && _initialLoadComplete) {
+  //     _noUsers = true;
+  //     notifyListeners();
+  //     return;
+  //   }
+
+  //   if (_initialLoadComplete) {
+  //     _checkForNewUsers();
+  //     return;
+  //   }
+
+  //   _loading = true;
+  //   _noUsers = false;
+  //   notifyListeners();
+
+  //   try {
+  //     List<User> newUsers = await getAllServiceUsers();
+  //     if (newUsers.isNotEmpty) {
+  //       _updateUsers(newUsers);
+  //     } else {
+  //       _noUsers = true;
+  //     }
+  //   } catch (e) {
+  //     _noUsers = true;
+  //   } finally {
+  //     _loading = false;
+  //     _initialLoadComplete = true;
+  //     notifyListeners();
+  //   }
+  // }
+
   Future<void> fetchUsers() async {
-    if (_users.isEmpty && _initialLoadComplete) {
-      _noUsers = true;
-      notifyListeners();
-      return;
-    }
-
-    if (_initialLoadComplete) {
-      _checkForNewUsers();
-      return;
-    }
-
+    // Always show loading before starting the fetch
     _loading = true;
-    _noUsers = false;
+    _noUsers = false; // Reset this state to avoid premature "No users found"
     notifyListeners();
 
     try {
+      // Fetch the users from the service
       List<User> newUsers = await getAllServiceUsers();
+
       if (newUsers.isNotEmpty) {
         _updateUsers(newUsers);
       } else {
-        _noUsers = true;
+        _noUsers =
+            true; // Show "No users found" only if there are truly no users
       }
     } catch (e) {
-      _noUsers = true;
+      _noUsers = true; // In case of an error, show "No users found"
     } finally {
-      _loading = false;
+      _loading = false; // Reset loading state after completion
       _initialLoadComplete = true;
       notifyListeners();
     }
