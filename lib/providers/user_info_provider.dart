@@ -99,6 +99,8 @@ class UserProfileProvider with ChangeNotifier {
       await _saveToPrefs('websiteLink', _websiteLink ?? '');
       await _saveToPrefs('restrictContact', _restrictContact.toString());
 
+      _isLoading = false;
+
       notifyListeners();
     }
   }

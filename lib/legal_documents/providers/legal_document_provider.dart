@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/legal_document_model.dart';
@@ -18,6 +20,10 @@ class LegalDocumentProvider with ChangeNotifier {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('accessToken') ?? '';
+
+    log('_____________________________________');
+    log('token: $token');
+    log('_____________________________________');
 
     try {
       final legalDocument = await LegalDocumentRepository.getLegalDocument(

@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -49,6 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       overlayWidgets: [
         Consumer<UserProfileProvider>(builder: (context, provider, child) {
           if (provider.isLoading) {
+            log('Loading');
             return const FullScreenLoader(loading: true);
           }
 
