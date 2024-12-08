@@ -89,6 +89,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       address: provider.address,
       city: provider.city,
       country: provider.countryName,
+      references: provider.references,
+      websiteLink: provider.websiteLink,
     );
 
     return Scaffold(

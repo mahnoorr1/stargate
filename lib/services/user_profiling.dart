@@ -99,9 +99,18 @@ Future<String?> registerUser(
 Future<User?> myProfile() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('accessToken');
+
+  if (token == null || token.isEmpty) {
+    // Handle case where token is null or empty
+    if (kDebugMode) {
+      print('Access token is null or empty.');
+    }
+    return null;
+  }
+
   var headers = {
     'Content-Type': 'application/json',
-    'Authorization': token!,
+    'Authorization': token,
   };
   var request = http.Request('GET', Uri.parse('${server}user/my-profile'));
 
@@ -120,17 +129,131 @@ Future<User?> myProfile() async {
       final Map<String, dynamic> errorData = jsonDecode(errorResponse);
       final String errorMessage = errorData['message'] as String;
       if (kDebugMode) {
-        print(errorMessage);
+        print('Error: $errorMessage');
       }
       return null;
     }
   } catch (e) {
     if (kDebugMode) {
-      print(e.toString());
+      print('Exception: ${e.toString()}');
     }
     return null;
   }
 }
+
+// Future<String> updateProfile({
+//   required String name,
+//   required String address,
+//   required String city,
+//   required String country,
+//   required List<Service> professions,
+//   List<dynamic>? references, // Accepts both file paths and URLs
+//   required String websiteLink,
+//   String? profile, // Profile picture file path
+// }) async {
+//   // Retrieve the token
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   String? token = prefs.getString('accessToken');
+
+//   if (token == null) {
+//     return 'Authorization token is missing';
+//   }
+
+//   // Setup headers
+//   var headers = {
+//     'Authorization': token,
+//     'Cookie': 'accessToken=$token',
+//   };
+
+//   // Create multipart request
+//   var request = http.MultipartRequest(
+//     'PATCH',
+//     Uri.parse('${server}user/update-profile'),
+//   );
+
+//   try {
+//     // Add fields to the request
+//     request.fields.addAll({
+//       'name': name,
+//       'address': address,
+//       'city': city,
+//       'country': country,
+//       'websiteLink': websiteLink,
+//     });
+
+//     log('Request Fields: ${request.fields}');
+
+//     // Add profile picture if provided
+//     if (profile != null && profile.isNotEmpty) {
+//       try {
+//         request.files.add(
+//           await http.MultipartFile.fromPath('profilePicture', profile),
+//         );
+//         log('Profile picture added: $profile');
+//       } catch (e) {
+//         log('Error adding profile picture: $e');
+//       }
+//     }
+
+//     // Separate references into file paths and URLs
+//     if (references != null && references.isNotEmpty) {
+//       List<String> urls = [];
+//       List<String> filePaths = [];
+
+//       // Separate URLs and file paths
+//       for (var ref in references) {
+//         if (ref.toString().startsWith('http')) {
+//           urls.add(ref); // Add to URLs list
+//         } else {
+//           filePaths.add(ref); // Add to file paths list
+//         }
+//       }
+
+//       // Add URLs to fields
+//       for (int i = 0; i < urls.length; i++) {
+//         request.fields['references[$i]'] = urls[i];
+//         log('Added URL reference: ${urls[i]}');
+//       }
+
+//       // Add files as MultipartFile
+//       for (var filePath in filePaths) {
+//         try {
+//           request.files.add(
+//             await http.MultipartFile.fromPath('references', filePath),
+//           );
+//           log('Added file reference: $filePath');
+//         } catch (e) {
+//           log('Error adding file reference $filePath: $e');
+//         }
+//       }
+//     }
+
+//     // Add headers
+//     request.headers.addAll(headers);
+
+//     log('Request Files: ${request.files}');
+//     log('Request Fields: ${request.fields}');
+
+//     // Send the request
+//     http.StreamedResponse response = await request.send();
+
+//     // Process the response
+//     if (response.statusCode == 200 || response.statusCode == 201) {
+//       String jsonString = await response.stream.bytesToString();
+//       final Map<String, dynamic> responseData = jsonDecode(jsonString);
+
+//       log('Update Profile Success: $responseData');
+
+//       // Update local user data
+//       storeUserData(
+//         name: responseData['data']['name'],
+//         email: responseData['data']['email'],
+//         id: responseData['data']['_id'],
+//         membership: responseData['data']['membership'],
+//       );
+
+//       // Update professions separately
+//       String profession = await updateProfessions(
 
 Future<String> updateProfile({
   required String name,
@@ -138,72 +261,131 @@ Future<String> updateProfile({
   required String city,
   required String country,
   required List<Service> professions,
-  required List<dynamic> references,
+  List<dynamic>? references, // Accepts both file paths and URLs
   required String websiteLink,
-  String? profile,
+  String? profile, // Profile picture file path
 }) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('accessToken');
-  var headers = {
-    'Content-Type': 'application/json',
-    'Authorization': token!,
+  // Retrieve the token
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String? token = prefs.getString('accessToken');
+
+  if (token == null) {
+    return 'Authorization token is missing';
+  }
+
+  final headers = {
+    'Authorization': token,
+    'Cookie': 'accessToken=$token',
   };
-  var request =
-      http.MultipartRequest('PATCH', Uri.parse('${server}user/update-profile'));
+
+  final request = http.MultipartRequest(
+    'PATCH',
+    Uri.parse('${server}user/update-profile'),
+  );
+
   try {
+    // Add basic fields
     request.fields.addAll({
-      "name": name,
-      "address": address,
-      "city": city,
-      "country": country,
-      "websiteLink": websiteLink,
+      'name': name,
+      'address': address,
+      'city': city,
+      'country': country,
+      'websiteLink': websiteLink,
     });
-    if (profile != '' && profile != null) {
+
+    // Add profile picture if provided
+    if (profile != null && profile.isNotEmpty) {
       request.files
           .add(await http.MultipartFile.fromPath('profilePicture', profile));
     }
-    if (references.isNotEmpty) {
-      for (int i = 0; i < references.length; i++) {
-        request.files.add(
-            await http.MultipartFile.fromPath('references', references[i]));
+
+    // Separate and handle references
+    if (references != null && references.isNotEmpty) {
+      final List<String> urls = [];
+      final List<String> filePaths = [];
+
+      for (var ref in references) {
+        if (ref.toString().startsWith('http')) {
+          urls.add(ref);
+        } else {
+          filePaths.add(ref);
+        }
+      }
+
+      for (int i = 0; i < urls.length; i++) {
+        request.fields['references[$i]'] = urls[i];
+      }
+
+      for (var filePath in filePaths) {
+        request.files
+            .add(await http.MultipartFile.fromPath('references', filePath));
       }
     }
+
+    // Add headers
     request.headers.addAll(headers);
 
-    http.StreamedResponse response = await request.send();
+    // Send the request
+    final http.StreamedResponse response = await request.send();
+
     if (response.statusCode == 200 || response.statusCode == 201) {
-      String jsonString = await response.stream.bytesToString();
+      final String jsonString = await response.stream.bytesToString();
       final Map<String, dynamic> responseData = jsonDecode(jsonString);
+
       storeUserData(
         name: responseData['data']['name'],
         email: responseData['data']['email'],
         id: responseData['data']['_id'],
         membership: responseData['data']['membership'],
       );
-      String profession = await updateProfessions(professions: professions);
-      return profession == 'Success' ? 'Success' : 'Error';
+
+      // Extract references from the response and update professions
+      final List<dynamic> updatedReferences =
+          List<dynamic>.from(responseData['data']['references'] ?? []);
+      final String professionUpdateStatus = await updateProfessions(
+        professions: professions,
+        references:
+            updatedReferences, // Passing references from profile update response
+      );
+
+      return professionUpdateStatus == 'Success' ? 'Success' : 'Error';
     } else {
-      final errorResponse = await response.stream.bytesToString();
+      final String errorResponse = await response.stream.bytesToString();
       final Map<String, dynamic> errorData = jsonDecode(errorResponse);
       final String errorMessage = errorData['message'] as String;
+
+      log('Update Profile Failed: $errorMessage');
       return errorMessage;
     }
   } catch (e) {
+    log('Update Profile Error: $e');
     return e.toString();
   }
 }
 
-Future<String> updateProfessions({required List<Service> professions}) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('accessToken');
-  var headers = {
+Future<String> updateProfessions({
+  required List<Service> professions,
+  required List<dynamic> references,
+}) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String? token = prefs.getString('accessToken');
+
+  if (token == null) {
+    return 'Authorization token is missing';
+  }
+
+  final headers = {
     'Content-Type': 'application/json',
-    'Authorization': token!,
+    'Authorization': token,
   };
-  var request =
-      http.Request('PATCH', Uri.parse('${server}user/update-profile'));
+
+  final request = http.Request(
+    'PATCH',
+    Uri.parse('${server}user/update-profile'),
+  );
 
   try {
+    // Add professions and references to the body
     request.body = jsonEncode({
       "professions": professions.map((item) {
         if (item.details['name'].toLowerCase() == 'investor') {
@@ -215,7 +397,8 @@ Future<String> updateProfessions({required List<Service> professions}) async {
             },
             "specialization": item.details['specialization'] ?? "",
             "preferredInvestmentCategories": List<String>.from(
-                item.details['preferredInvestmentCategories'] ?? []),
+              item.details['preferredInvestmentCategories'] ?? [],
+            ),
           };
         } else {
           return {
@@ -225,19 +408,26 @@ Future<String> updateProfessions({required List<Service> professions}) async {
           };
         }
       }).toList(),
+      "references":
+          references, // References passed from profile update response
     });
 
     request.headers.addAll(headers);
-    http.StreamedResponse response = await request.send();
+
+    final http.StreamedResponse response = await request.send();
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       return 'Success';
     } else {
-      final errorResponse = await response.stream.bytesToString();
+      final String errorResponse = await response.stream.bytesToString();
       final Map<String, dynamic> errorData = jsonDecode(errorResponse);
       final String errorMessage = errorData['message'] as String;
+
+      log('Update Professions Failed: $errorMessage');
       return errorMessage;
     }
   } catch (e) {
+    log('Update Professions Error: $e');
     return e.toString();
   }
 }

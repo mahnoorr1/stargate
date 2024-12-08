@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_nullable_for_final_variable_declarations, use_build_context_synchronously
 
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -75,14 +76,14 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id')!;
-    print(address.text);
-    print(price);
-    print(bathroom);
-    print(beds);
-    print(furnished);
-    print(garage);
-    print(images[0]);
-    print(selectedPurchaseType);
+    log('Address: ${address.text}');
+    log('Price: $price');
+    log('Bathrooms: $bathroom');
+    log('Beds: $beds');
+    log('Furnished: $furnished');
+    log('Garage: $garage');
+    log('Images: ${images.isNotEmpty ? images[0] : 'No images'}');
+    log('Purchase Type: $selectedPurchaseType');
 
     if (address.text.isEmpty ||
         title.text.isEmpty ||

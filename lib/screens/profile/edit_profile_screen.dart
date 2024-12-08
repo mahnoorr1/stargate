@@ -25,7 +25,10 @@ import 'package:stargate/widgets/inputfields/textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/local_pdf_viewer.dart';
 import 'package:path/path.dart' as p;
+import 'package:stargate/widgets/pdf_viewer.dart';
 import 'package:stargate/widgets/screen/screen.dart';
+
+import '../../services/helper_methods.dart';
 
 class EditProfile extends StatefulWidget {
   final User user;
@@ -115,6 +118,7 @@ class _EditProfileState extends State<EditProfile> {
       websiteLink: websiteLink.text,
       profileImage: image!.contains('https') ? null : image,
     );
+
     if (save == 'Success') {
       showToast(message: save, context: context);
       setState(() {
@@ -455,8 +459,8 @@ class _EditProfileState extends State<EditProfile> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => MyPdfViewer(
-                                          pdfPath: references[index]),
+                                      builder: (context) => PDFViewerScreen(
+                                          filePath: references[index]),
                                     ),
                                   );
                                 },
@@ -477,7 +481,7 @@ class _EditProfileState extends State<EditProfile> {
                                                 0.8,
                                         child: Text(
                                           style: AppStyles.heading4,
-                                          referencesNames[index],
+                                          getFileName(referencesNames[index]),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),

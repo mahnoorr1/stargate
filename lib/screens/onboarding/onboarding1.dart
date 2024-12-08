@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +27,8 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
     storeOnboardToken();
     final gettingStartedProvider = Provider.of<GettingStartedProvider>(context);
     final remoteOnboardData = gettingStartedProvider.gettingStartedContent;
+
+    log('remoteOnboardData: $remoteOnboardData');
 
     return Scaffold(
       appBar: OnBoardAppBar(index: 0),

@@ -133,15 +133,15 @@ class UserProfileProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateProfession(List<Service> newProfessions) async {
-    String result = await updateProfessions(professions: newProfessions);
-    if (result == 'Success') {
-      _services = newProfessions;
-      notifyListeners();
-    } else {
-      //
-    }
-  }
+  // Future<void> updateProfession(List<Service> newProfessions) async {
+  //   String result = await updateProfessions(professions: newProfessions);
+  //   if (result == 'Success') {
+  //     _services = newProfessions;
+  //     notifyListeners();
+  //   } else {
+  //     //
+  //   }
+  // }
 
   Future<void> deleteUserProperty(String propertyId) async {
     String result = await deleteProperty(id: propertyId);
