@@ -15,6 +15,7 @@ class User {
   bool? restrictContact;
   List<RealEstateListing>? properties;
   List<dynamic>? references;
+  String? membership;
 
   User({
     required this.id,
@@ -30,28 +31,31 @@ class User {
     this.restrictContact,
     this.properties,
     this.references,
+    this.membership,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-        id: json['_id'],
-        name: json['name'] ?? '',
-        image: json['profilePicture'] ?? '',
-        services: (json['professions'] as List<dynamic>? ?? [])
-            .map((profession) => Service.fromJson(profession))
-            .toList(),
-        address: json['address'] ?? '',
-        city: json['city'] ?? '',
-        country: json['country'] ?? '',
-        email: json['email'] ?? '',
-        verified: json['isRecommended'] ?? false,
-        websiteLink: json['websiteLink'] ?? '',
-        restrictContact: json['restrictContact'] ?? false,
-        properties: (json['properties'] as List<dynamic>? ?? [])
-            .map((property) => RealEstateListing.fromJson(
-                property, json['email'], json['name'], json['_id']))
-            .toList(),
-        references: json['references'] as List<dynamic>);
+      id: json['_id'],
+      name: json['name'] ?? '',
+      image: json['profilePicture'] ?? '',
+      services: (json['professions'] as List<dynamic>? ?? [])
+          .map((profession) => Service.fromJson(profession))
+          .toList(),
+      address: json['address'] ?? '',
+      city: json['city'] ?? '',
+      country: json['country'] ?? '',
+      email: json['email'] ?? '',
+      verified: json['isRecommended'] ?? false,
+      websiteLink: json['websiteLink'] ?? '',
+      restrictContact: json['restrictContact'] ?? false,
+      properties: (json['properties'] as List<dynamic>? ?? [])
+          .map((property) => RealEstateListing.fromJson(
+              property, json['email'], json['name'], json['_id']))
+          .toList(),
+      references: json['references'] as List<dynamic>,
+      membership: json['membership']['_id'] as String,
+    );
   }
 
   Map<String, dynamic> toJson() {

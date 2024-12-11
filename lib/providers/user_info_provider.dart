@@ -38,6 +38,7 @@ class UserProfileProvider with ChangeNotifier {
   List<dynamic> _references = [];
   bool _isLoading = true;
   bool _firstProfileInfoAlertDone = false;
+  String _membership = '';
 
   String get id => _id;
   String get name => _name;
@@ -56,6 +57,7 @@ class UserProfileProvider with ChangeNotifier {
   List<dynamic> get references => _references;
   bool get isLoading => _isLoading;
   bool get firstProfileInfoAlertDone => _firstProfileInfoAlertDone;
+  String get membership => _membership;
 
   Future<void> _loadInitialProfileData() async {
     _isLoading = true;
@@ -68,6 +70,11 @@ class UserProfileProvider with ChangeNotifier {
 
   void setFirstTimeAlert() {
     _firstProfileInfoAlertDone = true;
+    notifyListeners();
+  }
+
+  void setMembership(String membership) {
+    _membership = membership;
     notifyListeners();
   }
 
@@ -87,6 +94,7 @@ class UserProfileProvider with ChangeNotifier {
       _restrictContact = user.restrictContact ?? false;
       _properties = user.properties ?? [];
       _references = user.references ?? [];
+      _membership = user.membership ?? '';
 
       await _saveToPrefs('id', _id);
       await _saveToPrefs('name', _name);
@@ -98,6 +106,7 @@ class UserProfileProvider with ChangeNotifier {
       await _saveToPrefs('verified', _verified.toString());
       await _saveToPrefs('websiteLink', _websiteLink ?? '');
       await _saveToPrefs('restrictContact', _restrictContact.toString());
+      await _saveToPrefs('membership', _membership);
 
       _isLoading = false;
 
@@ -171,6 +180,7 @@ class UserProfileProvider with ChangeNotifier {
     _verified = prefs.getBool('verified') ?? _verified;
     _websiteLink = prefs.getString('websiteLink') ?? _websiteLink;
     _restrictContact = prefs.getBool('restrictContact') ?? _restrictContact;
+    _membership = prefs.getString('membership') ?? _membership;
 
     notifyListeners();
   }
@@ -220,6 +230,7 @@ class UserProfileProvider with ChangeNotifier {
     _services = [];
     _properties = [];
     _references = [];
+    _membership = '';
 
     await _saveToPrefs('id', '');
     await _saveToPrefs('name', '');
@@ -232,6 +243,7 @@ class UserProfileProvider with ChangeNotifier {
     await _saveToPrefs('verified', 'false');
     await _saveToPrefs('websiteLink', '');
     await _saveToPrefs('restrictContact', 'false');
+    await _saveToPrefs('membership', '');
 
     notifyListeners();
   }

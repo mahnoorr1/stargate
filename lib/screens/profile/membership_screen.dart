@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/content_management/providers/membership_content.dart';
-import 'package:stargate/utils/app_data.dart';
+import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/widgets/buttons/back_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/cards/membership_card.dart';
@@ -22,7 +22,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
   void initState() {
     super.initState();
     MembershipContentProvider().fetchMembershipContent();
-    Future.delayed(Duration(seconds: 2));
+    Future.delayed(const Duration(seconds: 2));
     setState(() {
       loaded = true;
     });
@@ -30,9 +30,16 @@ class _MembershipScreenState extends State<MembershipScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("inside");
     final membershipContentProvider =
         Provider.of<MembershipContentProvider>(context, listen: false);
+    membershipContentProvider.membershipContent!.sort((a, b) {
+      if (a.id == UserProfileProvider.c(context).membership) {
+        return -1;
+      }
+      if (b.id == UserProfileProvider.c(context).membership) return 1;
+
+      return 0;
+    });
     return Screen(
       overlayWidgets: [
         if (membershipContentProvider.isLoading || !loaded)
@@ -66,13 +73,26 @@ class _MembershipScreenState extends State<MembershipScreen> {
             SizedBox(
               height: 6.w,
             ),
-            ...membershipContentProvider.membershipContent!.map(
-              (item) => MembershipCard(
-                membership: item,
-                activeMembership:
-                    membershipContentProvider.membershipContent![0].tag ?? '',
-              ),
-            ),
+            UserProfileProvider.c(context).membership ==
+                    '66c2ff151bf7b7176ee92708'
+                ? MembershipCard(
+                    membership: membershipContentProvider.membershipContent![0],
+                    activeMembership:
+                        membershipContentProvider.membershipContent![0].tag ??
+                            '',
+                  )
+                : Column(
+                    children: [
+                      ...membershipContentProvider.membershipContent!.map(
+                        (item) => MembershipCard(
+                          membership: item,
+                          activeMembership: membershipContentProvider
+                                  .membershipContent![0].tag ??
+                              '',
+                        ),
+                      ),
+                    ],
+                  ),
             SizedBox(
               height: 18.w,
             ),

@@ -14,6 +14,7 @@ class User {
   String? websiteLink;
   bool? restrictContact;
   List<dynamic>? properties;
+  List<dynamic>? references;
 
   User({
     required this.id,
@@ -29,6 +30,7 @@ class User {
     this.websiteLink,
     this.restrictContact,
     this.properties,
+    this.references,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -48,6 +50,7 @@ class User {
       restrictContact: json['restrictContact'] ?? false,
       properties: json['properties'] as List<dynamic>,
       membership: json['membership'] ?? '',
+      references: json['references'] as List<dynamic>,
     );
   }
 

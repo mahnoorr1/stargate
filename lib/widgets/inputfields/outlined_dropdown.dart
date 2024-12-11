@@ -46,7 +46,7 @@ class _OutlinedDropdownButtonExampleState
 
   @override
   Widget build(BuildContext context) {
-    var seen = Set<String>();
+    var seen = <String>{};
     List<String> uniquelist =
         widget.list.where((item) => seen.add(item)).toList();
 

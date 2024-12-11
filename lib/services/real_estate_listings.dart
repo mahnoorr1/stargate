@@ -143,7 +143,6 @@ Future<Map<String, dynamic>> addPropertyRequest({
     if (response.statusCode == 200 || response.statusCode == 201) {
       String responseBody = await response.stream.bytesToString();
       final data = json.decode(responseBody);
-      print(data);
       return data;
     } else {
       String responseBody = await response.stream.bytesToString();
@@ -243,27 +242,21 @@ Future<List<RealEstateListing>> filterProperty({
     final response = await http.get(uri, headers: headers);
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
-      print(data);
       try {
         final listings = (data['data'] as List<dynamic>)
             .map((listing) => RealEstateListing.fromJson(
                 listing as Map<String, dynamic>, '', '', ''))
             .toList();
-        print(listings);
         return listings;
       } catch (e) {
         return [];
       }
     } else if (response.statusCode == 404) {
-      print("erroeee");
       return [];
     } else {
-      print("property error");
       throw Exception('Failed to get property: ${response.statusCode}');
     }
   } catch (e) {
-    print("exception");
-    print(e.toString());
     return [];
   }
 }

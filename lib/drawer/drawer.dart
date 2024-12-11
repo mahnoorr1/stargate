@@ -107,7 +107,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
               GestureDetector(
                 onTap: () {
-                  widget.onNavigate!(3);
+                  if (UserProfileProvider.c(context).membership ==
+                          "66c2ff151bf7b7176ee92708" ||
+                      UserProfileProvider.c(context).membership ==
+                          '66c2ff551bf7b7176ee9271a') {
+                    widget.onNavigate!(2);
+                  } else {
+                    widget.onNavigate!(3);
+                  }
                 },
                 child: Container(
                   height: 40.w,
@@ -124,6 +131,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           borderRadius: BorderRadius.circular(30.w),
                           color: AppColors.lightBlue,
                           image: DecorationImage(
+                              fit: BoxFit.cover,
                               image: NetworkImage(UserProfileProvider.c(context)
                                   .profileImage!))),
                 ),

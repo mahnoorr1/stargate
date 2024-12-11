@@ -14,6 +14,7 @@ import 'package:stargate/config/core.dart';
 import 'package:stargate/utils/app_enums.dart';
 
 import '../../providers/service_providers_provider.dart';
+import '../../providers/user_info_provider.dart';
 
 class ServicesScreen extends StatefulWidget {
   const ServicesScreen({super.key});
@@ -25,20 +26,7 @@ class ServicesScreen extends StatefulWidget {
 class _ServicesScreenState extends State<ServicesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   UserType selectedUser = UserType.all;
-  List<UserType> userTypes = [
-    UserType.all,
-    UserType.investor,
-    UserType.agent,
-    UserType.consultant,
-    UserType.lawyer,
-    UserType.notary,
-    UserType.appraiser,
-    UserType.manager,
-    UserType.loanBroker,
-    UserType.economist,
-    UserType.drawingMaker,
-    UserType.propertyAdmin,
-  ];
+  List<UserType> userTypes = [];
   TextEditingController country = TextEditingController();
   TextEditingController state = TextEditingController();
   TextEditingController city = TextEditingController();
@@ -49,6 +37,49 @@ class _ServicesScreenState extends State<ServicesScreen> {
   void initState() {
     super.initState();
     Provider.of<AllUsersProvider>(context, listen: false).fetchUsers();
+
+    String membership = UserProfileProvider.c(context).membership;
+    if (membership == "66c2ff151bf7b7176ee92708" ||
+        membership == '66c2ff461bf7b7176ee92713') {
+      userTypes = [
+        UserType.consultant,
+        UserType.lawyer,
+        UserType.notary,
+        UserType.appraiser,
+        UserType.manager,
+        UserType.economist,
+        UserType.drawingMaker,
+        UserType.propertyAdmin,
+      ];
+    } else if (membership == '66c2ff151bf7b7176ee92722') {
+      userTypes = [
+        UserType.consultant,
+        UserType.lawyer,
+        UserType.notary,
+        UserType.appraiser,
+        UserType.manager,
+        UserType.economist,
+        UserType.drawingMaker,
+        UserType.propertyAdmin,
+        UserType.investor,
+      ];
+    } else {
+      userTypes = [
+        UserType.all,
+        UserType.investor,
+        UserType.agent,
+        UserType.consultant,
+        UserType.lawyer,
+        UserType.notary,
+        UserType.appraiser,
+        UserType.manager,
+        UserType.loanBroker,
+        UserType.economist,
+        UserType.drawingMaker,
+        UserType.propertyAdmin,
+      ];
+    }
+    selectedUser = userTypes[0];
   }
 
   void resetFilters() {
@@ -65,10 +96,16 @@ class _ServicesScreenState extends State<ServicesScreen> {
   Widget build(BuildContext context) {
     final allUsersProvider = Provider.of<AllUsersProvider>(context);
 
+    final currentUserId = UserProfileProvider.c(context).id;
+
     List<User> displayedUsers = selectedUser == UserType.all
         ? allUsersProvider.filteredUsers
+            .where((user) => user.id != currentUserId)
+            .toList()
         : allUsersProvider.filteredUsers
-            .where((user) => user.containsServiceUserType(selectedUser))
+            .where((user) =>
+                user.id != currentUserId &&
+                user.containsServiceUserType(selectedUser))
             .toList();
 
     return Scaffold(

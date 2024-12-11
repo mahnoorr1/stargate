@@ -120,8 +120,6 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         bathroom == 0 ||
         price == 0 ||
         furnished == '') {
-      print(selectedInvestmentSubcategory);
-      print(selectedInvestmentType);
       showToast(
         message: "Incomplete property details!",
         context: context,
@@ -415,7 +413,6 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                       ? currentCommercialSubcategoryOptions[0]
                       : ''; // Empty if no subcategory available
             });
-            print(selectedInvestmentSubcategory);
           },
           initial: commercialPropertyCategory.isNotEmpty
               ? commercialPropertyCategory[0]
@@ -610,7 +607,6 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                       ? currentConventionalSubcategoryOptions[0]
                       : '';
             });
-            print(selectedInvestmentSubcategory);
           },
           initial: conventionalPropertyCategory.isNotEmpty
               ? conventionalPropertyCategory[0]
@@ -624,12 +620,9 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         DropdownButton2Example(
           list: currentConventionalSubcategoryOptions,
           onSelected: (value) {
-            print(value);
             setState(() {
               selectedInvestmentSubcategory = value;
             });
-
-            print(selectedInvestmentSubcategory);
           },
           initial: currentConventionalSubcategoryOptions.isNotEmpty
               ? selectedInvestmentSubcategory.isNotEmpty

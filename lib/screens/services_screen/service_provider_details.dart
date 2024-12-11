@@ -16,6 +16,7 @@ import 'package:stargate/widgets/buttons/custom_button.dart';
 import 'package:stargate/widgets/buttons/membership_button.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/pdf_thumbnail.dart';
+import 'package:stargate/widgets/pdf_viewer.dart';
 
 import '../../widgets/inputfields/textfield.dart';
 
@@ -144,21 +145,31 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                                 ),
                               ),
                               SizedBox(width: 4.w),
-                              Container(
-                                height: 50.w,
-                                width: 50.w,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30.w),
-                                  // ignore: deprecated_member_use
-                                  color: AppColors.lightBlue.withOpacity(0.3),
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.email_outlined,
-                                    color: AppColors.blue,
-                                  ),
-                                ),
-                              ),
+                              widget.user.restrictContact!
+                                  ? const SizedBox()
+                                  : GestureDetector(
+                                      onTap: () => showCustomBottomSheet(
+                                          context: context,
+                                          child: _sendEmailMessage()),
+                                      child: Container(
+                                        height: 50.w,
+                                        width: 50.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30.w),
+                                          // ignore: deprecated_member_use
+                                          color: AppColors.lightBlue
+                                              // ignore: deprecated_member_use
+                                              .withOpacity(0.3),
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.email_outlined,
+                                            color: AppColors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                             ],
                           ),
                           SizedBox(height: 16.w),
@@ -255,27 +266,39 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
           ],
         ),
         SizedBox(height: 12.w),
-        Text(
-          "References",
-          style: AppStyles.supportiveText.copyWith(
-            color: AppColors.primaryGrey,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        widget.user.references != null &&
+                widget.user.references != [] &&
+                widget.user.references!.isNotEmpty
+            ? Text(
+                "References",
+                style: AppStyles.supportiveText.copyWith(
+                  color: AppColors.primaryGrey,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            : const SizedBox(),
         SizedBox(height: 8.w),
-        const PdfThumbnail(),
+        widget.user.references != null &&
+                widget.user.references != [] &&
+                widget.user.references!.isNotEmpty
+            ? referencesDisplay()
+            : const SizedBox(),
         SizedBox(height: 16.w),
-        Text(
-          "Contact on my website",
-          style: AppStyles.heading4.copyWith(color: AppColors.blue),
-        ),
+        widget.user.websiteLink != ''
+            ? Text(
+                "Contact on my website",
+                style: AppStyles.heading4.copyWith(color: AppColors.blue),
+              )
+            : const SizedBox(),
         SizedBox(height: 16.w),
-        CustomButton(
-            onPressed: () {
-              showCustomBottomSheet(
-                  context: context, child: _sendEmailMessage());
-            },
-            text: "Send Mail"),
+        widget.user.restrictContact!
+            ? const SizedBox()
+            : CustomButton(
+                onPressed: () {
+                  showCustomBottomSheet(
+                      context: context, child: _sendEmailMessage());
+                },
+                text: "Send Mail"),
       ],
     );
   }
@@ -296,31 +319,43 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
           (service) => ExperienceCard(
             title: service.details['name'],
             subTitle: service.details['specialization'],
-            noOfYears: service.details['yearsOfExperience'],
+            noOfYears: service.details['yearsOfExperience'] ?? 0,
           ),
         ),
         SizedBox(height: 12.w),
-        Text(
-          "References",
-          style: AppStyles.supportiveText.copyWith(
-            color: AppColors.primaryGrey,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        widget.user.references != null &&
+                widget.user.references != [] &&
+                widget.user.references!.isNotEmpty
+            ? Text(
+                "References",
+                style: AppStyles.supportiveText.copyWith(
+                  color: AppColors.primaryGrey,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            : const SizedBox(),
         SizedBox(height: 8.w),
-        const PdfThumbnail(),
+        widget.user.references != null &&
+                widget.user.references != [] &&
+                widget.user.references!.isNotEmpty
+            ? referencesDisplay()
+            : const SizedBox(),
         SizedBox(height: 16.w),
-        Text(
-          "contact on my website",
-          style: AppStyles.heading4.copyWith(color: AppColors.blue),
-        ),
+        widget.user.websiteLink != ''
+            ? Text(
+                "Contact on my website",
+                style: AppStyles.heading4.copyWith(color: AppColors.blue),
+              )
+            : const SizedBox(),
         SizedBox(height: 16.w),
-        CustomButton(
-            onPressed: () {
-              showCustomBottomSheet(
-                  context: context, child: _sendEmailMessage());
-            },
-            text: "Send Mail"),
+        widget.user.restrictContact!
+            ? const SizedBox()
+            : CustomButton(
+                onPressed: () {
+                  showCustomBottomSheet(
+                      context: context, child: _sendEmailMessage());
+                },
+                text: "Send Mail"),
       ],
     );
   }
@@ -388,27 +423,83 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
           (service) => ExperienceCard(
             title: service.details['name'],
             subTitle: service.details['specialization'],
-            noOfYears: service.details['yearsOfExperience'],
+            noOfYears: service.details['yearsOfExperience'] ?? 0,
           ),
         ),
         SizedBox(height: 12.w),
-        Text(
-          "References",
-          style: AppStyles.supportiveText.copyWith(
-            color: AppColors.primaryGrey,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        widget.user.references != null &&
+                widget.user.references != [] &&
+                widget.user.references!.isNotEmpty
+            ? Text(
+                "References",
+                style: AppStyles.supportiveText.copyWith(
+                  color: AppColors.primaryGrey,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            : const SizedBox(),
         SizedBox(height: 8.w),
-        const PdfThumbnail(),
+        widget.user.references != null &&
+                widget.user.references != [] &&
+                widget.user.references!.isNotEmpty
+            ? referencesDisplay()
+            : const SizedBox(),
         SizedBox(height: 16.w),
-        Text(
-          "contact on my website",
-          style: AppStyles.heading4.copyWith(color: AppColors.blue),
-        ),
+        widget.user.websiteLink != ''
+            ? Text(
+                "Contact on my website",
+                style: AppStyles.heading4.copyWith(color: AppColors.blue),
+              )
+            : const SizedBox(),
         SizedBox(height: 16.w),
-        const CustomButton(text: "Send Mail"),
+        widget.user.restrictContact!
+            ? const SizedBox()
+            : CustomButton(
+                onPressed: () {
+                  showCustomBottomSheet(
+                      context: context, child: _sendEmailMessage());
+                },
+                text: "Send Mail"),
       ],
+    );
+  }
+
+  Widget referencesDisplay() {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 1,
+      ),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: widget.user.references?.length ?? 0,
+      itemBuilder: (context, index) {
+        final pdfUrl = widget.user.references![index];
+        return GestureDetector(
+            onDoubleTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PDFViewerScreen(
+                    filePath: pdfUrl,
+                  ),
+                ),
+              );
+            },
+            onLongPress: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PDFViewerScreen(
+                    filePath: pdfUrl,
+                  ),
+                ),
+              );
+            },
+            child: PdfThumbnail(pdfUrl: pdfUrl));
+      },
     );
   }
 

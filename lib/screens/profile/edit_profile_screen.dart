@@ -23,7 +23,6 @@ import 'package:stargate/widgets/inputfields/country_textfield.dart';
 import 'package:stargate/widgets/inputfields/outlined_dropdown.dart';
 import 'package:stargate/widgets/inputfields/textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
-import 'package:stargate/widgets/local_pdf_viewer.dart';
 import 'package:path/path.dart' as p;
 import 'package:stargate/widgets/pdf_viewer.dart';
 import 'package:stargate/widgets/screen/screen.dart';
@@ -195,7 +194,7 @@ class _EditProfileState extends State<EditProfile> {
   void changePass() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => ChangePassword()),
+      MaterialPageRoute(builder: (context) => const ChangePassword()),
     );
   }
 

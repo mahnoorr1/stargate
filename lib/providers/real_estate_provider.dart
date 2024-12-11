@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/services/real_estate_listings.dart';
@@ -240,7 +241,6 @@ class RealEstateProvider extends ChangeNotifier {
         userID: UserProfileProvider().id,
         userName: UserProfileProvider().name,
       );
-      print(newProperty.userName);
 
       notifyListeners();
       return result;

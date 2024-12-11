@@ -22,20 +22,17 @@ Future<List<User>> getAllServiceUsers() async {
       String jsonString = await response.stream.bytesToString();
       try {
         final decodedData = jsonDecode(jsonString);
-        print(decodedData);
         final users = (decodedData['data'] as List<dynamic>)
             .map((userJson) => User.fromJson(userJson as Map<String, dynamic>))
             .toList();
         return users;
       } catch (e) {
-        print(e.toString());
         return [];
       }
     } else {
       throw Exception('Failed to get users: ${response.statusCode}');
     }
   } catch (e) {
-    print("errrorrrr");
     return [];
   }
 }

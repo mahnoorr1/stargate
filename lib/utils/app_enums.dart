@@ -1,10 +1,10 @@
 enum UserType {
   all,
-  investor,
+  investor, //investor
   notary,
   appraiser,
-  customer,
-  agent,
+  customer, //investor
+  agent, // broker
   lawyer,
   consultant,
   economist,
@@ -13,7 +13,7 @@ enum UserType {
   marketer,
   drawingMaker,
   facilityManager,
-  loanBroker,
+  loanBroker, //broker
 }
 
 extension UserTypeExtension on UserType {

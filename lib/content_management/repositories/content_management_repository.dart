@@ -178,17 +178,20 @@ class ContentManagementRepository {
             .map((json) => Membership.fromMap(json as Map<String, dynamic>))
             .toList();
 
-// Reorder the list: 'free_trial' first, 'restricted_access' last
         memberships.sort((a, b) {
-          if (a.identifier == 'free_trial')
+          if (a.identifier == 'free_trial') {
             return -1; // Move 'free_trial' to the top
-          if (b.identifier == 'free_trial')
+          }
+          if (b.identifier == 'free_trial') {
             return 1; // Keep 'free_trial' on top
+          }
 
-          if (a.identifier == 'restricted_access')
+          if (a.identifier == 'restricted_access') {
             return 1; // Move 'restricted_access' to the bottom
-          if (b.identifier == 'restricted_access')
+          }
+          if (b.identifier == 'restricted_access') {
             return -1; // Keep 'restricted_access' at the bottom
+          }
 
           return 0; // Preserve order for others
         });

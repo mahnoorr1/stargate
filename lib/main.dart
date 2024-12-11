@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:stargate/config/core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +17,6 @@ import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/routes/app_routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:stargate/widgets/animated/widget_animator.dart';
 
 import 'content_management/providers/getting_started_content_provider.dart';
 import 'content_management/providers/home_content_provider.dart';
@@ -41,6 +43,7 @@ void main() async {
   // If Application is in background or terminated
   FirebaseMessaging.onMessageOpenedApp.listen(
     (RemoteMessage message) async {
+      // ignore: avoid_print
       print("Notification opened: ${message.notification?.title}");
       if (message.data.isNotEmpty) {
         navigatorKey.currentState!.pushNamed(
@@ -143,6 +146,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _initializeProviders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    UserProfileProvider.c(context)
+        .setMembership(prefs.getString('membership') ?? '');
     final gettingStartedProvider =
         Provider.of<GettingStartedProvider>(context, listen: false);
     final offerRequestProvider =
@@ -158,7 +164,6 @@ class _MyAppState extends State<MyApp> {
         Provider.of<ProfileContentProvider>(context, listen: false);
     final membershipContentProvider =
         Provider.of<MembershipContentProvider>(context, listen: false);
-
     await Future.wait([
       gettingStartedProvider.fetchGettingStartedContent(),
       offerRequestProvider.fetchOfferRequestPropertyContent(),
@@ -169,6 +174,7 @@ class _MyAppState extends State<MyApp> {
       membershipContentProvider.fetchMembershipContent(),
       AllUsersProvider.c(context).fetchUsers(),
       RealEstateProvider.c(context).fetchAllListings(),
+      UserProfileProvider.c(context).fetchUserProfile(),
     ]);
     Future.delayed(const Duration(seconds: 3));
 

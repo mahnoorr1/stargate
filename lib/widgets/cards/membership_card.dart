@@ -23,16 +23,32 @@ class MembershipCard extends StatelessWidget {
       color: Colors.white,
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: activeMembership == membership.tag
-                ? MainAxisAlignment.spaceBetween
-                : MainAxisAlignment.center,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              activeMembership == membership.tag
-                  ? SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.27,
-                    )
-                  : const SizedBox(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  activeMembership == membership.tag
+                      ? Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 4.w,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.w),
+                            color: Colors.green,
+                          ),
+                          child: Text(
+                            "Active",
+                            style: AppStyles.heading4.copyWith(
+                              color: AppColors.white,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+                ],
+              ),
               Text(
                 membership.tag ?? '',
                 style: AppStyles.heading3.copyWith(
@@ -42,24 +58,6 @@ class MembershipCard extends StatelessWidget {
               SizedBox(
                 width: 32.w,
               ),
-              activeMembership == membership.tag
-                  ? Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 4.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.w),
-                        color: Colors.green,
-                      ),
-                      child: Text(
-                        "Active",
-                        style: AppStyles.heading4.copyWith(
-                          color: AppColors.white,
-                        ),
-                      ),
-                    )
-                  : const SizedBox(),
             ],
           ),
           SizedBox(

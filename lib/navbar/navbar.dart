@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/content_management/providers/profile_content_provider.dart';
 import 'package:stargate/drawer/drawer.dart';
+import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/listings/listings_screen.dart';
 import 'package:stargate/screens/profile/profile_screen.dart';
 import 'package:stargate/screens/services_screen/services_screen.dart';
@@ -29,19 +30,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
   int selected = 0;
   bool heart = false;
   final controller = PageController();
-  List<Widget> screens = [];
 
   @override
   void initState() {
     super.initState();
-    screens = [
-      CustomDrawer(
-        onNavigate: navigateTo,
-      ),
-      const ServicesScreen(),
-      const ListingsScreen(),
-      const ProfileScreen(),
-    ];
   }
 
   @override
@@ -59,6 +51,39 @@ class _NavBarScreenState extends State<NavBarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final membership = UserProfileProvider.c(context).membership;
+
+    List<Widget> screens = [];
+    if (membership == "66c2ff151bf7b7176ee92708") {
+      setState(() {
+        screens = [
+          CustomDrawer(
+            onNavigate: navigateTo,
+          ),
+          const ServicesScreen(),
+          const ProfileScreen(),
+        ];
+      });
+    } else if (membership == '66c2ff551bf7b7176ee9271a') {
+      screens = [
+        CustomDrawer(
+          onNavigate: navigateTo,
+        ),
+        const ListingsScreen(),
+        const ProfileScreen(),
+      ];
+    } else {
+      setState(() {
+        screens = [
+          CustomDrawer(
+            onNavigate: navigateTo,
+          ),
+          const ServicesScreen(),
+          const ListingsScreen(),
+          const ProfileScreen(),
+        ];
+      });
+    }
     final homeContentProvider =
         Provider.of<HomeContentProvider>(context, listen: false);
     final listingContentProvider =
@@ -81,89 +106,226 @@ class _NavBarScreenState extends State<NavBarScreen> {
         option: AnimatedBarOptions(
           iconStyle: IconStyle.Default,
         ),
-        items: [
-          BottomBarItem(
-            icon: Image.network(
-              homeContentProvider.homeContent!.homeIcon,
-              width: 20,
-              height: 24,
-              color: AppColors.primaryGrey, // Ensure grey for unselected state
-            ),
-            selectedIcon: Image.network(
-              homeContentProvider.homeContent!.homeIcon,
-              width: 22,
-              height: 24,
-              color: AppColors.blue,
-            ),
-            selectedColor: AppColors.blue,
-            unSelectedColor: AppColors.primaryGrey,
-            title: const Text(
-              'Home',
-              style: TextStyle(fontSize: 12),
-            ),
-          ),
-          BottomBarItem(
-            icon: Image.network(
-              servicesContentProvider.searchContent!,
-              width: 20,
-              height: 24,
-              color: AppColors.primaryGrey, // Ensure grey for unselected state
-            ),
-            selectedIcon: Image.network(
-              servicesContentProvider.searchContent!,
-              width: 22,
-              height: 24,
-              color: AppColors.blue,
-            ),
-            selectedColor: AppColors.blue,
-            unSelectedColor: AppColors.primaryGrey,
-            title: const Text(
-              'Services',
-              style: TextStyle(fontSize: 12),
-            ),
-          ),
-          BottomBarItem(
-            icon: Image.network(
-              listingContentProvider.listingContent!.icon,
-              width: 22,
-              height: 24,
-              color: AppColors.primaryGrey, // Ensure grey for unselected state
-            ),
-            selectedIcon: Image.network(
-              listingContentProvider.listingContent!.icon,
-              color: AppColors.blue,
-              width: 24,
-              height: 24,
-              fit: BoxFit.contain,
-            ),
-            selectedColor: AppColors.blue,
-            unSelectedColor: AppColors.primaryGrey,
-            title: const Text(
-              'Listings',
-              style: TextStyle(fontSize: 12),
-            ),
-          ),
-          BottomBarItem(
-            icon: Image.network(
-              profileContentProvider.profileContent!.profileIcon,
-              width: 18,
-              height: 24,
-              color: AppColors.primaryGrey, // Ensure grey for unselected state
-            ),
-            selectedIcon: Image.network(
-              profileContentProvider.profileContent!.profileIcon,
-              color: AppColors.blue,
-              width: 20,
-              height: 24,
-            ),
-            selectedColor: AppColors.blue,
-            unSelectedColor: AppColors.primaryGrey,
-            title: const Text(
-              'Profile',
-              style: TextStyle(fontSize: 12),
-            ),
-          ),
-        ],
+        items: membership == "66c2ff151bf7b7176ee92708"
+            ? [
+                BottomBarItem(
+                  icon: Image.network(
+                    homeContentProvider.homeContent!.homeIcon,
+                    width: 20,
+                    height: 24,
+                    color: AppColors
+                        .primaryGrey, // Ensure grey for unselected state
+                  ),
+                  selectedIcon: Image.network(
+                    homeContentProvider.homeContent!.homeIcon,
+                    width: 22,
+                    height: 24,
+                    color: AppColors.blue,
+                  ),
+                  selectedColor: AppColors.blue,
+                  unSelectedColor: AppColors.primaryGrey,
+                  title: const Text(
+                    'Home',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ),
+                BottomBarItem(
+                  icon: Image.network(
+                    servicesContentProvider.searchContent!,
+                    width: 20,
+                    height: 24,
+                    color: AppColors
+                        .primaryGrey, // Ensure grey for unselected state
+                  ),
+                  selectedIcon: Image.network(
+                    servicesContentProvider.searchContent!,
+                    width: 22,
+                    height: 24,
+                    color: AppColors.blue,
+                  ),
+                  selectedColor: AppColors.blue,
+                  unSelectedColor: AppColors.primaryGrey,
+                  title: const Text(
+                    'Services',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ),
+                BottomBarItem(
+                  icon: Image.network(
+                    profileContentProvider.profileContent!.profileIcon,
+                    width: 18,
+                    height: 24,
+                    color: AppColors
+                        .primaryGrey, // Ensure grey for unselected state
+                  ),
+                  selectedIcon: Image.network(
+                    profileContentProvider.profileContent!.profileIcon,
+                    color: AppColors.blue,
+                    width: 20,
+                    height: 24,
+                  ),
+                  selectedColor: AppColors.blue,
+                  unSelectedColor: AppColors.primaryGrey,
+                  title: const Text(
+                    'Profile',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ),
+              ]
+            : membership == '66c2ff551bf7b7176ee9271a'
+                ? [
+                    BottomBarItem(
+                      icon: Image.network(
+                        homeContentProvider.homeContent!.homeIcon,
+                        width: 20,
+                        height: 24,
+                        color: AppColors
+                            .primaryGrey, // Ensure grey for unselected state
+                      ),
+                      selectedIcon: Image.network(
+                        homeContentProvider.homeContent!.homeIcon,
+                        width: 22,
+                        height: 24,
+                        color: AppColors.blue,
+                      ),
+                      selectedColor: AppColors.blue,
+                      unSelectedColor: AppColors.primaryGrey,
+                      title: const Text(
+                        'Home',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                    BottomBarItem(
+                      icon: Image.network(
+                        listingContentProvider.listingContent!.icon,
+                        width: 22,
+                        height: 24,
+                        color: AppColors
+                            .primaryGrey, // Ensure grey for unselected state
+                      ),
+                      selectedIcon: Image.network(
+                        listingContentProvider.listingContent!.icon,
+                        color: AppColors.blue,
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.contain,
+                      ),
+                      selectedColor: AppColors.blue,
+                      unSelectedColor: AppColors.primaryGrey,
+                      title: const Text(
+                        'Listings',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                    BottomBarItem(
+                      icon: Image.network(
+                        profileContentProvider.profileContent!.profileIcon,
+                        width: 18,
+                        height: 24,
+                        color: AppColors
+                            .primaryGrey, // Ensure grey for unselected state
+                      ),
+                      selectedIcon: Image.network(
+                        profileContentProvider.profileContent!.profileIcon,
+                        color: AppColors.blue,
+                        width: 20,
+                        height: 24,
+                      ),
+                      selectedColor: AppColors.blue,
+                      unSelectedColor: AppColors.primaryGrey,
+                      title: const Text(
+                        'Profile',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ]
+                : [
+                    BottomBarItem(
+                      icon: Image.network(
+                        homeContentProvider.homeContent!.homeIcon,
+                        width: 20,
+                        height: 24,
+                        color: AppColors
+                            .primaryGrey, // Ensure grey for unselected state
+                      ),
+                      selectedIcon: Image.network(
+                        homeContentProvider.homeContent!.homeIcon,
+                        width: 22,
+                        height: 24,
+                        color: AppColors.blue,
+                      ),
+                      selectedColor: AppColors.blue,
+                      unSelectedColor: AppColors.primaryGrey,
+                      title: const Text(
+                        'Home',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                    BottomBarItem(
+                      icon: Image.network(
+                        servicesContentProvider.searchContent!,
+                        width: 20,
+                        height: 24,
+                        color: AppColors
+                            .primaryGrey, // Ensure grey for unselected state
+                      ),
+                      selectedIcon: Image.network(
+                        servicesContentProvider.searchContent!,
+                        width: 22,
+                        height: 24,
+                        color: AppColors.blue,
+                      ),
+                      selectedColor: AppColors.blue,
+                      unSelectedColor: AppColors.primaryGrey,
+                      title: const Text(
+                        'Services',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                    BottomBarItem(
+                      icon: Image.network(
+                        listingContentProvider.listingContent!.icon,
+                        width: 22,
+                        height: 24,
+                        color: AppColors
+                            .primaryGrey, // Ensure grey for unselected state
+                      ),
+                      selectedIcon: Image.network(
+                        listingContentProvider.listingContent!.icon,
+                        color: AppColors.blue,
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.contain,
+                      ),
+                      selectedColor: AppColors.blue,
+                      unSelectedColor: AppColors.primaryGrey,
+                      title: const Text(
+                        'Listings',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                    BottomBarItem(
+                      icon: Image.network(
+                        profileContentProvider.profileContent!.profileIcon,
+                        width: 18,
+                        height: 24,
+                        color: AppColors
+                            .primaryGrey, // Ensure grey for unselected state
+                      ),
+                      selectedIcon: Image.network(
+                        profileContentProvider.profileContent!.profileIcon,
+                        color: AppColors.blue,
+                        width: 20,
+                        height: 24,
+                      ),
+                      selectedColor: AppColors.blue,
+                      unSelectedColor: AppColors.primaryGrey,
+                      title: const Text(
+                        'Profile',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ],
         currentIndex: selected,
         notchStyle: NotchStyle.square,
         onTap: (index) {

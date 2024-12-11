@@ -1,4 +1,7 @@
+// ignore: duplicate_ignore
 // ignore: depend_on_referenced_packages
+// ignore_for_file: unused_element, depend_on_referenced_packages
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';

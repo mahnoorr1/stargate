@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
+import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/forget%20password/forget_pass.dart';
 import 'package:stargate/screens/otp_screen/otp_Screen.dart';
 import 'package:stargate/services/user_profiling.dart';
@@ -33,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ForgetPass(),
+        builder: (context) => const ForgetPass(),
       ),
     );
   }
@@ -65,6 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       String? loggedIn = await loginUser(email.text, password.text);
       if (loggedIn == 'token') {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        UserProfileProvider.c(context)
+            .setMembership(prefs.getString('membership') ?? '');
         await AllUsersProvider.c(context).fetchUsers();
         await RealEstateProvider.c(context).fetchAllListings();
         Navigator.popAndPushNamed(context, '/navbar');

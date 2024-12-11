@@ -25,6 +25,9 @@ Future<String?> loginUser(String email, String pass) async {
     if (response.statusCode == 200) {
       String jsonString = await response.stream.bytesToString();
       final Map<String, dynamic> responseData = jsonDecode(jsonString);
+      if (kDebugMode) {
+        print(responseData);
+      }
       String? token = responseData['data']['accessToken'] as String?;
       storeUserData(
         name: responseData['data']['user']['name'],
@@ -62,7 +65,6 @@ Future<String?> registerUser(
   var request = http.Request('POST', Uri.parse('${server}user/register'));
 
   try {
-    print("inside");
     request.body = json.encode({
       "name": name,
       "email": email,
@@ -91,7 +93,9 @@ Future<String?> registerUser(
       return errorMessage;
     }
   } catch (e) {
-    print(e.toString());
+    if (kDebugMode) {
+      print(e.toString());
+    }
     return e.toString();
   }
 }
@@ -121,7 +125,7 @@ Future<User?> myProfile() async {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200 || response.statusCode == 201) {
       String jsonString = await response.stream.bytesToString();
-      final Map<String, dynamic> responseData = jsonDecode(jsonString);
+      final responseData = jsonDecode(jsonString);
       final user = User.fromJson(responseData['message']);
       return user;
     } else {

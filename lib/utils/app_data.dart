@@ -1,5 +1,4 @@
 import 'package:stargate/models/faq.dart';
-import 'package:stargate/models/membership.dart';
 import 'package:stargate/models/user.dart';
 import 'package:stargate/utils/app_enums.dart';
 
