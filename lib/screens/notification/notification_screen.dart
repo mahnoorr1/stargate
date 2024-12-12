@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/localization/translation_strings.dart';
 import 'package:stargate/providers/notification_provider.dart';
+
+import '../../localization/localization.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -28,8 +31,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        title: const Text(
-          'Notifications',
+        title: Text(
+          AppLocalization.of(context)!
+              .translate(TranslationString.notifications),
           style: AppStyles.heading2,
         ),
         centerTitle: true,
@@ -38,7 +42,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ? const Center(
               child: CircularProgressIndicator()) // Show loading spinner
           : notificationProvider.notifications.isEmpty
-              ? const Center(child: Text('No notifications found'))
+              ? Center(
+                  child: Text(AppLocalization.of(context)!
+                      .translate(TranslationString.noNorificationsFound)))
               : ListView.builder(
                   itemCount: notificationProvider.notifications.length,
                   itemBuilder: (context, index) {

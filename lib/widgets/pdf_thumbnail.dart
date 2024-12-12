@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
+import '../localization/localization.dart';
+import '../localization/translation_strings.dart';
+
 class PdfThumbnail extends StatefulWidget {
   final String pdfUrl;
 
@@ -43,9 +46,11 @@ class _PdfThumbnailState extends State<PdfThumbnail> {
             !_isPdfReady) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Text('Failed to load PDF: ${snapshot.error}');
+          return Text(
+              '${AppLocalization.of(context)!.translate(TranslationString.failedToLoadPdf)} ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data == null) {
-          return const Text('No PDF available');
+          return Text(AppLocalization.of(context)!
+              .translate(TranslationString.noPdfAvailable));
         } else {
           return Container(
             height: 180,

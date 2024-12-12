@@ -8,6 +8,9 @@ import 'package:stargate/screens/services_screen/service_provider_details.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/blurred_rectangle.dart';
 
+import '../../../localization/localization.dart';
+import '../../../localization/translation_strings.dart';
+
 class ServiceProviderListingCard extends StatelessWidget {
   final User user;
   const ServiceProviderListingCard({
@@ -78,7 +81,7 @@ class ServiceProviderListingCard extends StatelessWidget {
             BlurredRectangle(
               title: user.name,
               subtitle:
-                  "${user.getHighestExperience().toString()} years Experience",
+                  "${user.getHighestExperience().toString()} ${AppLocalization.of(context)!.translate(TranslationString.years)} ${AppLocalization.of(context)!.translate(TranslationString.experience)}",
             ),
           ],
         ),

@@ -25,6 +25,8 @@ import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../services/helper_methods.dart';
 
 class PropertyRequestForm extends StatefulWidget {
@@ -51,8 +53,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   TextEditingController parkingPlaces = TextEditingController(text: '0');
 
   List<String> requestTypeList = ['offering', 'requesting'];
-  List<String> currentConventionalSubcategoryOptions = ['Select an Option'];
-  List<String> currentCommercialSubcategoryOptions = ['Select an Option'];
+  List<String> currentConventionalSubcategoryOptions = [];
+  List<String> currentCommercialSubcategoryOptions = [];
 
   String selectedRequestType = '';
   String selectedCondition = '';
@@ -90,7 +92,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         country.text.isEmpty ||
         state.text.isEmpty) {
       showToast(
-        message: 'Incomplete property details',
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.incompletePropertyDetails),
         context: context,
         isAlert: true,
         color: Colors.redAccent,
@@ -100,7 +103,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
       });
     } else if ((selectedRequestType == 'offering' && images.isEmpty)) {
       showToast(
-        message: 'Provide Pictures',
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.providePictures),
         context: context,
         isAlert: true,
         color: Colors.redAccent,
@@ -121,7 +125,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         price == 0 ||
         furnished == '') {
       showToast(
-        message: "Incomplete property details!",
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.incompletePropertyDetails),
         context: context,
         isAlert: true,
         color: Colors.redAccent,
@@ -166,7 +171,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             parkingPlaces.text.isNotEmpty ? int.parse(parkingPlaces.text) : 0,
       );
       if (response['message'] == 'Property added successfully') {
-        showToast(message: response['message'], context: context);
+        showToast(
+            message: AppLocalization.of(context)!
+                .translate(TranslationString.propertyAddedSuccessfully),
+            context: context);
         setState(() {
           loading = false;
         });
@@ -196,7 +204,18 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    currentConventionalSubcategoryOptions = [
+      AppLocalization.of(context)!.translate(TranslationString.selectOption)
+    ];
+    currentCommercialSubcategoryOptions = [
+      AppLocalization.of(context)!.translate(TranslationString.selectOption)
+    ];
     final propertyRequestProvider =
         Provider.of<OfferRequestPropertyContentProvider>(context,
             listen: false);
@@ -231,8 +250,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                 ),
                 CustomTextField(
                   controller: title,
-                  label: "Title",
-                  hintText: "Title",
+                  label: AppLocalization.of(context)!
+                      .translate(TranslationString.title),
+                  hintText: AppLocalization.of(context)!
+                      .translate(TranslationString.title),
                   inputType: TextInputType.text,
                   horizontalSpacing: 0,
                   verticalSpacing: 3,
@@ -242,8 +263,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                 ),
                 CustomTextField(
                   controller: address,
-                  label: "Address",
-                  hintText: "Address",
+                  label: AppLocalization.of(context)!
+                      .translate(TranslationString.address),
+                  hintText: AppLocalization.of(context)!
+                      .translate(TranslationString.address),
                   inputType: TextInputType.text,
                   horizontalSpacing: 0,
                   verticalSpacing: 3,
@@ -255,8 +278,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                 ),
                 CustomTextField(
                   controller: description,
-                  label: "Description",
-                  hintText: "Description",
+                  label: AppLocalization.of(context)!
+                      .translate(TranslationString.description),
+                  hintText: AppLocalization.of(context)!
+                      .translate(TranslationString.description),
                   inputType: TextInputType.text,
                   horizontalSpacing: 0,
                   verticalSpacing: 3,
@@ -313,9 +338,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                 SizedBox(
                   height: 8.w,
                 ),
-                questionText(
-                  "Purchase",
-                ),
+                questionText(AppLocalization.of(context)!
+                    .translate(TranslationString.purchase)),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -397,7 +421,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        questionText("Investment type"),
+        questionText(AppLocalization.of(context)!
+            .translate(TranslationString.investmentType)),
         OutlinedDropdownButtonExample(
           list: commercialPropertyCategory,
           onSelected: (value) {
@@ -417,12 +442,14 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           initial: commercialPropertyCategory.isNotEmpty
               ? commercialPropertyCategory[0]
               : '',
-          label: 'Investment Type',
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.investmentType),
         ),
         SizedBox(
           height: 8.w,
         ),
-        questionText("Investment subcategory"),
+        questionText(AppLocalization.of(context)!
+            .translate(TranslationString.investmentSubcategory)),
         OutlinedDropdownButtonExample(
           list: currentCommercialSubcategoryOptions,
           onSelected: (value) {
@@ -436,15 +463,18 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                   ? selectedInvestmentSubcategory
                   : currentCommercialSubcategoryOptions[0]
               : '', // If no subcategory selected, fallback to the first subcategory
-          label: 'Investment Subcategory',
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.investmentSubcategory),
         ),
         SizedBox(
           height: 6.w,
         ),
         CustomTextField(
           controller: selectedLandArea,
-          label: "land area in m²",
-          hintText: "land area in m²",
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.landAreaInM2),
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.landAreaInM2),
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
@@ -454,8 +484,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         CustomTextField(
           controller: selectedBuildingArea,
-          label: "building usage area in m²",
-          hintText: "building usage area in m²",
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.buildingUsageAreaInM2),
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.buildingUsageAreaInM2),
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
@@ -465,8 +497,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         CustomTextField(
           controller: selectedBuildableArea,
-          label: "build able area in m²",
-          hintText: "build able area in m²",
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.buildableAreaInM2),
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.buildableAreaInM2),
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
@@ -478,7 +512,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         SizedBox(
           height: 10.w,
         ),
-        questionText("Furnished"),
+        questionText(AppLocalization.of(context)!
+            .translate(TranslationString.furnished)),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -502,8 +537,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         CustomTextField(
           controller: equipment,
-          label: "any equipments",
-          hintText: "any equipments",
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.anyEquipments),
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.anyEquipments),
           inputType: TextInputType.text,
           horizontalSpacing: 0,
           verticalSpacing: 3,
@@ -513,8 +550,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         CustomTextField(
           controller: qualityOfEquipment,
-          label: "quality of equipments",
-          hintText: "any equipments",
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.qualityOfEquipmentsSmall),
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.qualityOfEquipmentsSmall),
           inputType: TextInputType.text,
           horizontalSpacing: 0,
           verticalSpacing: 3,
@@ -524,8 +563,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         CustomTextField(
           controller: parkingPlaces,
-          label: "no of parking places",
-          hintText: "no of parking places",
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.noOfParkingPlaces),
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.noOfParkingPlaces),
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
@@ -538,7 +579,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  questionText("Add pictures"),
+                  questionText(AppLocalization.of(context)!
+                      .translate(TranslationString.addPictures)),
                   SizedBox(
                     height: 6.w,
                   ),
@@ -579,8 +621,9 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         GestureDetector(
           onTap: onSendRequest,
-          child: const CustomButton(
-            text: "Post",
+          child: CustomButton(
+            text:
+                AppLocalization.of(context)!.translate(TranslationString.post),
           ),
         ),
       ],
@@ -592,7 +635,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        questionText("Investment type"),
+        questionText(AppLocalization.of(context)!
+            .translate(TranslationString.investmentType)),
         DropdownButton2Example(
           list: conventionalPropertyCategory,
           onSelected: (value) {
@@ -611,12 +655,14 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           initial: conventionalPropertyCategory.isNotEmpty
               ? conventionalPropertyCategory[0]
               : '',
-          label: 'Investment Type',
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.investmentType),
         ),
         SizedBox(
           height: 8.w,
         ),
-        questionText("Investment subcategory"),
+        questionText(AppLocalization.of(context)!
+            .translate(TranslationString.investmentSubcategory)),
         DropdownButton2Example(
           list: currentConventionalSubcategoryOptions,
           onSelected: (value) {
@@ -629,15 +675,18 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                   ? selectedInvestmentSubcategory
                   : currentConventionalSubcategoryOptions[0]
               : '',
-          label: 'Investment Subcategory',
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.investmentSubcategory),
         ),
         SizedBox(
           height: 6.w,
         ),
         CustomTextField(
           controller: selectedLandArea,
-          label: "land area in m²",
-          hintText: "land area in m²",
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.landAreaInM2),
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.landAreaInM2),
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
@@ -647,8 +696,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         CustomTextField(
           controller: selectedBuildingArea,
-          label: "building usage area in m²",
-          hintText: "building usage area in m²",
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.buildingUsageArea),
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.buildingUsageArea),
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
@@ -658,8 +709,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         CustomTextField(
           controller: selectedBuildableArea,
-          label: "build able area in m²",
-          hintText: "build able area in m²",
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.buildableAreaInM2),
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.buildableAreaInM2),
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
@@ -671,7 +724,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         SizedBox(
           height: 10.w,
         ),
-        questionText("Furnished"),
+        questionText(AppLocalization.of(context)!
+            .translate(TranslationString.furnished)),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -693,7 +747,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         SizedBox(
           height: 10.w,
         ),
-        questionText("Garage"),
+        questionText(
+            AppLocalization.of(context)!.translate(TranslationString.garage)),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -720,7 +775,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  questionText("Add pictures"),
+                  questionText(AppLocalization.of(context)!
+                      .translate(TranslationString.addPictures)),
                   SizedBox(
                     height: 6.w,
                   ),
@@ -761,8 +817,9 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         GestureDetector(
           onTap: onSendRequest,
-          child: const CustomButton(
-            text: "Post",
+          child: CustomButton(
+            text:
+                AppLocalization.of(context)!.translate(TranslationString.post),
           ),
         ),
       ],
@@ -828,8 +885,9 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
               );
             },
           )
-        : const Center(
-            child: Text('No images selected'),
+        : Center(
+            child: Text(AppLocalization.of(context)!
+                .translate(TranslationString.noImageSelected)),
           );
   }
 
@@ -846,7 +904,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             SizedBox(
               width: 12.w,
             ),
-            questionText("Rooms"),
+            questionText(AppLocalization.of(context)!
+                .translate(TranslationString.rooms)),
             const Spacer(),
             Text(
               beds.toString(),
@@ -887,7 +946,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             SizedBox(
               width: 12.w,
             ),
-            questionText("Bathrooms"),
+            questionText(AppLocalization.of(context)!
+                .translate(TranslationString.bathrooms)),
             const Spacer(),
             Text(
               bathroom.toString(),
@@ -926,7 +986,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             SizedBox(
               width: 12.w,
             ),
-            questionText("Price"),
+            questionText(AppLocalization.of(context)!
+                .translate(TranslationString.price)),
             const Spacer(),
             Text(
               "€ ${formatPrice(price.toDouble())}",

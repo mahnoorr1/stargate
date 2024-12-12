@@ -9,6 +9,8 @@ import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/underlined_textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../services/user_profiling.dart';
 import '../../widgets/screen/screen.dart';
 
@@ -41,7 +43,10 @@ class _OTPScreenState extends State<OTPScreen> {
     });
     String? result = await verifyOTP(otp.text, widget.email);
     if (result == 'Email verified, login to continue!') {
-      showToast(message: result, context: context);
+      showToast(
+          message: AppLocalization.of(context)!
+              .translate(TranslationString.emailVerifiedLoginToContinue),
+          context: context);
       setState(() {
         verifying = false;
       });
@@ -101,13 +106,15 @@ class _OTPScreenState extends State<OTPScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Verify OTP",
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.verifyOTP),
                         style: AppStyles.heading1.copyWith(
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        "Input the 6-digit code that has been emailed to you.",
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.input6DigitsOtp),
                         style: AppStyles.heading3.copyWith(
                           color: Colors.white,
                         ),
@@ -135,21 +142,26 @@ class _OTPScreenState extends State<OTPScreen> {
                             ),
                             UnderlinedTextField(
                               controller: otp,
-                              label: "Enter otp",
-                              hintText: "Enter otp",
+                              label: AppLocalization.of(context)!
+                                  .translate(TranslationString.enterOTP),
+                              hintText: AppLocalization.of(context)!
+                                  .translate(TranslationString.enterOTP),
                               inputType: TextInputType.number,
                               icon: Icons.password,
                             ),
                             SizedBox(height: 12.w),
                             const Spacer(),
                             CustomButton(
-                              text: "Verify",
+                              text: AppLocalization.of(context)!
+                                  .translate(TranslationString.verify),
                               onPressed: () {
                                 if (otp.text.isNotEmpty) {
                                   verifyOtp();
                                 } else {
                                   showToast(
-                                    message: "Please Enter OTP!",
+                                    message: AppLocalization.of(context)!
+                                        .translate(
+                                            TranslationString.pleaseEnterOTP),
                                     context: context,
                                     isAlert: true,
                                   );

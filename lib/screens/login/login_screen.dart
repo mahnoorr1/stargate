@@ -15,6 +15,8 @@ import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/underlined_textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../providers/real_estate_provider.dart';
 import '../../widgets/screen/screen.dart';
 
@@ -49,14 +51,16 @@ class _LoginScreenState extends State<LoginScreen> {
   void onSignIn() async {
     if (email.text.isEmpty || password.text.isEmpty) {
       showToast(
-        message: "Please enter all fields!",
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.pleaseEnterAllFields),
         context: context,
         isAlert: true,
         color: Colors.redAccent,
       );
     } else if (!isValidEmail()) {
       showToast(
-        message: "Invalid Email!",
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.invalidEmail),
         context: context,
         isAlert: true,
         color: Colors.redAccent,
@@ -73,7 +77,10 @@ class _LoginScreenState extends State<LoginScreen> {
         await AllUsersProvider.c(context).fetchUsers();
         await RealEstateProvider.c(context).fetchAllListings();
         Navigator.popAndPushNamed(context, '/navbar');
-        showToast(message: "Login successful", context: context);
+        showToast(
+            message: AppLocalization.of(context)!
+                .translate(TranslationString.loginSuccessfull),
+            context: context);
       } else {
         setState(() {
           login = false;
@@ -141,13 +148,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Welcome!",
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.welcome),
                         style: AppStyles.heading1.copyWith(
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        "Login to continue",
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.loginToContinue),
                         style: AppStyles.heading3.copyWith(
                           color: Colors.white,
                         ),
@@ -175,17 +184,21 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             UnderlinedTextField(
                               controller: email,
-                              label: "Email",
-                              hintText: "Enter email",
+                              label: AppLocalization.of(context)!
+                                  .translate(TranslationString.email),
+                              hintText: AppLocalization.of(context)!
+                                  .translate(TranslationString.enterEmail),
                               inputType: TextInputType.emailAddress,
                               icon: Icons.email_outlined,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter your email';
+                                  return AppLocalization.of(context)!.translate(
+                                      TranslationString.pleaseEnterEmail);
                                 }
                                 if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
                                     .hasMatch(value)) {
-                                  return 'Please enter a valid email address';
+                                  return AppLocalization.of(context)!.translate(
+                                      TranslationString.pleaseEnterValidEmail);
                                 }
                                 return null;
                               },
@@ -193,8 +206,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(height: 6.w),
                             UnderlinedTextField(
                               controller: password,
-                              label: "Password",
-                              hintText: "Enter Password",
+                              label: AppLocalization.of(context)!
+                                  .translate(TranslationString.password),
+                              hintText: AppLocalization.of(context)!
+                                  .translate(TranslationString.enterPass),
                               inputType: TextInputType.text,
                               obscureText: true,
                               prefixSvgPath: AppIcons.lock,
@@ -203,7 +218,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             GestureDetector(
                               onTap: onForgetPassword,
                               child: Text(
-                                "Forgot Password?",
+                                AppLocalization.of(context)!.translate(
+                                    TranslationString.forgotPassword),
                                 style: AppStyles.normalText.copyWith(
                                   color: AppColors.white,
                                 ),
@@ -211,7 +227,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const Spacer(),
                             CustomButton(
-                                text: "Sign In",
+                                text: AppLocalization.of(context)!
+                                    .translate(TranslationString.signIn),
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
                                     onSignIn();
@@ -228,7 +245,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Don't have an Account?",
+                          AppLocalization.of(context)!
+                              .translate(TranslationString.dontHaveAccount),
                           style: AppStyles.normalText.copyWith(
                             color: AppColors.backgroundColor,
                           ),
@@ -236,7 +254,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         GestureDetector(
                           onTap: onSignUp,
                           child: Text(
-                            "Sign Up here",
+                            AppLocalization.of(context)!
+                                .translate(TranslationString.signUpHere),
                             style: AppStyles.heading4.copyWith(
                               color: AppColors.white,
                               fontWeight: FontWeight.bold,

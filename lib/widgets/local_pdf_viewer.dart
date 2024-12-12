@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:stargate/localization/translation_strings.dart';
+
+import '../localization/localization.dart';
 
 class MyPdfViewer extends StatefulWidget {
   String pdfPath;
@@ -16,7 +19,8 @@ class _MyPdfViewerState extends State<MyPdfViewer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Reference File: ${widget.pdfPath}"),
+        title: Text(
+            "${AppLocalization.of(context)!.translate(TranslationString.referenceFile)} ${widget.pdfPath}"),
       ),
       body: PDFView(
         filePath: widget.pdfPath,

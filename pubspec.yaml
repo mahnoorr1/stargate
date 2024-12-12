@@ -71,6 +71,9 @@ dependencies:
   flutter_launcher_icons: ^0.14.2
   permission_handler: ^11.3.1
   path_provider: ^2.1.5
+  translator: ^1.0.3+1
+  flutter_localization: ^0.2.3
+  flutter_riverpod: ^2.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -96,6 +99,9 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - l10n/en.json
+    - l10n/es.json
+    - l10n/de.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

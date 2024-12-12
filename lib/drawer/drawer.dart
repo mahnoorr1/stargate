@@ -13,6 +13,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 
 import '../content_management/providers/home_content_provider.dart';
+import '../localization/language_toggle_button.dart';
+import '../localization/localization.dart';
+import '../localization/translation_strings.dart';
 
 class CustomDrawer extends StatefulWidget {
   final Function(int)? onNavigate;
@@ -168,6 +171,7 @@ class _SliderView extends StatelessWidget {
       padding: const EdgeInsets.only(top: 30),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             children: <Widget>[
@@ -175,21 +179,42 @@ class _SliderView extends StatelessWidget {
                 height: 200,
               ),
               ...[
-                Menu(AppIcons.terms, 'Terms and Conditions', '/terms'),
-                Menu(AppIcons.lock, 'Privacy Policy', '/policy'),
-                Menu(AppIcons.legalNotice, 'Legal Notice', '/legalNotice'),
-                Menu(AppIcons.faq, 'FAQ', '/faq'),
+                Menu(
+                    AppIcons.terms,
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.termsAndConditions),
+                    '/terms'),
+                Menu(
+                    AppIcons.lock,
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.privacyPolicy),
+                    '/policy'),
+                Menu(
+                    AppIcons.legalNotice,
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.legalNotice),
+                    '/legalNotice'),
+                Menu(
+                    AppIcons.faq,
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.faq),
+                    '/faq'),
               ].map((menu) => _SliderMenuItem(
                   title: menu.title, iconData: menu.iconData, path: menu.path)),
             ],
           ),
+          SizedBox(height: 40.w),
+          const LanguageToggleButton(),
           GestureDetector(
             onTap: () {
               deleteAccessToken();
               deleteUserData();
               UserProfileProvider().resetUserDetails();
               Navigator.popAndPushNamed(context, '/login');
-              showToast(message: "Logged Out", context: context);
+              showToast(
+                  message: AppLocalization.of(context)!
+                      .translate(TranslationString.loggedOut),
+                  context: context);
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 40.w),
@@ -199,8 +224,10 @@ class _SliderView extends StatelessWidget {
                   SizedBox(
                     width: 20.w,
                   ),
-                  const Text('Logout',
-                      style: TextStyle(
+                  Text(
+                      AppLocalization.of(context)!
+                          .translate(TranslationString.logout),
+                      style: const TextStyle(
                         color: AppColors.blue,
                       )),
                 ],

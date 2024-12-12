@@ -11,6 +11,8 @@ import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../widgets/inputfields/textfield.dart';
 
 // ignore: must_be_immutable
@@ -33,7 +35,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   void changePass() async {
     if (newPassword.text != confirmPassword.text) {
       showToast(
-        message: "Password does not match",
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.passwordDoesNotMatch),
         context: context,
         isAlert: true,
         color: Colors.redAccent,
@@ -46,7 +49,10 @@ class _ChangePasswordState extends State<ChangePassword> {
         String result =
             await changePassword(oldPassword.text, newPassword.text);
         if (result == 'Password Changed Successfully!') {
-          showToast(message: result, context: context);
+          showToast(
+              message: AppLocalization.of(context)!
+                  .translate(TranslationString.passwordChangedSuccessfully),
+              context: context);
           setState(() {
             loading = false;
           });
@@ -78,7 +84,8 @@ class _ChangePasswordState extends State<ChangePassword> {
           surfaceTintColor: Colors.transparent,
           leading: const CustomBackButton(),
           title: Text(
-            "Change Password",
+            AppLocalization.of(context)!
+                .translate(TranslationString.changePass),
             style: AppStyles.heading3.copyWith(color: AppColors.darkBlue),
           ),
         ),
@@ -94,8 +101,10 @@ class _ChangePasswordState extends State<ChangePassword> {
               ),
               CustomTextField(
                 controller: oldPassword,
-                label: "Current Password",
-                hintText: "Current Password",
+                label: AppLocalization.of(context)!
+                    .translate(TranslationString.currentPass),
+                hintText: AppLocalization.of(context)!
+                    .translate(TranslationString.currentPass),
                 inputType: TextInputType.text,
                 verticalSpacing: 3.w,
                 horizontalSpacing: 0,
@@ -107,8 +116,10 @@ class _ChangePasswordState extends State<ChangePassword> {
               ),
               CustomTextField(
                 controller: newPassword,
-                label: "New Password",
-                hintText: "New Password",
+                label: AppLocalization.of(context)!
+                    .translate(TranslationString.newPassword),
+                hintText: AppLocalization.of(context)!
+                    .translate(TranslationString.newPassword),
                 inputType: TextInputType.text,
                 verticalSpacing: 3.w,
                 horizontalSpacing: 0,
@@ -120,8 +131,10 @@ class _ChangePasswordState extends State<ChangePassword> {
               ),
               CustomTextField(
                 controller: confirmPassword,
-                label: "Confirm Password",
-                hintText: "Confirm Password",
+                label: AppLocalization.of(context)!
+                    .translate(TranslationString.confirmPass),
+                hintText: AppLocalization.of(context)!
+                    .translate(TranslationString.confirmPass),
                 inputType: TextInputType.text,
                 verticalSpacing: 3.w,
                 horizontalSpacing: 0,
@@ -134,7 +147,9 @@ class _ChangePasswordState extends State<ChangePassword> {
               ),
               GestureDetector(
                 onTap: changePass,
-                child: const CustomButton(text: "Change Password"),
+                child: CustomButton(
+                    text: AppLocalization.of(context)!
+                        .translate(TranslationString.changePass)),
               ),
             ],
           ),

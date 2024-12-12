@@ -10,6 +10,8 @@ import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
 import '../../config/core.dart';
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../utils/app_images.dart';
 import '../../widgets/buttons/custom_button.dart';
 
@@ -42,7 +44,8 @@ class _ForgetPassState extends State<ForgetPass> {
   void onEmailContinue() async {
     if (email.text.isEmpty) {
       showToast(
-        message: "Please enter email!",
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.pleaseEnterEmail),
         context: context,
         isAlert: true,
         color: Colors.redAccent,
@@ -89,7 +92,8 @@ class _ForgetPassState extends State<ForgetPass> {
   void changePassword() async {
     if (pass.text != confirmPass.text) {
       showToast(
-        message: "Password does not match",
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.passwordDoesNotMatch),
         context: context,
         isAlert: true,
         color: Colors.redAccent,
@@ -162,20 +166,25 @@ class _ForgetPassState extends State<ForgetPass> {
                         ),
                         Text(
                           emailActive
-                              ? "Forgot Password?"
+                              ? AppLocalization.of(context)!
+                                  .translate(TranslationString.forgotPassword)
                               : otpActive
-                                  ? "Verify OTP"
-                                  : "Change Password",
+                                  ? AppLocalization.of(context)!
+                                      .translate(TranslationString.verifyOTP)
+                                  : AppLocalization.of(context)!
+                                      .translate(TranslationString.changePass),
                           style: AppStyles.heading1.copyWith(
                             color: Colors.white,
                           ),
                         ),
                         Text(
                           emailActive
-                              ? "Verify your email to continue"
+                              ? AppLocalization.of(context)!.translate(
+                                  TranslationString.verifyEmailToContinue)
                               : otpActive
-                                  ? "Enter the OTP sent to you at ${email.text}"
-                                  : "Enter a new valid password",
+                                  ? "${AppLocalization.of(context)!.translate(TranslationString.enterOTPSentToYouAt)} ${email.text}"
+                                  : AppLocalization.of(context)!.translate(
+                                      TranslationString.enterNewPassword),
                           style: AppStyles.heading3.copyWith(
                             color: Colors.white,
                           ),
@@ -204,18 +213,25 @@ class _ForgetPassState extends State<ForgetPass> {
                               emailActive
                                   ? UnderlinedTextField(
                                       controller: email,
-                                      label: "Email",
-                                      hintText: "Enter email",
+                                      label: AppLocalization.of(context)!
+                                          .translate(TranslationString.email),
+                                      hintText: AppLocalization.of(context)!
+                                          .translate(
+                                              TranslationString.enterEmail),
                                       inputType: TextInputType.emailAddress,
                                       icon: Icons.email_outlined,
                                       obscureText: true,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter your email';
+                                          return AppLocalization.of(context)!
+                                              .translate(TranslationString
+                                                  .pleaseEnterEmail);
                                         }
                                         if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
                                             .hasMatch(value)) {
-                                          return 'Please enter a valid email address';
+                                          return AppLocalization.of(context)!
+                                              .translate(TranslationString
+                                                  .pleaseEnterValidEmail);
                                         }
                                         return null;
                                       },
@@ -223,14 +239,21 @@ class _ForgetPassState extends State<ForgetPass> {
                                   : otpActive
                                       ? UnderlinedTextField(
                                           controller: otp,
-                                          label: "Enter otp",
-                                          hintText: "Enter otp",
+                                          label: AppLocalization.of(context)!
+                                              .translate(
+                                                  TranslationString.enterOTP),
+                                          hintText: AppLocalization.of(context)!
+                                              .translate(
+                                                  TranslationString.enterOTP),
                                           inputType: TextInputType.number,
                                           icon: Icons.password,
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
-                                              return 'Please enter OTP';
+                                              return AppLocalization.of(
+                                                      context)!
+                                                  .translate(TranslationString
+                                                      .pleaseEnterOTP);
                                             }
 
                                             return null;
@@ -240,16 +263,31 @@ class _ForgetPassState extends State<ForgetPass> {
                                           children: [
                                             UnderlinedTextField(
                                               controller: pass,
-                                              label: "New Password",
-                                              hintText: "New Password",
+                                              label:
+                                                  AppLocalization.of(context)!
+                                                      .translate(
+                                                          TranslationString
+                                                              .newPassword),
+                                              hintText:
+                                                  AppLocalization.of(context)!
+                                                      .translate(
+                                                          TranslationString
+                                                              .newPassword),
                                               inputType: TextInputType.text,
                                               prefixSvgPath: AppIcons.lock,
                                               validator: (value) {
                                                 if (value == null ||
                                                     value.isEmpty) {
-                                                  return 'Please enter password';
+                                                  return AppLocalization.of(
+                                                          context)!
+                                                      .translate(
+                                                          TranslationString
+                                                              .pleaseEnterPass);
                                                 } else if (value.length < 8) {
-                                                  return 'Password should be atleast 8 characters';
+                                                  return AppLocalization.of(
+                                                          context)!
+                                                      .translate(TranslationString
+                                                          .passwordShouldBe8Characters);
                                                 }
 
                                                 return null;
@@ -260,17 +298,32 @@ class _ForgetPassState extends State<ForgetPass> {
                                             ),
                                             UnderlinedTextField(
                                               controller: confirmPass,
-                                              label: "Confirm Password",
-                                              hintText: "Confirm Password",
+                                              label:
+                                                  AppLocalization.of(context)!
+                                                      .translate(
+                                                          TranslationString
+                                                              .confirmPass),
+                                              hintText:
+                                                  AppLocalization.of(context)!
+                                                      .translate(
+                                                          TranslationString
+                                                              .confirmPass),
                                               inputType: TextInputType.text,
                                               prefixSvgPath: AppIcons.lock,
                                               obscureText: true,
                                               validator: (value) {
                                                 if (value == null ||
                                                     value.isEmpty) {
-                                                  return 'Please enter password';
+                                                  return AppLocalization.of(
+                                                          context)!
+                                                      .translate(
+                                                          TranslationString
+                                                              .pleaseEnterPass);
                                                 } else if (value.length < 8) {
-                                                  return 'Password should be atleast 8 characters';
+                                                  return AppLocalization.of(
+                                                          context)!
+                                                      .translate(TranslationString
+                                                          .passwordShouldBe8Characters);
                                                 }
 
                                                 return null;
@@ -281,8 +334,10 @@ class _ForgetPassState extends State<ForgetPass> {
                               const Spacer(),
                               CustomButton(
                                   text: changePass
-                                      ? "Change Password"
-                                      : "Continue",
+                                      ? AppLocalization.of(context)!.translate(
+                                          TranslationString.changePass)
+                                      : AppLocalization.of(context)!.translate(
+                                          TranslationString.continueText),
                                   onPressed: () {
                                     if (emailActive) {
                                       if (formKey.currentState!.validate()) {

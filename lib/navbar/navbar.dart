@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/content_management/providers/profile_content_provider.dart';
 import 'package:stargate/drawer/drawer.dart';
+import 'package:stargate/localization/localization.dart';
+import 'package:stargate/localization/translation_strings.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/listings/listings_screen.dart';
 import 'package:stargate/screens/profile/profile_screen.dart';
@@ -124,9 +126,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
                   ),
                   selectedColor: AppColors.blue,
                   unSelectedColor: AppColors.primaryGrey,
-                  title: const Text(
-                    'Home',
-                    style: TextStyle(fontSize: 12),
+                  title: Text(
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.home),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ),
                 BottomBarItem(
@@ -145,9 +148,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
                   ),
                   selectedColor: AppColors.blue,
                   unSelectedColor: AppColors.primaryGrey,
-                  title: const Text(
-                    'Services',
-                    style: TextStyle(fontSize: 12),
+                  title: Text(
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.services),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ),
                 BottomBarItem(
@@ -166,9 +170,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
                   ),
                   selectedColor: AppColors.blue,
                   unSelectedColor: AppColors.primaryGrey,
-                  title: const Text(
-                    'Profile',
-                    style: TextStyle(fontSize: 12),
+                  title: Text(
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.profile),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ),
               ]
@@ -190,9 +195,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
-                      title: const Text(
-                        'Home',
-                        style: TextStyle(fontSize: 12),
+                      title: Text(
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.home),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                     BottomBarItem(
@@ -212,9 +218,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
-                      title: const Text(
-                        'Listings',
-                        style: TextStyle(fontSize: 12),
+                      title: Text(
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.listings),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                     BottomBarItem(
@@ -233,9 +240,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
-                      title: const Text(
-                        'Profile',
-                        style: TextStyle(fontSize: 12),
+                      title: Text(
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.profile),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                   ]
@@ -256,9 +264,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
-                      title: const Text(
-                        'Home',
-                        style: TextStyle(fontSize: 12),
+                      title: Text(
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.home),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                     BottomBarItem(
@@ -277,9 +286,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
-                      title: const Text(
-                        'Services',
-                        style: TextStyle(fontSize: 12),
+                      title: Text(
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.services),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                     BottomBarItem(
@@ -299,9 +309,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
-                      title: const Text(
-                        'Listings',
-                        style: TextStyle(fontSize: 12),
+                      title: Text(
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.listings),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                     BottomBarItem(
@@ -320,9 +331,10 @@ class _NavBarScreenState extends State<NavBarScreen> {
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
-                      title: const Text(
-                        'Profile',
-                        style: TextStyle(fontSize: 12),
+                      title: Text(
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.profile),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                   ],

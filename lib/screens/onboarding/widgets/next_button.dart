@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/config/core.dart';
 
+import '../../../localization/localization.dart';
+import '../../../localization/translation_strings.dart';
+
 class NextButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final int index;
@@ -53,7 +56,8 @@ class _NextButtonState extends State<NextButton> {
                         );
                       },
                       child: Text(
-                        "Skip",
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.skip),
                         style: AppStyles.heading4.copyWith(
                           color: AppColors.darkBlue,
                         ),
@@ -98,7 +102,8 @@ class _NextButtonState extends State<NextButton> {
                             bottom: 10,
                             top: 10,
                             child: Text(
-                              "Get Started",
+                              AppLocalization.of(context)!
+                                  .translate(TranslationString.getStarted),
                               style: AppStyles.heading3
                                   .copyWith(color: AppColors.darkBlue),
                             ),

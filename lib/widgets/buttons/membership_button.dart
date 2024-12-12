@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/screens/profile/membership_screen.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
+
 class MembershipButton extends StatefulWidget {
   final Color textColor;
   const MembershipButton({
@@ -42,7 +45,8 @@ class _MembershipButtonState extends State<MembershipButton> {
                   ),
                   child: Center(
                     child: Text(
-                      "membership",
+                      AppLocalization.of(context)!
+                          .translate(TranslationString.membership),
                       style:
                           AppStyles.heading4.copyWith(color: widget.textColor),
                     ),

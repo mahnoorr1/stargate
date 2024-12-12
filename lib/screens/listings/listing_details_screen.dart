@@ -11,6 +11,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/buttons/bubble_text_button.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../providers/service_providers_provider.dart';
 import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/inputfields/textfield.dart';
@@ -32,12 +34,16 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
   _onEmailMessageSendSuccess() {
     Navigator.pop(context);
     showToast(
-        message: "Message Sent Successfully to ${widget.listing.userName}",
+        message:
+            "${AppLocalization.of(context)!.translate(TranslationString.messageSentSuccessfullyTo)} ${widget.listing.userName}",
         context: context);
   }
 
   _onError() {
-    showToast(message: "Something Went Wrong", context: context);
+    showToast(
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.somethingWentWrong),
+        context: context);
   }
 
   @override
@@ -158,8 +164,12 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                         BubbleTextButton(
                                           text: widget.listing.requestType ==
                                                   'requesting'
-                                              ? 'request'
-                                              : 'offer',
+                                              ? AppLocalization.of(context)!
+                                                  .translate(
+                                                      TranslationString.request)
+                                              : AppLocalization.of(context)!
+                                                  .translate(
+                                                      TranslationString.offer),
                                         ),
                                       ],
                                     ),
@@ -223,8 +233,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "category",
+                Text(
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.category),
                   style: AppStyles.supportiveText,
                 ),
                 SizedBox(
@@ -239,8 +250,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "subcategory",
+                Text(
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.subcategory),
                   style: AppStyles.supportiveText,
                 ),
                 SizedBox(
@@ -257,7 +269,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
           height: 8.w,
         ),
         Text(
-          "Price",
+          AppLocalization.of(context)!.translate(TranslationString.price),
           style: AppStyles.supportiveText.copyWith(
             color: AppColors.primaryGrey,
             fontWeight: FontWeight.bold,
@@ -317,8 +329,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         SizedBox(
           height: 20.w,
         ),
-        const Text(
-          "Other details",
+        Text(
+          AppLocalization.of(context)!
+              .translate(TranslationString.otherDetails),
           style: AppStyles.heading4,
         ),
         SizedBox(
@@ -326,8 +339,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         ),
         Row(
           children: [
-            const Text(
-              "condition:",
+            Text(
+              AppLocalization.of(context)!
+                  .translate(TranslationString.conditionSmallWithColon),
               style: AppStyles.normalText,
             ),
             const Spacer(),
@@ -345,8 +359,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         ),
         Row(
           children: [
-            const Text(
-              "land area:",
+            Text(
+              AppLocalization.of(context)!
+                  .translate(TranslationString.landArea),
               style: AppStyles.normalText,
             ),
             const Spacer(),
@@ -375,8 +390,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         ),
         Row(
           children: [
-            const Text(
-              "build able area:",
+            Text(
+              AppLocalization.of(context)!
+                  .translate(TranslationString.builableArea),
               style: AppStyles.normalText,
             ),
             const Spacer(),
@@ -404,8 +420,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         ),
         Row(
           children: [
-            const Text(
-              "building usage area:",
+            Text(
+              AppLocalization.of(context)!
+                  .translate(TranslationString.buildingUsageArea),
               style: AppStyles.normalText,
             ),
             const Spacer(),
@@ -433,13 +450,18 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         ),
         Row(
           children: [
-            const Text(
-              "furnished:",
+            Text(
+              AppLocalization.of(context)!
+                  .translate(TranslationString.furnished),
               style: AppStyles.normalText,
             ),
             const Spacer(),
             Text(
-              widget.listing.furnished! ? 'yes' : 'no',
+              widget.listing.furnished!
+                  ? AppLocalization.of(context)!
+                      .translate(TranslationString.yes)
+                  : AppLocalization.of(context)!
+                      .translate(TranslationString.no),
               style: AppStyles.normalText.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -452,8 +474,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         widget.listing.propertyType == 'commercial'
             ? Row(
                 children: [
-                  const Text(
-                    "no of parking places:",
+                  Text(
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.noOfParkingPlaces),
                     style: AppStyles.normalText,
                   ),
                   const Spacer(),
@@ -474,13 +497,18 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
               )
             : Row(
                 children: [
-                  const Text(
-                    "garage:",
+                  Text(
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.garage),
                     style: AppStyles.normalText,
                   ),
                   const Spacer(),
                   Text(
-                    widget.listing.garage! ? 'yes' : 'no',
+                    widget.listing.garage!
+                        ? AppLocalization.of(context)!
+                            .translate(TranslationString.yes)
+                        : AppLocalization.of(context)!
+                            .translate(TranslationString.no),
                     style: AppStyles.normalText.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -494,8 +522,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Equipment Details",
+                  Text(
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.equipmentDetails),
                     style: AppStyles.heading4,
                   ),
                   SizedBox(
@@ -507,8 +536,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         widget.listing.equipment == '' &&
                 widget.listing.qualityOfEquipment == '' &&
                 widget.listing.propertyType == 'commercial'
-            ? const Text(
-                "No Equipments",
+            ? Text(
+                AppLocalization.of(context)!
+                    .translate(TranslationString.noEquipment),
                 style: AppStyles.normalText,
               )
             : widget.listing.propertyType == 'commercial'
@@ -519,8 +549,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "equipment",
+                                Text(
+                                  AppLocalization.of(context)!
+                                      .translate(TranslationString.equipment),
                                   style: AppStyles.supportiveText,
                                 ),
                                 SizedBox(
@@ -537,8 +568,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "Quality of equipment",
+                                Text(
+                                  AppLocalization.of(context)!.translate(
+                                      TranslationString.qualityOfEquipment),
                                   style: AppStyles.supportiveText,
                                 ),
                                 SizedBox(
@@ -600,15 +632,18 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Send Message",
+                Text(
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.sendMessage),
                   style: AppStyles.heading3,
                 ),
                 SizedBox(height: 12.w),
                 CustomTextField(
                   controller: _emailMessageController,
-                  label: "Message",
-                  hintText: "Write your Message",
+                  label: AppLocalization.of(context)!
+                      .translate(TranslationString.message),
+                  hintText: AppLocalization.of(context)!
+                      .translate(TranslationString.writeYourMessage),
                   inputType: TextInputType.text,
                   horizontalSpacing: 0,
                   maxLines: 3,
@@ -616,11 +651,14 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 24),
                   child: CustomButton(
-                    text: "Send",
+                    text: AppLocalization.of(context)!
+                        .translate(TranslationString.send),
                     onPressed: () async {
                       if (_emailMessageController.text.isEmpty) {
                         showToast(
-                            message: "Please Enter Message", context: context);
+                            message: AppLocalization.of(context)!.translate(
+                                TranslationString.pleaseEnterMessage),
+                            context: context);
                       } else {
                         var res = await context
                             .read<AllUsersProvider>()

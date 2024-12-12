@@ -13,6 +13,8 @@ import 'package:stargate/screens/services_screen/widgets/user_listing_card.dart'
 import 'package:stargate/config/core.dart';
 import 'package:stargate/utils/app_enums.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../providers/service_providers_provider.dart';
 import '../../providers/user_info_provider.dart';
 
@@ -112,7 +114,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "Search",
+          AppLocalization.of(context)!.translate(TranslationString.search),
           style: AppStyles.heading3.copyWith(color: AppColors.darkBlue),
         ),
         centerTitle: true,
@@ -123,7 +125,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
         child: allUsersProvider.loading
             ? const Center(child: CircularProgressIndicator())
             : (allUsersProvider.noUsers && !filterApplied)
-                ? const Center(child: Text("No users found"))
+                ? Center(
+                    child: Text(AppLocalization.of(context)!
+                        .translate(TranslationString.noUsersFound)))
                 : Column(
                     children: [
                       SingleChildScrollView(
@@ -199,9 +203,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
                                         0.6,
-                                    child: const Center(
-                                      child:
-                                          Text("No users available on filter"),
+                                    child: Center(
+                                      child: Text(AppLocalization.of(context)!
+                                          .translate(TranslationString
+                                              .noUsersAvailableOnFilter)),
                                     ),
                                   ),
                                 ],
@@ -230,7 +235,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Apply search filters for Service Providers',
+                Text(
+                    AppLocalization.of(context)!.translate(TranslationString
+                        .applySearchFiltersForServiceProviders),
                     style: AppStyles.heading4),
                 SizedBox(height: 12.h),
                 filterApplied
@@ -245,7 +252,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            "clear filters",
+                            AppLocalization.of(context)!
+                                .translate(TranslationString.clearFilters),
                             style: AppStyles.heading4
                                 .copyWith(color: AppColors.blue),
                           ),
@@ -254,7 +262,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     : const SizedBox(),
                 CountryPickerField(country: country, state: state, city: city),
                 SizedBox(height: 12.w),
-                Text("Experience",
+                Text(
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.experience),
                     style: AppStyles.normalText
                         .copyWith(color: AppColors.primaryGrey)),
                 SizedBox(height: 6.w),
@@ -278,7 +288,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 ),
                 SizedBox(height: 20.h),
                 CustomButton(
-                  text: 'Apply Filters',
+                  text: AppLocalization.of(context)!
+                      .translate(TranslationString.applyFilters),
                   onPressed: () {
                     Navigator.pop(context);
                     setState(() {
@@ -292,7 +303,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     );
                     if (AllUsersProvider.c(context).filteredUsers.isEmpty) {
                       showToast(
-                        message: "No users available on filter",
+                        message: AppLocalization.of(context)!.translate(
+                            TranslationString.noUsersAvailableOnFilter),
                         context: context,
                         isAlert: true,
                       );

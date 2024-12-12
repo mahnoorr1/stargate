@@ -4,6 +4,9 @@ import 'package:stargate/config/core.dart';
 import 'package:stargate/models/membership.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
+
 class MembershipCard extends StatelessWidget {
   final Membership membership;
   final String activeMembership;
@@ -40,7 +43,8 @@ class MembershipCard extends StatelessWidget {
                             color: Colors.green,
                           ),
                           child: Text(
-                            "Active",
+                            AppLocalization.of(context)!
+                                .translate(TranslationString.active),
                             style: AppStyles.heading4.copyWith(
                               color: AppColors.white,
                             ),
@@ -97,8 +101,11 @@ class MembershipCard extends StatelessWidget {
             height: 12.w,
           ),
           CustomButton(
-            text:
-                activeMembership == membership.tag ? "Subscribed" : "Subscribe",
+            text: activeMembership == membership.tag
+                ? AppLocalization.of(context)!
+                    .translate(TranslationString.subscribed)
+                : AppLocalization.of(context)!
+                    .translate(TranslationString.subscribe),
             color: activeMembership == membership.tag
                 ? AppColors.blue
                 : AppColors.primaryGrey,

@@ -79,6 +79,7 @@ class UserProfileProvider with ChangeNotifier {
   }
 
   Future<void> fetchUserProfile() async {
+    _isLoading = true;
     User? user = await myProfile();
     if (user != null) {
       _id = user.id;

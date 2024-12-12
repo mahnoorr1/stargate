@@ -4,6 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/utils/app_images.dart';
 
+import '../../../localization/localization.dart';
+import '../../../localization/translation_strings.dart';
+
 class ExperienceCard extends StatelessWidget {
   final String title;
   final String? subTitle;
@@ -68,7 +71,7 @@ class ExperienceCard extends StatelessWidget {
                       ? Alignment.topLeft
                       : Alignment.centerLeft,
                   child: Text(
-                    "$noOfYears years",
+                    "$noOfYears ${AppLocalization.of(context)!.translate(TranslationString.years)}",
                     style: AppStyles.heading4.copyWith(
                       color: AppColors.blue,
                     ),

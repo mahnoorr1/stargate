@@ -9,6 +9,9 @@ import 'package:stargate/widgets/cards/membership_card.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
+
 class MembershipScreen extends StatefulWidget {
   const MembershipScreen({super.key});
 
@@ -64,7 +67,8 @@ class _MembershipScreenState extends State<MembershipScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 12.0),
               child: Text(
-                "Membership",
+                AppLocalization.of(context)!
+                    .translate(TranslationString.membership),
                 style: AppStyles.heading2.copyWith(
                   color: AppColors.darkBlue,
                 ),

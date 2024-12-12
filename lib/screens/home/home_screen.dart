@@ -13,6 +13,8 @@ import 'package:stargate/screens/property_request_screen/property_request_screen
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../providers/notification_provider.dart';
 import '../../utils/notifications_permission_handler.dart';
 import '../../widgets/dialog_box.dart';
@@ -48,11 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
         showCustomDialog(
           context: context,
           circleBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-          titleText: "Incomplete Profile",
+          titleText: AppLocalization.of(context)!
+              .translate(TranslationString.incompleteProfileTitle),
           titleColor: AppColors.black,
-          descriptionText:
-              "Your Profile Information is incomplete please go to profile section and edit your information",
-          buttonText: "OK",
+          descriptionText: AppLocalization.of(context)!
+              .translate(TranslationString.incompleteProfileDescription),
+          buttonText:
+              AppLocalization.of(context)!.translate(TranslationString.ok),
           onButtonPressed: () {
             Navigator.pop(context);
           },
@@ -312,7 +316,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final allUsersProvider = Provider.of<AllUsersProvider>(context);
 
     if (allUsersProvider.users.isEmpty) {
-      return const Center(child: Text('No service providers available'));
+      return Center(
+          child: Text(AppLocalization.of(context)!
+              .translate(TranslationString.noServiceProvidersAvailable)));
     }
 
     final filteredUsers = allUsersProvider.users
@@ -357,7 +363,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     '66c2ff551bf7b7176ee9271a'
                 ? const SizedBox()
                 : Text(
-                    "Service Providers",
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.serviceProviders),
                     style: AppStyles.heading4.copyWith(
                       color: AppColors.blue,
                     ),
@@ -416,7 +423,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Recent Notifications",
+                      AppLocalization.of(context)!
+                          .translate(TranslationString.recentNotifications),
                       style: AppStyles.heading4.copyWith(
                         color: AppColors.blue,
                       ),
@@ -424,9 +432,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       onTap: () =>
                           Navigator.pushNamed(context, '/notifications'),
-                      child: const Text(
-                        "view more",
-                        style: TextStyle(
+                      child: Text(
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.viewMore),
+                        style: const TextStyle(
                             color: AppColors.darkGrey,
                             fontWeight: FontWeight.bold),
                       ),
@@ -439,8 +448,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       child:
                           CircularProgressIndicator()) // Show loading spinner
                   : notificationProvider.notifications.isEmpty
-                      ? const Expanded(
-                          child: Center(child: Text('No notifications found')))
+                      ? Expanded(
+                          child: Center(
+                              child: Text(AppLocalization.of(context)!
+                                  .translate(
+                                      TranslationString.noNorificationsFound))))
                       : Padding(
                           padding: EdgeInsets.symmetric(horizontal: 12.w),
                           child: ListView.builder(

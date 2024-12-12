@@ -18,6 +18,8 @@ import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/pdf_thumbnail.dart';
 import 'package:stargate/widgets/pdf_viewer.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../widgets/inputfields/textfield.dart';
 
 class ServiceProviderDetails extends StatefulWidget {
@@ -33,12 +35,16 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
   _onEmailMessageSendSuccess() {
     Navigator.pop(context);
     showToast(
-        message: "Message Sent Successfully to ${widget.user.name}",
+        message:
+            "${AppLocalization.of(context)!.translate(TranslationString.messageSentSuccessfullyTo)} ${widget.user.name}",
         context: context);
   }
 
   _onError() {
-    showToast(message: "Something Went Wrong", context: context);
+    showToast(
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.somethingWentWrong),
+        context: context);
   }
 
   @override
@@ -137,7 +143,11 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                                                   style:
                                                       AppStyles.supportiveText,
                                                 )
-                                              : const Text("No Address"),
+                                              : Text(
+                                                  AppLocalization.of(context)!
+                                                      .translate(
+                                                          TranslationString
+                                                              .noAddress)),
                                         ),
                                       ],
                                     )
@@ -230,7 +240,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Investment Range",
+                    AppLocalization.of(context)!
+                        .translate(TranslationString.investmentRange),
                     style: AppStyles.supportiveText.copyWith(
                       color: AppColors.primaryGrey,
                       fontWeight: FontWeight.bold,
@@ -253,16 +264,19 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
             : const SizedBox(),
         SizedBox(height: 12.w),
         Text(
-          "Investment priorities",
+          AppLocalization.of(context)!
+              .translate(TranslationString.investmentPriorities),
           style: AppStyles.supportiveText.copyWith(
             color: AppColors.primaryGrey,
             fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: 8.w),
-        const Row(
+        Row(
           children: [
-            BubbleTextButton(text: "commercial"),
+            BubbleTextButton(
+                text: AppLocalization.of(context)!
+                    .translate(TranslationString.commercial)),
           ],
         ),
         SizedBox(height: 12.w),
@@ -270,7 +284,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                 widget.user.references != [] &&
                 widget.user.references!.isNotEmpty
             ? Text(
-                "References",
+                AppLocalization.of(context)!
+                    .translate(TranslationString.references),
                 style: AppStyles.supportiveText.copyWith(
                   color: AppColors.primaryGrey,
                   fontWeight: FontWeight.bold,
@@ -286,7 +301,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
         SizedBox(height: 16.w),
         widget.user.websiteLink != ''
             ? Text(
-                "Contact on my website",
+                AppLocalization.of(context)!
+                    .translate(TranslationString.contactOnMyWebsite),
                 style: AppStyles.heading4.copyWith(color: AppColors.blue),
               )
             : const SizedBox(),
@@ -298,7 +314,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                   showCustomBottomSheet(
                       context: context, child: _sendEmailMessage());
                 },
-                text: "Send Mail"),
+                text: AppLocalization.of(context)!
+                    .translate(TranslationString.sendMail)),
       ],
     );
   }
@@ -308,7 +325,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Specialized Experience",
+          AppLocalization.of(context)!
+              .translate(TranslationString.specializedExperience),
           style: AppStyles.supportiveText.copyWith(
             color: AppColors.primaryGrey,
             fontWeight: FontWeight.bold,
@@ -327,7 +345,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                 widget.user.references != [] &&
                 widget.user.references!.isNotEmpty
             ? Text(
-                "References",
+                AppLocalization.of(context)!
+                    .translate(TranslationString.references),
                 style: AppStyles.supportiveText.copyWith(
                   color: AppColors.primaryGrey,
                   fontWeight: FontWeight.bold,
@@ -343,7 +362,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
         SizedBox(height: 16.w),
         widget.user.websiteLink != ''
             ? Text(
-                "Contact on my website",
+                AppLocalization.of(context)!
+                    .translate(TranslationString.contactOnMyWebsite),
                 style: AppStyles.heading4.copyWith(color: AppColors.blue),
               )
             : const SizedBox(),
@@ -355,7 +375,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                   showCustomBottomSheet(
                       context: context, child: _sendEmailMessage());
                 },
-                text: "Send Mail"),
+                text: AppLocalization.of(context)!
+                    .translate(TranslationString.sendMail)),
       ],
     );
   }
@@ -379,7 +400,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Investment Range",
+          AppLocalization.of(context)!
+              .translate(TranslationString.investmentRange),
           style: AppStyles.supportiveText.copyWith(
             color: AppColors.primaryGrey,
             fontWeight: FontWeight.bold,
@@ -398,21 +420,25 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
         ),
         SizedBox(height: 12.w),
         Text(
-          "Investment priorities",
+          AppLocalization.of(context)!
+              .translate(TranslationString.investmentPriorities),
           style: AppStyles.supportiveText.copyWith(
             color: AppColors.primaryGrey,
             fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: 8.w),
-        const Row(
+        Row(
           children: [
-            BubbleTextButton(text: "commercial"),
+            BubbleTextButton(
+                text: AppLocalization.of(context)!
+                    .translate(TranslationString.commercial)),
           ],
         ),
         SizedBox(height: 12.w),
         Text(
-          "Specialized Experience",
+          AppLocalization.of(context)!
+              .translate(TranslationString.specializedExperience),
           style: AppStyles.supportiveText.copyWith(
             color: AppColors.primaryGrey,
             fontWeight: FontWeight.bold,
@@ -431,7 +457,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                 widget.user.references != [] &&
                 widget.user.references!.isNotEmpty
             ? Text(
-                "References",
+                AppLocalization.of(context)!
+                    .translate(TranslationString.references),
                 style: AppStyles.supportiveText.copyWith(
                   color: AppColors.primaryGrey,
                   fontWeight: FontWeight.bold,
@@ -447,7 +474,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
         SizedBox(height: 16.w),
         widget.user.websiteLink != ''
             ? Text(
-                "Contact on my website",
+                AppLocalization.of(context)!
+                    .translate(TranslationString.contactOnMyWebsite),
                 style: AppStyles.heading4.copyWith(color: AppColors.blue),
               )
             : const SizedBox(),
@@ -459,7 +487,8 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                   showCustomBottomSheet(
                       context: context, child: _sendEmailMessage());
                 },
-                text: "Send Mail"),
+                text: AppLocalization.of(context)!
+                    .translate(TranslationString.sendMail)),
       ],
     );
   }
@@ -512,15 +541,18 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Send Message",
+                Text(
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.sendMessage),
                   style: AppStyles.heading3,
                 ),
                 SizedBox(height: 12.w),
                 CustomTextField(
                   controller: _emailMessageController,
-                  label: "Message",
-                  hintText: "Write your Message",
+                  label: AppLocalization.of(context)!
+                      .translate(TranslationString.message),
+                  hintText: AppLocalization.of(context)!
+                      .translate(TranslationString.writeYourMessage),
                   inputType: TextInputType.text,
                   horizontalSpacing: 0,
                   maxLines: 3,
@@ -528,11 +560,14 @@ class _ServiceProviderDetailsState extends State<ServiceProviderDetails> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 24),
                   child: CustomButton(
-                    text: "Send",
+                    text: AppLocalization.of(context)!
+                        .translate(TranslationString.send),
                     onPressed: () async {
                       if (_emailMessageController.text.isEmpty) {
                         showToast(
-                            message: "Please Enter Message", context: context);
+                            message: AppLocalization.of(context)!.translate(
+                                TranslationString.pleaseEnterMessage),
+                            context: context);
                       } else {
                         var res = await context
                             .read<AllUsersProvider>()

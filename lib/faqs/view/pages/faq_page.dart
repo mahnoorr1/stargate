@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/faqs/view/widgets/faq_card.dart';
+import 'package:stargate/localization/localization.dart';
+import 'package:stargate/localization/translation_strings.dart';
 
 import '../../../config/core.dart';
 import '../../../drawer/widgets/widgets.dart';
@@ -35,7 +37,9 @@ class _FAQScreenState extends State<FAQScreen> {
         color: AppColors.backgroundColor,
         child: Column(
           children: [
-            const Heading(heading: "Frequently Asked \nQuestions"),
+            Heading(
+                heading: AppLocalization.of(context)!
+                    .translate(TranslationString.frequentlyAskedQuestions)),
             const SizedBox(height: 20),
             Consumer<FaqProvider>(
               builder: (context, provider, child) {

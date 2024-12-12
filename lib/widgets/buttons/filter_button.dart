@@ -4,6 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/utils/app_images.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
+
 class FilterButton extends StatefulWidget {
   final void Function() onTap;
   const FilterButton({
@@ -35,7 +38,8 @@ class _FilterButtonState extends State<FilterButton> {
             children: [
               SizedBox(width: 16.w),
               Text(
-                "Filter",
+                AppLocalization.of(context)!
+                    .translate(TranslationString.filter),
                 style: AppStyles.heading3.copyWith(
                   color: Colors.white,
                 ),

@@ -5,6 +5,8 @@ import 'package:stargate/legal_documents/providers/legal_document_provider.dart'
 
 import '../../../config/core.dart';
 import '../../../drawer/widgets/widgets.dart';
+import '../../../localization/localization.dart';
+import '../../../localization/translation_strings.dart';
 import '../../../widgets/loader/loader.dart';
 import '../widgets/legal_document_main_widget.dart';
 
@@ -37,7 +39,9 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Heading(heading: "Terms And Conditions"),
+              Heading(
+                  heading: AppLocalization.of(context)!
+                      .translate(TranslationString.termsAndConditions)),
               Consumer<LegalDocumentProvider>(
                 builder: (context, provider, child) {
                   if (provider.isLoading) {
@@ -48,7 +52,9 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
                       fileUrl: provider.legalDocument!.file,
                     );
                   } else {
-                    return const Center(child: Text("Something Went Wrong"));
+                    return Center(
+                        child: Text(AppLocalization.of(context)!
+                            .translate(TranslationString.somethingWentWrong)));
                   }
                 },
               ),

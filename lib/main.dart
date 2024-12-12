@@ -12,6 +12,8 @@ import 'package:stargate/cubit/real_estate_listing/cubit.dart';
 import 'package:stargate/cubit/service_providers/cubit.dart';
 import 'package:stargate/firebase_options.dart';
 import 'package:stargate/legal_documents/providers/legal_document_provider.dart';
+import 'package:stargate/localization/locale_notifier.dart';
+import 'package:stargate/localization/localization.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/routes/app_routes.dart';
@@ -31,6 +33,8 @@ import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -105,6 +109,7 @@ void main() async {
           ChangeNotifierProvider(create: (_) => RealEstateProvider()),
           ChangeNotifierProvider(create: (_) => MembershipContentProvider()),
           ChangeNotifierProvider(create: (_) => NotificationProvider()),
+          ChangeNotifierProvider(create: (_) => LocaleNotifier()),
         ],
         child: MyApp(initialMessage: initialMessage),
       );
@@ -185,6 +190,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final localeNotifier = Provider.of<LocaleNotifier>(context);
+    final locale = localeNotifier.locale;
     return ScreenUtilInit(
       designSize: const Size(393, 852),
       builder: (context, child) {
@@ -203,6 +210,31 @@ class _MyAppState extends State<MyApp> {
             textTheme: GoogleFonts.montserratTextTheme(),
             scaffoldBackgroundColor: Colors.white,
           ),
+          // Localization
+          locale: locale,
+          // List of supported locales (languages)
+          supportedLocales: const [
+            Locale('en'), // English
+            Locale('es'), // Spanish
+            Locale('de'), // German
+          ],
+
+          // Localization delegates to support Material, Cupertino, and custom translations
+          localizationsDelegates: const [
+            AppLocalizationDelegate(), // Custom delegate for translations
+            GlobalMaterialLocalizations.delegate, // Material widgets
+            GlobalWidgetsLocalizations.delegate, // Basic widgets
+            GlobalCupertinoLocalizations.delegate, // Cupertino widgets
+          ],
+          // Dynamically set the locale based on user's system preference
+          localeResolutionCallback: (locale, supportedLocales) {
+            for (var supportedLocale in supportedLocales) {
+              if (supportedLocale.languageCode == locale?.languageCode) {
+                return supportedLocale;
+              }
+            }
+            return supportedLocales.first; // Default to English if no match
+          },
         );
       },
     );

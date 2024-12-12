@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:stargate/config/core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/content_management/providers/listing_content_provider.dart';
+import 'package:stargate/localization/translation_strings.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
 import 'package:stargate/screens/listings/widgets/listing_card.dart';
 import 'package:stargate/utils/app_data.dart';
@@ -14,6 +15,7 @@ import 'package:stargate/widgets/buttons/filter_button.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/country_textfield.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import '../../localization/localization.dart';
 import '../../providers/real_estate_provider.dart';
 import '../../widgets/inputfields/outlined_dropdown.dart';
 
@@ -36,7 +38,7 @@ class _ListingsScreenState extends State<ListingsScreen> {
   String selectedRequestType = '';
   String selectedCondition = '';
   String selectedSellingType = '';
-  List<String> currentSubcategoryOptions = ['Select an Option'];
+  List<String> currentSubcategoryOptions = [];
 
   @override
   void initState() {
@@ -67,7 +69,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
   void showNoPropertiesToast() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showToast(
-        message: "No properties found for the selected filters.",
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.noPropertiesFoundForFilters),
         context: context,
         isAlert: true,
       );
@@ -76,10 +79,14 @@ class _ListingsScreenState extends State<ListingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    currentSubcategoryOptions = [
+      AppLocalization.of(context)!.translate(TranslationString.selectOption)
+    ];
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Real Estate Listings",
+          AppLocalization.of(context)!
+              .translate(TranslationString.realEstateListings),
           style: AppStyles.heading3.copyWith(
             color: AppColors.darkBlue,
           ),
@@ -94,7 +101,9 @@ class _ListingsScreenState extends State<ListingsScreen> {
             if (provider.loading) {
               return const Center(child: CircularProgressIndicator());
             } else if (provider.noListings && !filterApplied) {
-              return const Center(child: Text("No Property Listing Available"));
+              return Center(
+                  child: Text(AppLocalization.of(context)!.translate(
+                      TranslationString.noPropertyListingAvailable)));
             } else if (provider.noListings && filterApplied) {
               showNoPropertiesToast();
               RealEstateProvider.c(
@@ -179,7 +188,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            "clear filters",
+                            AppLocalization.of(context)!
+                                .translate(TranslationString.clearFilters),
                             style: AppStyles.heading4.copyWith(
                               color: AppColors.blue,
                             ),
@@ -194,7 +204,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                 ),
                 SizedBox(height: 12.w),
                 Text(
-                  "Price Range",
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.priceRange),
                   style: AppStyles.normalText.copyWith(
                     color: AppColors.primaryGrey,
                   ),
@@ -236,7 +247,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                   height: 10.w,
                 ),
                 Text(
-                  "Property Type",
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.propertyType),
                   style: AppStyles.normalText.copyWith(
                     color: AppColors.primaryGrey,
                   ),
@@ -256,7 +268,10 @@ class _ListingsScreenState extends State<ListingsScreen> {
                               selectedPropertyType = value;
                               selectedPropertyCategory = '';
                               selectedPropertySubcategory = '';
-                              currentSubcategoryOptions = ['Select an Option'];
+                              currentSubcategoryOptions = [
+                                AppLocalization.of(context)!
+                                    .translate(TranslationString.selectOption)
+                              ];
                             });
                           },
                           current: selectedPropertyType,
@@ -274,7 +289,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                             height: 10.w,
                           ),
                           Text(
-                            "Investment Type",
+                            AppLocalization.of(context)!
+                                .translate(TranslationString.investmentType),
                             style: AppStyles.normalText.copyWith(
                               color: AppColors.primaryGrey,
                             ),
@@ -299,7 +315,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                                     });
                                   },
                                   initial: commercialPropertyCategory[0],
-                                  label: 'Select Investment Type',
+                                  label: AppLocalization.of(context)!.translate(
+                                      TranslationString.selectInvestmentType),
                                 )
                               : DropdownButton2Example(
                                   list: conventionalPropertyCategory,
@@ -317,13 +334,15 @@ class _ListingsScreenState extends State<ListingsScreen> {
                                     });
                                   },
                                   initial: conventionalPropertyCategory[0],
-                                  label: 'Select Investment Type',
+                                  label: AppLocalization.of(context)!.translate(
+                                      TranslationString.selectInvestmentType),
                                 ),
                           SizedBox(
                             height: 10.w,
                           ),
                           Text(
-                            "Investment Subcategory",
+                            AppLocalization.of(context)!.translate(
+                                TranslationString.investmentSubcategory),
                             style: AppStyles.normalText.copyWith(
                               color: AppColors.primaryGrey,
                             ),
@@ -343,7 +362,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                                       selectedPropertySubcategory.isNotEmpty
                                           ? selectedPropertySubcategory
                                           : currentSubcategoryOptions[0],
-                                  label: 'Select Subcategory',
+                                  label: AppLocalization.of(context)!.translate(
+                                      TranslationString.selectSubcategory),
                                 )
                               : DropdownButton2Example(
                                   list: currentSubcategoryOptions,
@@ -356,7 +376,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                                       selectedPropertySubcategory.isNotEmpty
                                           ? selectedPropertySubcategory
                                           : currentSubcategoryOptions[0],
-                                  label: 'Select Subcategory',
+                                  label: AppLocalization.of(context)!.translate(
+                                      TranslationString.selectSubcategory),
                                 ),
                         ],
                       ),
@@ -364,7 +385,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                   height: 10.w,
                 ),
                 Text(
-                  "Purchase",
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.purchase),
                   style: AppStyles.normalText.copyWith(
                     color: AppColors.primaryGrey,
                   ),
@@ -394,7 +416,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                   height: 10.w,
                 ),
                 Text(
-                  "Condition",
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.conditionCapital),
                   style: AppStyles.normalText.copyWith(
                     color: AppColors.primaryGrey,
                   ),
@@ -424,7 +447,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                   height: 10.w,
                 ),
                 Text(
-                  "Searching for",
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.searchingFor),
                   style: AppStyles.normalText.copyWith(
                     color: AppColors.primaryGrey,
                   ),
@@ -452,7 +476,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                 ),
                 SizedBox(height: 20.h),
                 CustomButton(
-                  text: "Apply Filters",
+                  text: AppLocalization.of(context)!
+                      .translate(TranslationString.applyFilters),
                   onPressed: () {
                     setState(() {
                       filterApplied = true;

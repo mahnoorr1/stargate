@@ -13,6 +13,8 @@ import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import 'edit_profile_screen.dart';
 import 'package:stargate/widgets/buttons/membership_button.dart';
 import 'widgets/post_card.dart';
@@ -38,7 +40,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await provider.fetchUserProfile();
     } catch (e) {
       showToast(
-        message: "Unable to fetch details",
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.unableToFetchDetails),
         context: context,
         isAlert: true,
       );
@@ -60,12 +63,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               !provider.isLoading) {
             hasShownNoPropertiesToast = true;
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              showToast(
-                message: "No properties found",
-                context: context,
-                isAlert: true,
-                color: Colors.redAccent,
-              );
+              // showToast(
+              //   message: "No properties found",
+              //   context: context,
+              //   isAlert: true,
+              //   color: Colors.redAccent,
+              // );
             });
           }
 
@@ -154,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.65,
+                                              0.56,
                                           child: Text(
                                             user.name,
                                             style: AppStyles.heading3.copyWith(
@@ -169,18 +172,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               AppStyles.supportiveText.copyWith(
                                             color: AppColors.white,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
                                     ),
                                     const Spacer(),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          'Posts',
-                                          style: AppStyles.heading4.copyWith(
-                                            color: AppColors.white,
+                                        SizedBox(
+                                          child: Text(
+                                            AppLocalization.of(context)!
+                                                .translate(
+                                                    TranslationString.posts),
+                                            style: AppStyles.heading4.copyWith(
+                                              color: AppColors.white,
+                                            ),
                                           ),
                                         ),
                                         Text(
@@ -209,8 +217,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "My Posts",
+                          Text(
+                            AppLocalization.of(context)!
+                                .translate(TranslationString.myPosts),
                             style: AppStyles.heading4,
                           ),
                           SizedBox(
@@ -220,9 +229,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ? SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.3,
-                                  child: const Center(
+                                  child: Center(
                                     child: Text(
-                                      "No properties",
+                                      AppLocalization.of(context)!.translate(
+                                          TranslationString.noProperties),
                                       style: AppStyles.supportiveText,
                                     ),
                                   ),

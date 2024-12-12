@@ -12,6 +12,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/screens/listings/listing_details_screen.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 
+import '../../../localization/localization.dart';
+import '../../../localization/translation_strings.dart';
+
 class PostCard extends StatefulWidget {
   final RealEstateListing listing;
   const PostCard({
@@ -34,12 +37,16 @@ class _PostCardState extends State<PostCard> {
 
       if (!mounted) return;
 
-      showToast(message: "Deletion Successful", context: context);
+      showToast(
+          message: AppLocalization.of(context)!
+              .translate(TranslationString.deletionSuccessfull),
+          context: context);
     } catch (e) {
       if (!mounted) return;
 
       showToast(
-        message: "Unable to delete property",
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.unableToDeleteProperty),
         context: context,
         isAlert: true,
       );
@@ -130,9 +137,10 @@ class _PostCardState extends State<PostCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Deletion'),
+          title: Text(AppLocalization.of(context)!
+              .translate(TranslationString.confirmDeletion)),
           content: Text(
-            'Are you sure you want to delete this property: "$propertyName"?',
+            '${AppLocalization.of(context)!.translate(TranslationString.areYouSureToDeleteProperty)}"$propertyName"?',
             style: const TextStyle(fontSize: 16),
           ),
           actions: [
@@ -140,14 +148,18 @@ class _PostCardState extends State<PostCard> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text(AppLocalization.of(context)!
+                  .translate(TranslationString.cancel)),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 onConfirm();
               },
-              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+              child: Text(
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.delete),
+                  style: TextStyle(color: Colors.red)),
             ),
           ],
         );

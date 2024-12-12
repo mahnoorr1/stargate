@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/localization/translation_strings.dart';
+
+import '../../localization/localization.dart';
 
 class CountryPickerField extends StatefulWidget {
   final TextEditingController country;
@@ -22,6 +25,14 @@ class CountryPickerField extends StatefulWidget {
 class _CountryPickerFieldState extends State<CountryPickerField> {
   @override
   Widget build(BuildContext context) {
+    // Fetch translations
+    final selectCountryText =
+        AppLocalization.of(context)!.translate(TranslationString.selectCountry);
+    final selectStateText =
+        AppLocalization.of(context)!.translate(TranslationString.selectState);
+    final selectCityText =
+        AppLocalization.of(context)!.translate(TranslationString.selectCity);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Column(
@@ -32,30 +43,38 @@ class _CountryPickerFieldState extends State<CountryPickerField> {
             state: widget.state,
             city: widget.city,
             dialogColor: Colors.grey.shade200,
-            textFieldDecoration: const InputDecoration(
+            textFieldDecoration: InputDecoration(
               fillColor: AppColors.white,
               filled: true,
-              hintStyle: TextStyle(
+              // Dynamically update hintText based on the field
+              hintText: widget.country.text.isEmpty
+                  ? selectCountryText
+                  : widget.state.text.isEmpty
+                      ? selectStateText
+                      : widget.city.text.isEmpty
+                          ? selectCityText
+                          : null,
+              hintStyle: const TextStyle(
                 color: AppColors.primaryGrey,
                 fontSize: 14,
               ),
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 color: AppColors.primaryGrey,
                 fontSize: 14,
               ),
-              suffixIcon: Icon(
+              suffixIcon: const Icon(
                 Icons.keyboard_arrow_down_rounded,
                 color: AppColors.primaryGrey,
               ),
-              border: OutlineInputBorder(
+              border: const OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.lightGrey),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              focusedBorder: OutlineInputBorder(
+              focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.blue),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              enabledBorder: OutlineInputBorder(
+              enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.lightGrey),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),

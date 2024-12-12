@@ -13,6 +13,8 @@ import 'package:stargate/widgets/inputfields/underlined_textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../utils/app_enums.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -30,20 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController profession = TextEditingController();
   bool loading = false;
 
-  List<String> professions = [
-    'Select Profession',
-    UserType.investor.toCamelCaseString(),
-    UserType.agent.toCamelCaseString(),
-    UserType.consultant.toCamelCaseString(),
-    UserType.lawyer.toCamelCaseString(),
-    UserType.notary.toCamelCaseString(),
-    UserType.appraiser.toCamelCaseString(),
-    UserType.manager.toCamelCaseString(),
-    UserType.loanBroker.toCamelCaseString(),
-    UserType.economist.toCamelCaseString(),
-    UserType.drawingMaker.toCamelCaseString(),
-    UserType.propertyAdmin.toCamelCaseString(),
-  ];
+  List<String> professions = [];
 
   bool registerSuccess = false;
 
@@ -58,6 +47,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    professions = [
+      AppLocalization.of(context)!
+          .translate(TranslationString.selectProfession),
+      UserType.investor.toCamelCaseString(),
+      UserType.agent.toCamelCaseString(),
+      UserType.consultant.toCamelCaseString(),
+      UserType.lawyer.toCamelCaseString(),
+      UserType.notary.toCamelCaseString(),
+      UserType.appraiser.toCamelCaseString(),
+      UserType.manager.toCamelCaseString(),
+      UserType.loanBroker.toCamelCaseString(),
+      UserType.economist.toCamelCaseString(),
+      UserType.drawingMaker.toCamelCaseString(),
+    ];
+  }
+
+  @override
   Widget build(BuildContext context) {
     void onSignUp() async {
       setState(() {
@@ -67,12 +75,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
           email.text.isEmpty ||
           password.text.isEmpty ||
           confirmPassword.text.isEmpty ||
-          profession.text == 'Select Profession') {
+          profession.text ==
+              AppLocalization.of(context)!
+                  .translate(TranslationString.selectProfession)) {
         setState(() {
           loading = false;
         });
         showToast(
-          message: "Please enter valid fields!",
+          message: AppLocalization.of(context)!
+              .translate(TranslationString.pleaseEnterAllFields),
           context: context,
           isAlert: true,
           color: Colors.redAccent,
@@ -82,7 +93,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           loading = false;
         });
         showToast(
-          message: "Invalid Email",
+          message: AppLocalization.of(context)!
+              .translate(TranslationString.invalidEmail),
           context: context,
           isAlert: true,
           color: Colors.redAccent,
@@ -92,7 +104,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           loading = false;
         });
         showToast(
-          message: "Password does not match!",
+          message: AppLocalization.of(context)!
+              .translate(TranslationString.passwordDoesNotMatch),
           context: context,
           isAlert: true,
           color: Colors.redAccent,
@@ -106,7 +119,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           setState(() {
             loading = false;
           });
-          showToast(message: register!, context: context);
+          showToast(
+              message: AppLocalization.of(context)!.translate(
+                  TranslationString.userRegisteredSuccessfullyPleaseEnterOtp),
+              context: context);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -165,13 +181,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Find Property",
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.findProperty),
                         style: AppStyles.heading1.copyWith(
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        "Get Started",
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.getStarted),
                         style: AppStyles.heading3.copyWith(
                           color: Colors.white,
                         ),
@@ -197,24 +215,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           UnderlinedTextField(
                             controller: name,
-                            label: "Full Name",
-                            hintText: 'Enter Full Name',
+                            label: AppLocalization.of(context)!
+                                .translate(TranslationString.fullName),
+                            hintText: AppLocalization.of(context)!
+                                .translate(TranslationString.enterFullName),
                             inputType: TextInputType.text,
                             icon: Icons.person_outlined,
                           ),
                           SizedBox(height: 6.w),
                           UnderlinedTextField(
                             controller: email,
-                            label: "Email",
-                            hintText: 'Enter Email',
+                            label: AppLocalization.of(context)!
+                                .translate(TranslationString.email),
+                            hintText: AppLocalization.of(context)!
+                                .translate(TranslationString.enterEmail),
                             inputType: TextInputType.emailAddress,
                             icon: Icons.email_outlined,
                           ),
                           SizedBox(height: 6.w),
                           UnderlinedTextField(
                             controller: password,
-                            label: "Password",
-                            hintText: 'Enter Password',
+                            label: AppLocalization.of(context)!
+                                .translate(TranslationString.password),
+                            hintText: AppLocalization.of(context)!
+                                .translate(TranslationString.enterPass),
                             inputType: TextInputType.text,
                             obscureText: true,
                             prefixSvgPath: AppIcons.lock,
@@ -222,8 +246,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           SizedBox(height: 6.w),
                           UnderlinedTextField(
                             controller: confirmPassword,
-                            label: "Confirm Password",
-                            hintText: 'Confirm Password',
+                            label: AppLocalization.of(context)!
+                                .translate(TranslationString.confirmPass),
+                            hintText: AppLocalization.of(context)!
+                                .translate(TranslationString.confirmPass),
                             inputType: TextInputType.text,
                             obscureText: true,
                             prefixSvgPath: AppIcons.lock,
@@ -237,16 +263,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               });
                             },
                             initial: professions[0],
-                            label: 'Your Professions',
+                            label: AppLocalization.of(context)!
+                                .translate(TranslationString.yourProfession),
                             svgIcon: AppIcons.profession,
                           ),
                           const Spacer(),
                           CustomButton(
-                            text: "Sign Up",
+                            text: AppLocalization.of(context)!
+                                .translate(TranslationString.signUp),
                             onPressed: () {
                               if (password.text != confirmPassword.text) {
                                 showToast(
-                                  message: "Password does not match",
+                                  message: AppLocalization.of(context)!
+                                      .translate(TranslationString
+                                          .passwordDoesNotMatch),
                                   context: context,
                                   isAlert: true,
                                   color: Colors.redAccent,
@@ -265,7 +295,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Already have an Account?",
+                          AppLocalization.of(context)!
+                              .translate(TranslationString.alreadyHaveAccount),
                           style: AppStyles.normalText.copyWith(
                             color: AppColors.backgroundColor,
                           ),
@@ -273,7 +304,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         GestureDetector(
                           onTap: onSignIn,
                           child: Text(
-                            "Sign In here",
+                            AppLocalization.of(context)!
+                                .translate(TranslationString.signInHere),
                             style: AppStyles.heading4.copyWith(
                               color: AppColors.white,
                               fontWeight: FontWeight.bold,

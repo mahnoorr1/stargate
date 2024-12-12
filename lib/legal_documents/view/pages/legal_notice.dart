@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/drawer/widgets/widgets.dart';
 import 'package:stargate/legal_documents/providers/legal_document_provider.dart';
+import 'package:stargate/localization/localization.dart';
+import 'package:stargate/localization/translation_strings.dart';
 
 import '../../../config/core.dart';
 import '../../../widgets/loader/loader.dart';
@@ -36,7 +38,9 @@ class _LegalNoticeScreenState extends State<LegalNoticeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Heading(heading: "Legal Notice"),
+              Heading(
+                  heading: AppLocalization.of(context)!
+                      .translate(TranslationString.legalNotice)),
               Consumer<LegalDocumentProvider>(
                 builder: (context, provider, child) {
                   if (provider.isLoading) {
@@ -47,7 +51,9 @@ class _LegalNoticeScreenState extends State<LegalNoticeScreen> {
                       fileUrl: provider.legalDocument!.file,
                     );
                   } else {
-                    return const Center(child: Text("Something Went Wrong"));
+                    return Center(
+                        child: Text(AppLocalization.of(context)!
+                            .translate(TranslationString.somethingWentWrong)));
                   }
                 },
               ),

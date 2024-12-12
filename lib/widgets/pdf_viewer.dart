@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:stargate/services/helper_methods.dart';
 
+import '../localization/localization.dart';
+import '../localization/translation_strings.dart';
 import 'loader/loader.dart';
 
 class PDFViewerScreen extends StatefulWidget {
@@ -91,7 +93,8 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Go Back'),
+                          child: Text(AppLocalization.of(context)!
+                              .translate(TranslationString.goBack)),
                         ),
                       ],
                     ),

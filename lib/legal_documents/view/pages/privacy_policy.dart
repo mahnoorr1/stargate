@@ -6,6 +6,8 @@ import 'package:stargate/widgets/loader/loader.dart';
 
 import '../../../config/core.dart';
 import '../../../drawer/widgets/widgets.dart';
+import '../../../localization/localization.dart';
+import '../../../localization/translation_strings.dart';
 import '../../providers/legal_document_provider.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
@@ -36,7 +38,9 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Heading(heading: "Privacy Policy"),
+              Heading(
+                  heading: AppLocalization.of(context)!
+                      .translate(TranslationString.privacyPolicy)),
               Consumer<LegalDocumentProvider>(
                 builder: (context, provider, child) {
                   if (provider.isLoading) {
@@ -47,7 +51,9 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                       fileUrl: provider.legalDocument!.file,
                     );
                   } else {
-                    return const Center(child: Text("Something Went Wrong"));
+                    return Center(
+                        child: Text(AppLocalization.of(context)!
+                            .translate(TranslationString.somethingWentWrong)));
                   }
                 },
               ),

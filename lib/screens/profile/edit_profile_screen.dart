@@ -27,6 +27,8 @@ import 'package:path/path.dart' as p;
 import 'package:stargate/widgets/pdf_viewer.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
+import '../../localization/localization.dart';
+import '../../localization/translation_strings.dart';
 import '../../services/helper_methods.dart';
 
 class EditProfile extends StatefulWidget {
@@ -77,7 +79,8 @@ class _EditProfileState extends State<EditProfile> {
     if (result != null && result.files.isNotEmpty) {
       if (referencesNames.any((value) => value == result.files.first.name)) {
         showToast(
-          message: "File already selected",
+          message: AppLocalization.of(context)!
+              .translate(TranslationString.fileAlreadySelected),
           context: context,
           isAlert: true,
           color: Colors.redAccent,
@@ -119,7 +122,10 @@ class _EditProfileState extends State<EditProfile> {
     );
 
     if (save == 'Success') {
-      showToast(message: save, context: context);
+      showToast(
+          message:
+              AppLocalization.of(context)!.translate(TranslationString.success),
+          context: context);
       setState(() {
         loading = false;
       });
@@ -250,7 +256,8 @@ class _EditProfileState extends State<EditProfile> {
                         GestureDetector(
                           onTap: changeProfile,
                           child: Text(
-                            "change profile",
+                            AppLocalization.of(context)!
+                                .translate(TranslationString.changeProfile),
                             style: AppStyles.heading4.copyWith(
                               color: AppColors.blue,
                             ),
@@ -296,8 +303,9 @@ class _EditProfileState extends State<EditProfile> {
                       SizedBox(
                         width: 12.w,
                       ),
-                      const Text(
-                        "change password",
+                      Text(
+                        AppLocalization.of(context)!
+                            .translate(TranslationString.changePass),
                         style: AppStyles.greyText,
                       )
                     ],
@@ -306,8 +314,10 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(height: 6.w),
                 CustomTextField(
                   controller: name,
-                  label: "Name",
-                  hintText: "Name",
+                  label: AppLocalization.of(context)!
+                      .translate(TranslationString.name),
+                  hintText: AppLocalization.of(context)!
+                      .translate(TranslationString.name),
                   inputType: TextInputType.text,
                   verticalSpacing: 3.w,
                   horizontalSpacing: 0,
@@ -317,8 +327,10 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 CustomTextField(
                   controller: address,
-                  label: "Address",
-                  hintText: "Address",
+                  label: AppLocalization.of(context)!
+                      .translate(TranslationString.address),
+                  hintText: AppLocalization.of(context)!
+                      .translate(TranslationString.address),
                   inputType: TextInputType.text,
                   verticalSpacing: 3.w,
                   horizontalSpacing: 0,
@@ -368,7 +380,8 @@ class _EditProfileState extends State<EditProfile> {
                     }
                   },
                   initial: servicesList[0],
-                  label: 'Profession',
+                  label: AppLocalization.of(context)!
+                      .translate(TranslationString.profession),
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -397,8 +410,9 @@ class _EditProfileState extends State<EditProfile> {
                   return serviceDetails(item.details, index);
                 }),
                 SizedBox(height: 6.w),
-                const Text(
-                  "(optional)",
+                Text(
+                  AppLocalization.of(context)!
+                      .translate(TranslationString.optional),
                   style: AppStyles.supportiveText,
                 ),
                 SizedBox(
@@ -406,8 +420,10 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 CustomTextField(
                   controller: websiteLink,
-                  label: "Website link",
-                  hintText: "Website link",
+                  label: AppLocalization.of(context)!
+                      .translate(TranslationString.websiteLink),
+                  hintText: AppLocalization.of(context)!
+                      .translate(TranslationString.websiteLink),
                   inputType: TextInputType.text,
                   horizontalSpacing: 0,
                   verticalSpacing: 0,
@@ -513,8 +529,9 @@ class _EditProfileState extends State<EditProfile> {
                   onTap: () {
                     saveData();
                   },
-                  child: const CustomButton(
-                    text: "Save",
+                  child: CustomButton(
+                    text: AppLocalization.of(context)!
+                        .translate(TranslationString.save),
                   ),
                 ),
                 SizedBox(
@@ -549,12 +566,18 @@ class _EditProfileState extends State<EditProfile> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 8.w),
-        supportiveText(AppIcons.medal,
-            "provide ${profession['name']} specialization", 'image'),
+        SizedBox(
+          child: supportiveText(
+              AppIcons.medal,
+              "${AppLocalization.of(context)!.translate(TranslationString.provide)} ${profession['name']} ${AppLocalization.of(context)!.translate(TranslationString.specialization)}",
+              'image'),
+        ),
         CustomTextField(
           controller: specialization[index],
-          label: "${profession['specialization']} specialization",
-          hintText: "Specify Specialization",
+          label:
+              "${profession['specialization']} ${AppLocalization.of(context)!.translate(TranslationString.specialization)}",
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.specifySpecialization),
           inputType: TextInputType.text,
           horizontalSpacing: 0,
           verticalSpacing: 3,
@@ -568,8 +591,10 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   CustomTextField(
                     controller: experience[index],
-                    label: "Experience",
-                    hintText: "Enter Experience years",
+                    label: AppLocalization.of(context)!
+                        .translate(TranslationString.experience),
+                    hintText: AppLocalization.of(context)!
+                        .translate(TranslationString.enterExperience),
                     inputType: TextInputType.number,
                     horizontalSpacing: 0,
                     verticalSpacing: 3,
@@ -620,7 +645,8 @@ class _EditProfileState extends State<EditProfile> {
                       }
                     },
                     initial: propertyTypes[0],
-                    label: "Category",
+                    label: AppLocalization.of(context)!
+                        .translate(TranslationString.category),
                   ),
                   SizedBox(height: 6.w),
                   SingleChildScrollView(
@@ -650,8 +676,10 @@ class _EditProfileState extends State<EditProfile> {
             width: MediaQuery.of(context).size.width * 0.45,
             child: CustomTextField(
               controller: investment1,
-              label: 'start value',
-              hintText: 'start value',
+              label: AppLocalization.of(context)!
+                  .translate(TranslationString.startValue),
+              hintText: AppLocalization.of(context)!
+                  .translate(TranslationString.startValue),
               inputType: TextInputType.number,
               horizontalSpacing: 0,
               verticalSpacing: 3,
@@ -668,8 +696,10 @@ class _EditProfileState extends State<EditProfile> {
             width: MediaQuery.of(context).size.width * 0.45,
             child: CustomTextField(
               controller: investment2,
-              label: 'end value',
-              hintText: 'end value',
+              label: AppLocalization.of(context)!
+                  .translate(TranslationString.endValue),
+              hintText: AppLocalization.of(context)!
+                  .translate(TranslationString.endValue),
               inputType: TextInputType.number,
               horizontalSpacing: 0,
               verticalSpacing: 3,
@@ -706,9 +736,14 @@ class _EditProfileState extends State<EditProfile> {
           SizedBox(
             width: 12.w,
           ),
-          Text(
-            text,
-            style: AppStyles.heading4,
+          SizedBox(
+            child: Text(
+              text,
+              style: AppStyles.heading4,
+              softWrap: true,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
           ),
         ],
       ),

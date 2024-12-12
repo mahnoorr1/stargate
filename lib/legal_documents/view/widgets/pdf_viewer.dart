@@ -5,6 +5,8 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:stargate/localization/localization.dart';
+import 'package:stargate/localization/translation_strings.dart';
 
 import '../../../widgets/loader/loader.dart';
 
@@ -49,7 +51,8 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PDF Viewer'),
+        title: Text(AppLocalization.of(context)!
+            .translate(TranslationString.pdfViewer)),
       ),
       body: localFilePath != null
           ? PDFView(
