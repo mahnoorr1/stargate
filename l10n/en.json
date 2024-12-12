@@ -192,7 +192,21 @@
     "optional": "(optional)",
     "search": "Search",
     "filter": "Filter",
-    "success": "Success"
+    "success": "Success",
+    "all": "All",
+    "investor": "Investor",
+    "notary": "Notary",
+    "appraiser": "Appraiser",
+    "customer": "Customer",
+    "agent": "Real Estate Agent",
+    "lawyer": "Lawyer",
+    "consultant": "Consultant",
+    "economist": "Economist",
+    "manager": "Manager",
+    "property_admin": "Administrator",
+    "marketer": "Marketer",
+    "drawing_maker": "Drawing Maker",
+    "loan_broker": "Loan Broker"
     
 
 }

@@ -181,6 +181,20 @@
     "success": "Erfolg",
     "selectCountry": "Land auswählen",
 "selectState": "Bundesland auswählen",
-"selectCity": "Stadt auswählen"
+"selectCity": "Stadt auswählen",
+"all": "Alle",
+"investor": "Investor",
+"notary": "Notar",
+"appraiser": "Gutachter",
+"customer": "Kunde",
+"agent": "Immobilienmakler",
+"lawyer": "Anwalt",
+"consultant": "Berater",
+"economist": "Volkswirt",
+"manager": "Manager",
+"property_admin": "Immobilienverwalter",
+"marketer": "Vermarkter",
+"drawing_maker": "Zeichner",
+"loan_broker": "Kreditmakler"
 
 }

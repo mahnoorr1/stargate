@@ -1251,6 +1251,8 @@ PODS:
     - nanopb (~> 3.30910.0)
   - FirebaseSharedSwift (11.5.0)
   - Flutter (1.0.0)
+  - flutter_localization (0.0.1):
+    - Flutter
   - flutter_pdfview (1.0.2):
     - Flutter
   - fluttertoast (0.0.2):
@@ -1410,6 +1412,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
+  - flutter_localization (from `.symlinks/plugins/flutter_localization/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
@@ -1460,6 +1463,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
+  flutter_localization:
+    :path: ".symlinks/plugins/flutter_localization/ios"
   flutter_pdfview:
     :path: ".symlinks/plugins/flutter_pdfview/ios"
   fluttertoast:
@@ -1500,6 +1505,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: f8a160d99c2c2e5babbbcc90c4a3e15db036aee2
   FirebaseSharedSwift: 302ac5967857ad7e7388b15382d705b8c8d892aa
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_localization: f43b18844a2b3d2c71fd64f04ffd6b1e64dd54d4
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7

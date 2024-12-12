@@ -94,6 +94,26 @@ class _ServicesScreenState extends State<ServicesScreen> {
     });
   }
 
+  final List<Map<String, String>> userMapping = [
+    {'type': UserType.all.name, 'label': TranslationString.all},
+    {'type': UserType.investor.name, 'label': TranslationString.investor},
+    {'type': UserType.agent.name, 'label': TranslationString.agent},
+    {'type': UserType.consultant.name, 'label': TranslationString.consultant},
+    {'type': UserType.lawyer.name, 'label': TranslationString.lawyer},
+    {'type': UserType.notary.name, 'label': TranslationString.notary},
+    {'type': UserType.appraiser.name, 'label': TranslationString.appraiser},
+    {'type': UserType.manager.name, 'label': TranslationString.manager},
+    {'type': UserType.loanBroker.name, 'label': TranslationString.loanBroker},
+    {'type': UserType.economist.name, 'label': TranslationString.economist},
+    {
+      'type': UserType.drawingMaker.name,
+      'label': TranslationString.drawingMaker
+    },
+    {
+      'type': UserType.propertyAdmin.name,
+      'label': TranslationString.propertyAdmin
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     final allUsersProvider = Provider.of<AllUsersProvider>(context);
@@ -133,20 +153,34 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          children: [
-                            ...userTypes.map(
-                              (type) => CustomTabButton(
-                                type: type.toCamelCaseString(),
-                                current: selectedUser.toCamelCaseString(),
-                                selected: (value) {
-                                  setState(() {
-                                    selectedUser = UserType.values.firstWhere(
-                                        (e) => e.toCamelCaseString() == value);
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
+                          children: userMapping.map((user) {
+                            final localizedLabel = AppLocalization.of(context)
+                                    ?.translate(user['label']!) ??
+                                user['label']!;
+
+                            return CustomTabButton(
+                              type: localizedLabel, // Ensure non-null value
+                              current: AppLocalization.of(context)?.translate(
+                                      userMapping.firstWhere((u) =>
+                                          u['type'] ==
+                                          selectedUser.name)['label']!) ??
+                                  userMapping.firstWhere((u) =>
+                                      u['type'] == selectedUser.name)['label']!,
+                              selected: (value) {
+                                final selected = userMapping.firstWhere(
+                                  (u) =>
+                                      AppLocalization.of(context)
+                                          ?.translate(u['label']!) ==
+                                      value,
+                                );
+                                setState(() {
+                                  selectedUser = UserType.values.firstWhere(
+                                    (e) => e.name == selected['type'],
+                                  );
+                                });
+                              },
+                            );
+                          }).toList(),
                         ),
                       ),
                       SizedBox(height: 6.w),

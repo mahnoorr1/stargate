@@ -200,4 +200,20 @@ class TranslationString {
   static const selectCountry = "selectCountry";
   static const selectCity = "selectCity";
   static const selectState = "selectState";
+
+  // User Types
+  static const all = 'all';
+  static const investor = 'investor';
+  static const notary = 'notary';
+  static const appraiser = 'appraiser';
+  static const customer = 'customer';
+  static const agent = 'agent';
+  static const lawyer = 'lawyer';
+  static const consultant = 'consultant';
+  static const economist = 'economist';
+  static const manager = 'manager';
+  static const propertyAdmin = 'property_admin';
+  static const marketer = 'marketer';
+  static const drawingMaker = 'drawing_maker';
+  static const loanBroker = 'loan_broker';
 }
