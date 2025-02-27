@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/content_management/providers/offer_request_property_content_provider.dart';
+import 'package:stargate/localization/locale_notifier.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
 import 'package:stargate/utils/app_data.dart';
@@ -210,6 +211,9 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
 
   @override
   Widget build(BuildContext context) {
+    final localeNotifier = Provider.of<LocaleNotifier>(context);
+    final locale = localeNotifier.locale;
+    final targetLang = locale.languageCode;
     currentConventionalSubcategoryOptions = [
       AppLocalization.of(context)!.translate(TranslationString.selectOption)
     ];
@@ -239,12 +243,29 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  propertyRequestProvider.content!.title,
-                  style: AppStyles.screenTitle.copyWith(
-                    color: AppColors.darkBlue,
-                  ),
-                ),
+                targetLang == 'en'
+                    ? Text(
+                        propertyRequestProvider.content!.title,
+                        style: AppStyles.screenTitle.copyWith(
+                          color: AppColors.darkBlue,
+                        ),
+                      )
+                    : FutureBuilder<String>(
+                        future: translateData(
+                            propertyRequestProvider.content!.title, targetLang),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const SizedBox();
+                          } else {
+                            return Text(
+                              snapshot.data!,
+                              style: AppStyles.screenTitle.copyWith(
+                                color: AppColors.darkBlue,
+                              ),
+                            );
+                          }
+                        }),
                 SizedBox(
                   height: 16.w,
                 ),
@@ -290,9 +311,25 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                 SizedBox(
                   height: 10.w,
                 ),
-                questionText(
-                  propertyRequestProvider.content!.offerSelectionTagLine,
-                ),
+                targetLang == 'en'
+                    ? questionText(
+                        propertyRequestProvider.content!.offerSelectionTagLine,
+                      )
+                    : FutureBuilder(
+                        future: translateData(
+                            propertyRequestProvider
+                                .content!.offerSelectionTagLine,
+                            targetLang),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else {
+                            return questionText(
+                              snapshot.data!,
+                            );
+                          }
+                        }),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -314,9 +351,24 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                 SizedBox(
                   height: 8.w,
                 ),
-                questionText(
-                  propertyRequestProvider.content!.conditionTagLine,
-                ),
+                targetLang == 'en'
+                    ? questionText(
+                        propertyRequestProvider.content!.conditionTagLine,
+                      )
+                    : FutureBuilder(
+                        future: translateData(
+                            propertyRequestProvider.content!.conditionTagLine,
+                            targetLang),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else {
+                            return questionText(
+                              snapshot.data!,
+                            );
+                          }
+                        }),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -361,9 +413,25 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                 SizedBox(
                   height: 8.w,
                 ),
-                questionText(
-                  propertyRequestProvider.content!.investmentTypeTagLine,
-                ),
+                targetLang == 'en'
+                    ? questionText(
+                        propertyRequestProvider.content!.investmentTypeTagLine,
+                      )
+                    : FutureBuilder(
+                        future: translateData(
+                            propertyRequestProvider
+                                .content!.investmentTypeTagLine,
+                            targetLang),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else {
+                            return questionText(
+                              snapshot.data!,
+                            );
+                          }
+                        }),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(

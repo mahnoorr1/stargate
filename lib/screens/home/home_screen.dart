@@ -4,12 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/content_management/providers/home_content_provider.dart';
+import 'package:stargate/localization/locale_notifier.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/home/widgets/property_card.dart';
 import 'package:stargate/screens/home/widgets/service_provider_card.dart';
 import 'package:stargate/screens/property_request_screen/property_request_screen.dart';
+import 'package:stargate/services/helper_methods.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
@@ -161,155 +163,197 @@ class _HomeScreenState extends State<HomeScreen> {
     final homeContentProvider =
         Provider.of<HomeContentProvider>(context, listen: false);
 
-    return UserProfileProvider.c(context).membership !=
-            '66c2ff551bf7b7176ee9271a'
-        ? Container(
-            height: 150.w,
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10.w),
-              boxShadow: [AppStyles.boxShadow],
-            ),
-            child: Row(
-              children: [
-                Image.network(
-                  homeContentProvider.homeContent!.picture,
-                  width: MediaQuery.of(context).size.width * 0.25,
-                ),
-                SizedBox(width: 12.w),
-                Column(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.55,
-                      child: Text(
-                        homeContentProvider.homeContent!.title,
-                        style: AppStyles.heading3.copyWith(
-                          color: AppColors.darkBlue,
-                          fontSize: 16,
-                        ),
-                        textAlign: TextAlign.center,
+    final localeNotifier = Provider.of<LocaleNotifier>(context);
+    final locale = localeNotifier.locale;
+    final targetLang = locale.languageCode;
+    final translationStrings = Future.wait([
+      translateData(homeContentProvider.homeContent!.title, targetLang),
+      translateData(homeContentProvider.homeContent!.subtitle, targetLang),
+      translateData(homeContentProvider.homeContent!.tagline, targetLang),
+    ]);
+    return FutureBuilder<List<String>>(
+        future: translationStrings,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
+              margin: EdgeInsets.only(bottom: 12.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.w),
+                color: Colors.white,
+              ),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          return UserProfileProvider.c(context).membership !=
+                  '66c2ff551bf7b7176ee9271a'
+              ? Container(
+                  width: double.infinity,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(10.w),
+                    boxShadow: [AppStyles.boxShadow],
+                  ),
+                  child: Row(
+                    children: [
+                      Image.network(
+                        homeContentProvider.homeContent!.picture,
+                        width: targetLang == 'de'
+                            ? MediaQuery.of(context).size.width * 0.2
+                            : MediaQuery.of(context).size.width * 0.25,
                       ),
-                    ),
-                    SizedBox(height: 8.w),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      child: Text(
-                        homeContentProvider.homeContent!.subtitle,
-                        style: AppStyles.supportiveText,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(height: 8.w),
-                    GestureDetector(
-                      onTap: () async {
-                        final result =
-                            await Navigator.of(context, rootNavigator: false)
-                                .push(
-                          MaterialPageRoute(
-                            builder: (context) => const PropertyRequestForm(),
-                          ),
-                        );
-                        if (result == 'success') {
-                          getListing();
-                        }
-                      },
-                      child: Row(
+                      SizedBox(width: 12.w),
+                      Column(
                         children: [
-                          Text(
-                            homeContentProvider.homeContent!.tagline,
-                            style: AppStyles.heading4
-                                .copyWith(color: AppColors.darkBlue),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.55,
+                            child: Text(
+                              targetLang == 'en'
+                                  ? homeContentProvider.homeContent!.title
+                                  : snapshot.data![0],
+                              style: AppStyles.heading3.copyWith(
+                                color: AppColors.darkBlue,
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                          SizedBox(width: 8.w),
-                          const Icon(
-                            Icons.arrow_forward,
-                            color: AppColors.darkBlue,
-                            size: 18,
+                          SizedBox(height: 8.w),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            child: Text(
+                              targetLang == 'en'
+                                  ? homeContentProvider.homeContent!.subtitle
+                                  : snapshot.data![1],
+                              style: AppStyles.supportiveText,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(height: 8.w),
+                          GestureDetector(
+                            onTap: () async {
+                              final result = await Navigator.of(context,
+                                      rootNavigator: false)
+                                  .push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PropertyRequestForm(),
+                                ),
+                              );
+                              if (result == 'success') {
+                                getListing();
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  targetLang == 'en'
+                                      ? homeContentProvider.homeContent!.tagline
+                                      : snapshot.data![2],
+                                  style: AppStyles.heading4
+                                      .copyWith(color: AppColors.darkBlue),
+                                ),
+                                SizedBox(width: 8.w),
+                                const Icon(
+                                  Icons.arrow_forward,
+                                  color: AppColors.darkBlue,
+                                  size: 18,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          )
-        : Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.w),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10.w),
-              boxShadow: [AppStyles.boxShadow],
-            ),
-            child: Column(
-              children: [
-                Image.network(
-                  homeContentProvider.homeContent!.picture,
-                  height: 130.w,
-                ),
-                SizedBox(width: 12.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Text(
-                        homeContentProvider.homeContent!.title,
-                        style: AppStyles.heading3.copyWith(
-                          color: AppColors.darkBlue,
-                          fontSize: 16,
-                        ),
-                        textAlign: TextAlign.center,
+                    ],
+                  ),
+                )
+              : Container(
+                  width: double.infinity,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(10.w),
+                    boxShadow: [AppStyles.boxShadow],
+                  ),
+                  child: Column(
+                    children: [
+                      Image.network(
+                        homeContentProvider.homeContent!.picture,
+                        height: 130.w,
                       ),
-                    ),
-                    SizedBox(height: 8.w),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Text(
-                        homeContentProvider.homeContent!.subtitle,
-                        style: AppStyles.supportiveText,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(height: 8.w),
-                    GestureDetector(
-                      onTap: () async {
-                        final result =
-                            await Navigator.of(context, rootNavigator: false)
-                                .push(
-                          MaterialPageRoute(
-                            builder: (context) => const PropertyRequestForm(),
-                          ),
-                        );
-                        if (result == 'success') {
-                          getListing();
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      SizedBox(width: 12.w),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            homeContentProvider.homeContent!.tagline,
-                            style: AppStyles.heading4
-                                .copyWith(color: AppColors.darkBlue),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: Text(
+                              targetLang == 'en'
+                                  ? homeContentProvider.homeContent!.title
+                                  : snapshot.data![0],
+                              style: AppStyles.heading3.copyWith(
+                                color: AppColors.darkBlue,
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                          SizedBox(width: 8.w),
-                          const Icon(
-                            Icons.arrow_forward,
-                            color: AppColors.darkBlue,
-                            size: 18,
+                          SizedBox(height: 8.w),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: Text(
+                              targetLang == 'en'
+                                  ? homeContentProvider.homeContent!.subtitle
+                                  : snapshot.data![1],
+                              style: AppStyles.supportiveText,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(height: 8.w),
+                          GestureDetector(
+                            onTap: () async {
+                              final result = await Navigator.of(context,
+                                      rootNavigator: false)
+                                  .push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PropertyRequestForm(),
+                                ),
+                              );
+                              if (result == 'success') {
+                                getListing();
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  targetLang == 'en'
+                                      ? homeContentProvider.homeContent!.tagline
+                                      : snapshot.data![2],
+                                  style: AppStyles.heading4
+                                      .copyWith(color: AppColors.darkBlue),
+                                ),
+                                SizedBox(width: 8.w),
+                                const Icon(
+                                  Icons.arrow_forward,
+                                  color: AppColors.darkBlue,
+                                  size: 18,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
+                    ],
+                  ),
+                );
+        });
   }
 
   Widget serviceProviderSection() {
@@ -463,13 +507,52 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemBuilder: (context, index) {
                               final notification =
                                   notificationProvider.notifications[index];
-                              return buildNotificationCard(
-                                title: notification.title,
-                                description: notification.message,
-                                imageUrl: notification.profileImage,
-                                date:
-                                    "${notification.date} ${notification.time}",
-                              );
+                              final localeNotifier =
+                                  Provider.of<LocaleNotifier>(context);
+                              final locale = localeNotifier.locale;
+                              final targetLang = locale.languageCode;
+                              if (targetLang == 'en') {
+                                return buildNotificationCard(
+                                  title: notification.title,
+                                  description: notification.message,
+                                  imageUrl: notification.profileImage,
+                                  date:
+                                      "${notification.date} ${notification.time}",
+                                );
+                              } else {
+                                final translationStrings = Future.wait([
+                                  translateData(notification.title, targetLang),
+                                  translateData(
+                                      notification.message, targetLang),
+                                ]);
+                                FutureBuilder<List<String>>(
+                                    future: translationStrings,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16.w, vertical: 12.w),
+                                          margin: EdgeInsets.only(bottom: 12.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20.w),
+                                            color: Colors.white,
+                                          ),
+                                          child: const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      }
+                                      return buildNotificationCard(
+                                        title: snapshot.data![0],
+                                        description: snapshot.data![1],
+                                        imageUrl: notification.profileImage,
+                                        date:
+                                            "${notification.date} ${notification.time}",
+                                      );
+                                    });
+                              }
                             },
                           ),
                         ),

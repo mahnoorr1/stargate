@@ -49,6 +49,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     professions = [
       AppLocalization.of(context)!
           .translate(TranslationString.selectProfession),
