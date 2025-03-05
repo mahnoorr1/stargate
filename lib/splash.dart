@@ -85,11 +85,18 @@ class _SplashScreenState extends State<SplashScreen> {
           // AllUsersCubit serviceProviders =
           //     BlocProvider.of<AllUsersCubit>(context);
           // await serviceProviders.getAllUsers();
-          await AllUsersProvider.c(context).fetchUsers();
-          await RealEstateProvider.c(context).fetchAllListings();
-          _initializeProviders();
 
-          Navigator.pushReplacementNamed(context, '/navbar');
+          await UserProfileProvider.c(context).fetchUserProfile();
+          print("Checking Incomplete");
+          if (UserProfileProvider.c(context).incompleteProfile()) {
+            Navigator.pushReplacementNamed(context, '/incompleteProfileDrawer');
+          } else {
+            await AllUsersProvider.c(context).fetchUsers();
+            await RealEstateProvider.c(context).fetchAllListings();
+            _initializeProviders();
+
+            Navigator.pushReplacementNamed(context, '/navbar');
+          }
         }
       } else {
         Navigator.pushReplacementNamed(

@@ -32,9 +32,11 @@ import '../../localization/translation_strings.dart';
 import '../../services/helper_methods.dart';
 
 class EditProfile extends StatefulWidget {
+  bool? backButton = true;
   final User user;
-  const EditProfile({
+  EditProfile({
     super.key,
+    this.backButton = true,
     required this.user,
   });
 
@@ -218,10 +220,12 @@ class _EditProfileState extends State<EditProfile> {
       ],
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          surfaceTintColor: Colors.transparent,
-          leading: const CustomBackButton(),
-        ),
+        appBar: widget.backButton!
+            ? null
+            : AppBar(
+                surfaceTintColor: Colors.transparent,
+                leading: const CustomBackButton(),
+              ),
         body: Padding(
           padding: EdgeInsets.only(right: 12.w, left: 12.w, top: 12.w),
           child: SingleChildScrollView(
@@ -529,9 +533,12 @@ class _EditProfileState extends State<EditProfile> {
                   onTap: () {
                     saveData();
                   },
-                  child: CustomButton(
-                    text: AppLocalization.of(context)!
-                        .translate(TranslationString.save),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: CustomButton(
+                      text: AppLocalization.of(context)!
+                          .translate(TranslationString.save),
+                    ),
                   ),
                 ),
                 SizedBox(

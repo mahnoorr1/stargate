@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/home/home_screen.dart';
-import 'package:stargate/screens/profile/membership_screen.dart';
+import 'package:stargate/screens/profile/edit_profile_screen.dart';
 import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,16 +17,18 @@ import '../content_management/providers/home_content_provider.dart';
 import '../localization/language_toggle_button.dart';
 import '../localization/localization.dart';
 import '../localization/translation_strings.dart';
+import '../models/profile.dart';
+import '../widgets/dialog_box.dart';
 
-class CustomDrawer extends StatefulWidget {
+class IncompleteCustomDrawer extends StatefulWidget {
   final Function(int)? onNavigate;
-  const CustomDrawer({super.key, this.onNavigate});
+  const IncompleteCustomDrawer({super.key, this.onNavigate});
 
   @override
-  State<CustomDrawer> createState() => _CustomDrawerState();
+  State<IncompleteCustomDrawer> createState() => _CustomDrawerState();
 }
 
-class _CustomDrawerState extends State<CustomDrawer> {
+class _CustomDrawerState extends State<IncompleteCustomDrawer> {
   final GlobalKey<SliderDrawerState> _sliderDrawerKey =
       GlobalKey<SliderDrawerState>();
 
@@ -44,15 +46,58 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    UserProfileProvider profileProvdier = UserProfileProvider.c(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!profileProvdier.firstProfileInfoAlertDone &&
+          (profileProvdier.address.isEmpty ||
+              profileProvdier.countryName.isEmpty ||
+              profileProvdier.profileImage == null ||
+              profileProvdier.profileImage == '')) {
+        profileProvdier.setFirstTimeAlert();
+        showCustomDialog(
+          context: context,
+          circleBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+          titleText: AppLocalization.of(context)!
+              .translate(TranslationString.incompleteProfileTitle),
+          titleColor: AppColors.black,
+          descriptionText: AppLocalization.of(context)!
+              .translate(TranslationString.incompleteProfileDescription),
+          buttonText:
+              AppLocalization.of(context)!.translate(TranslationString.ok),
+          onButtonPressed: () {
+            Navigator.pop(context);
+          },
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    UserProfileProvider provider = UserProfileProvider.c(context);
     final homeContentProvider =
         Provider.of<HomeContentProvider>(context, listen: false);
+    final user = User(
+      services: provider.services,
+      id: provider.id,
+      name: provider.name,
+      email: provider.email,
+      image: provider.profileImage,
+      properties: provider.properties,
+      address: provider.address,
+      city: provider.city,
+      country: provider.countryName,
+      references: provider.references,
+      websiteLink: provider.websiteLink,
+    );
+
     return GestureDetector(
       child: SliderDrawer(
         key: _sliderDrawerKey,
         sliderOpenSize: 270,
         appBar: SliderAppBar(
-          appBarColor: AppColors.darkBlue,
           appBarHeight: 100,
           drawerIcon: Container(
             margin: EdgeInsets.symmetric(horizontal: 10.w),
@@ -60,7 +105,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             width: 40.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.w),
-              color: AppColors.lightBlue.withOpacity(0.1),
+              color: AppColors.blue,
             ),
             child: Center(
               child: IconButton(
@@ -94,56 +139,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
             ),
           ),
-          title: Image.network(
-            homeContentProvider.homeContent!.appLogo,
-            height: 45.w,
-          ),
-          trailing: Row(
-            children: [
-              GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/notifications'),
-                child: SvgPicture.asset(
-                  AppIcons.notificationBell,
-                ),
-              ),
-              SizedBox(
-                width: 6.w,
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (UserProfileProvider.c(context).membership ==
-                          "66c2ff151bf7b7176ee92708" ||
-                      UserProfileProvider.c(context).membership ==
-                          '66c2ff551bf7b7176ee9271a') {
-                    widget.onNavigate!(2);
-                  } else {
-                    widget.onNavigate!(3);
-                  }
-                },
-                child: Container(
-                  height: 40.w,
-                  width: 40.w,
-                  decoration: UserProfileProvider.c(context).profileImage ==
-                              null ||
-                          UserProfileProvider.c(context).profileImage == ""
-                      ? BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.w),
-                          color: AppColors.lightBlue,
-                          image: const DecorationImage(
-                              image: AssetImage(AppImages.user)))
-                      : BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.w),
-                          color: AppColors.lightBlue,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(UserProfileProvider.c(context)
-                                  .profileImage!))),
-                ),
-              ),
-              SizedBox(
-                width: 10.w,
-              ),
-            ],
+          title: const Text(
+            'Edit Profile',
+            style: AppStyles.heading3,
           ),
         ),
         slider: _SliderView(
@@ -154,7 +152,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
             });
           },
         ),
-        child: HomeScreen(onNavigate: widget.onNavigate),
+        child: EditProfile(
+          user: user,
+        ),
       ),
     );
   }
@@ -178,45 +178,6 @@ class _SliderView extends StatelessWidget {
             children: <Widget>[
               const SizedBox(
                 height: 200,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const MembershipScreen()),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 60.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30.h),
-                    border: Border.all(
-                      width: 2,
-                      color: const Color.fromARGB(255, 247, 189, 42),
-                    ),
-                    color: Colors.amber.withOpacity(0.2),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: Colors.amber[600],
-                      ),
-                      SizedBox(
-                        width: 8.w,
-                      ),
-                      Text(
-                        AppLocalization.of(context)!
-                            .translate(TranslationString.membership),
-                        style: AppStyles.heading4.copyWith(
-                          color: Colors.amber,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
               ...[
                 Menu(

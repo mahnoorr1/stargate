@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:stargate/drawer/drawer.dart';
+import 'package:stargate/drawer/incompleteProfileDrawer.dart';
 
 import 'package:stargate/faqs/view/pages/faq_page.dart';
 
@@ -21,6 +23,7 @@ class AppRoutes {
   static const String signup = '/signup';
   static const String navbar = '/navbar';
   static const String drawer = '/drawer';
+  static const String drawerForIncomplete = '/incompleteProfileDrawer';
   static const String home = '/home';
   static const String terms = '/terms';
   static const String policy = '/policy';
@@ -35,6 +38,7 @@ class AppRoutes {
     signup: (context) => const SignUpScreen(),
     navbar: (context) => const NavBarScreen(),
     drawer: (context) => const CustomDrawer(),
+    drawerForIncomplete: (context) => const IncompleteCustomDrawer(),
     terms: (context) => const TermsAndConditionsScreen(),
     policy: (context) => const PrivacyPolicyScreen(),
     legalNotice: (context) => const LegalNoticeScreen(),

@@ -148,6 +148,7 @@ class ContentManagementRepository {
 
       if (response.statusCode == 200) {
         final decodedData = json.decode(await response.stream.bytesToString());
+        print(decodedData);
         log("Profile Content: OK Responce");
 
         return ProfileContentModel.fromMap(decodedData as Map<String, dynamic>);

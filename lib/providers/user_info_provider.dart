@@ -186,6 +186,22 @@ class UserProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool incompleteProfile() {
+    if (countryName == '' ||
+        address == '' ||
+        profileImage == '' ||
+        (services.isEmpty ||
+            services[0].details['yearsOfExperience'] == '' ||
+            services[0].details['yeasOfExperience'] == null ||
+            services[0].details['specialization'] == '' ||
+            services[0].details['specialization'] == null)) {
+      print("Incomplete Profile");
+      return true;
+    }
+    print("Complete Profile");
+    return false;
+  }
+
   void setUserDetails({
     required String name,
     required String joiningDate,
