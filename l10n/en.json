@@ -42,7 +42,7 @@
     "confirmPass": "Confirm Password",
 
     "incompleteProfileTitle": "Incomplete Profile",
-    "incompleteProfileDescription": "Your Profile Information is incomplete please go to profile section and edit your information",
+    "incompleteProfileDescription": "Your Profile Information is incomplete please edit your information",
     "noServiceProvidersAvailable": "No service providers available",
     "serviceProviders":"Service Providers",
     "recentNotifications":"Recent Notifications",
@@ -142,6 +142,7 @@
     "selectCountry": "Select Country",
     "selectState": "Select State",
     "selectCity": "Select City",
+    "createNewPost": "Create new post",
 
     "logout": "Logout",
     "loggedOut": "Logged Out",

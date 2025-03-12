@@ -200,6 +200,7 @@ class TranslationString {
   static const selectCountry = "selectCountry";
   static const selectCity = "selectCity";
   static const selectState = "selectState";
+  static const createNewPost = 'createNewPost';
 
   // User Types
   static const all = 'all';

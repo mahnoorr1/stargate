@@ -18,6 +18,7 @@ import '../localization/language_toggle_button.dart';
 import '../localization/localization.dart';
 import '../localization/translation_strings.dart';
 import '../models/profile.dart';
+import '../screens/profile/membership_screen.dart';
 import '../widgets/dialog_box.dart';
 
 class IncompleteCustomDrawer extends StatefulWidget {
@@ -50,11 +51,7 @@ class _CustomDrawerState extends State<IncompleteCustomDrawer> {
     super.initState();
     UserProfileProvider profileProvdier = UserProfileProvider.c(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!profileProvdier.firstProfileInfoAlertDone &&
-          (profileProvdier.address.isEmpty ||
-              profileProvdier.countryName.isEmpty ||
-              profileProvdier.profileImage == null ||
-              profileProvdier.profileImage == '')) {
+      if (UserProfileProvider.c(context).incompleteProfile()) {
         profileProvdier.setFirstTimeAlert();
         showCustomDialog(
           context: context,
@@ -178,6 +175,51 @@ class _SliderView extends StatelessWidget {
             children: <Widget>[
               const SizedBox(
                 height: 200,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const MembershipScreen()),
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 60.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30.h),
+                      border: Border.all(
+                        width: 2,
+                        color: const Color.fromARGB(255, 247, 189, 42),
+                      ),
+                      color: Colors.amber.withOpacity(0.2),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 12.w,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.amber[600],
+                        ),
+                        SizedBox(
+                          width: 12.w,
+                        ),
+                        Text(
+                          AppLocalization.of(context)!
+                              .translate(TranslationString.membership),
+                          style: AppStyles.heading4.copyWith(
+                            color: Colors.amber,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
               ...[
                 Menu(

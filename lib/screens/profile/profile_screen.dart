@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/profile.dart';
 import 'package:stargate/providers/user_info_provider.dart';
+import 'package:stargate/screens/property_request_screen/property_request_screen.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/loader/loader.dart';
@@ -217,10 +218,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            AppLocalization.of(context)!
-                                .translate(TranslationString.myPosts),
-                            style: AppStyles.heading4,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppLocalization.of(context)!
+                                    .translate(TranslationString.myPosts),
+                                style: AppStyles.heading4,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const PropertyRequestForm()));
+                                },
+                                child: Text(
+                                  AppLocalization.of(context)!.translate(
+                                      TranslationString.createNewPost),
+                                  style: AppStyles.heading4.copyWith(
+                                    color: AppColors.blue,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 12.w,

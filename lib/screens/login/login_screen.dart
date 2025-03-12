@@ -74,13 +74,22 @@ class _LoginScreenState extends State<LoginScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         UserProfileProvider.c(context)
             .setMembership(prefs.getString('membership') ?? '');
-        await AllUsersProvider.c(context).fetchUsers();
-        await RealEstateProvider.c(context).fetchAllListings();
-        Navigator.popAndPushNamed(context, '/navbar');
-        showToast(
-            message: AppLocalization.of(context)!
-                .translate(TranslationString.loginSuccessfull),
-            context: context);
+        if (UserProfileProvider.c(context).incompleteProfile()) {
+          Navigator.pushReplacementNamed(context, '/incompleteProfileDrawer');
+          showToast(
+              message: AppLocalization.of(context)!
+                  .translate(TranslationString.loginSuccessfull),
+              context: context);
+        } else {
+          await AllUsersProvider.c(context).fetchUsers();
+          await RealEstateProvider.c(context).fetchAllListings();
+
+          Navigator.popAndPushNamed(context, '/navbar');
+          showToast(
+              message: AppLocalization.of(context)!
+                  .translate(TranslationString.loginSuccessfull),
+              context: context);
+        }
       } else {
         setState(() {
           login = false;

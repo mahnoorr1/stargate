@@ -179,45 +179,6 @@ class _SliderView extends StatelessWidget {
               const SizedBox(
                 height: 200,
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const MembershipScreen()),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 60.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30.h),
-                    border: Border.all(
-                      width: 2,
-                      color: const Color.fromARGB(255, 247, 189, 42),
-                    ),
-                    color: Colors.amber.withOpacity(0.2),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: Colors.amber[600],
-                      ),
-                      SizedBox(
-                        width: 8.w,
-                      ),
-                      Text(
-                        AppLocalization.of(context)!
-                            .translate(TranslationString.membership),
-                        style: AppStyles.heading4.copyWith(
-                          color: Colors.amber,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               ...[
                 Menu(
                     AppIcons.terms,
