@@ -16,6 +16,7 @@ import '../../localization/translation_strings.dart';
 import '../../providers/service_providers_provider.dart';
 import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/inputfields/textfield.dart';
+import '../../widgets/translationWidget.dart';
 
 class ListingDetailsScreen extends StatefulWidget {
   final RealEstateListing listing;
@@ -107,18 +108,23 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                       child: Row(
                         children: [
                           BubbleTextButton(
-                            text: widget.listing.propertyType,
-                            textStyle: AppStyles.heading4.copyWith(
-                              color: AppColors.white,
-                            ),
+                            child: Text(
+                                AppLocalization.of(context)!
+                                    .translate(widget.listing.propertyType),
+                                style: AppStyles.heading4.copyWith(
+                                  color: AppColors.white,
+                                )),
                           ),
                           SizedBox(
                             width: 4.w,
                           ),
                           BubbleTextButton(
-                            text: widget.listing.sellingType,
-                            textStyle: AppStyles.heading4.copyWith(
-                              color: AppColors.white,
+                            child: Text(
+                              AppLocalization.of(context)!
+                                  .translate(widget.listing.sellingType),
+                              style: AppStyles.heading4.copyWith(
+                                color: AppColors.white,
+                              ),
                             ),
                           ),
                         ],
@@ -151,25 +157,32 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                     Row(
                                       children: [
                                         SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.61,
-                                          child: Text(
-                                            widget.listing.title,
-                                            style: AppStyles.heading3,
-                                          ),
-                                        ),
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.61,
+                                            child: translationWidget(
+                                              widget.listing.title,
+                                              context,
+                                              widget.listing.title,
+                                              AppStyles.heading3,
+                                            )),
                                         const Spacer(),
                                         BubbleTextButton(
-                                          text: widget.listing.requestType ==
-                                                  'requesting'
-                                              ? AppLocalization.of(context)!
-                                                  .translate(
-                                                      TranslationString.request)
-                                              : AppLocalization.of(context)!
-                                                  .translate(
-                                                      TranslationString.offer),
+                                          child: Text(
+                                            widget.listing.requestType ==
+                                                    'requesting'
+                                                ? AppLocalization.of(context)!
+                                                    .translate(TranslationString
+                                                        .request)
+                                                : AppLocalization.of(context)!
+                                                    .translate(TranslationString
+                                                        .offer),
+                                            style:
+                                                AppStyles.normalText.copyWith(
+                                              color: AppColors.darkBlue,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -218,6 +231,41 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
     );
   }
 
+  Widget translationString(String value) {
+    return FutureBuilder<String>(
+      future: translatedText(value, context),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: 10,
+              height: 10,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text(
+            value,
+            style: AppStyles.normalText.copyWith(color: AppColors.darkBlue),
+          );
+        } else if (snapshot.hasData) {
+          return Text(
+            snapshot.data!,
+            style: AppStyles.normalText,
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 6,
+          );
+        } else {
+          return Text(
+            value,
+            style: AppStyles.normalText.copyWith(color: AppColors.darkBlue),
+          );
+        }
+      },
+    );
+  }
+
   String formatPrice(double price) {
     final NumberFormat formatter = NumberFormat("###,###", "de_DE");
     String formattedPrice = formatter.format(price).replaceAll(',', ' ');
@@ -242,7 +290,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                   height: 6.w,
                 ),
                 BubbleTextButton(
-                  text: widget.listing.propertyCategory,
+                  child: translationString(widget.listing.propertyCategory),
                 ),
               ],
             ),
@@ -259,7 +307,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                   height: 6.w,
                 ),
                 BubbleTextButton(
-                  text: widget.listing.propertySubCategory,
+                  child: translationString(widget.listing.propertySubCategory),
                 ),
               ],
             )
@@ -321,9 +369,39 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         ),
         SizedBox(
           width: double.infinity,
-          child: Text(
-            widget.listing.description,
-            style: AppStyles.normalText.copyWith(color: AppColors.primaryGrey),
+          child: FutureBuilder<String>(
+            future: translatedText(widget.listing.description, context),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: 10,
+                    height: 10,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Text(
+                  widget.listing.description,
+                  style: AppStyles.normalText
+                      .copyWith(color: AppColors.primaryGrey),
+                );
+              } else if (snapshot.hasData) {
+                return Text(
+                  snapshot.data!,
+                  style: AppStyles.normalText,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                );
+              } else {
+                return Text(
+                  widget.listing.description,
+                  style: AppStyles.normalText
+                      .copyWith(color: AppColors.primaryGrey),
+                );
+              }
+            },
           ),
         ),
         SizedBox(
@@ -557,10 +635,12 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                 SizedBox(
                                   height: 6.w,
                                 ),
-                                Text(
+                                translationWidget(
                                   widget.listing.equipment!,
-                                  style: AppStyles.normalText,
-                                ),
+                                  context,
+                                  widget.listing.equipment!,
+                                  AppStyles.normalText,
+                                )
                               ],
                             )
                           : const SizedBox(),
@@ -576,10 +656,12 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                 SizedBox(
                                   height: 6.w,
                                 ),
-                                Text(
+                                translationWidget(
                                   widget.listing.qualityOfEquipment!,
-                                  style: AppStyles.normalText,
-                                ),
+                                  context,
+                                  widget.listing.qualityOfEquipment!,
+                                  AppStyles.normalText,
+                                )
                               ],
                             )
                           : const SizedBox(),

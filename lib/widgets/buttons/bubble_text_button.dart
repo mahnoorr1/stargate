@@ -3,12 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/config/core.dart';
 
 class BubbleTextButton extends StatelessWidget {
-  final String text;
+  final String? text;
+  Widget? child;
   final TextStyle? textStyle;
-  const BubbleTextButton({
+  BubbleTextButton({
     super.key,
-    required this.text,
+    this.text,
     this.textStyle,
+    this.child,
   });
 
   @override
@@ -23,13 +25,15 @@ class BubbleTextButton extends StatelessWidget {
         // ignore: deprecated_member_use
         color: AppColors.lightBlue.withOpacity(0.6),
       ),
-      child: Text(
-        text,
-        style: textStyle ??
-            AppStyles.normalText.copyWith(
-              color: AppColors.darkBlue,
+      child: text == null
+          ? child
+          : Text(
+              text!,
+              style: textStyle ??
+                  AppStyles.normalText.copyWith(
+                    color: AppColors.darkBlue,
+                  ),
             ),
-      ),
     );
   }
 }
