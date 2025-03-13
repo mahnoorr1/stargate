@@ -96,6 +96,15 @@
     "investmentSubcategory": "Anlage-Unterkategorie",
     "selectSubcategory": "Unterkategorie auswählen",
     "purchase": "Kauf",
+    "rental": "Verleih",
+    "new": "Neu",
+    "old": "alt",
+
+    "below5years": "unter 5 Jahren",
+    "above5years": "über 5 Jahre",
+    "years5": "5 Jahre",
+
+    "renovating": "renovierend",
     "conditionCapital": "Zustand",
     "searchingFor": "Suche nach",
     "applyFilters": "Filter anwenden",
@@ -214,6 +223,7 @@
 "property_admin": "Immobilienverwalter",
 "marketer": "Vermarkter",
 "drawing_maker": "Zeichner",
-"loan_broker": "Kreditmakler"
+"loan_broker": "Kreditmakler",
+"offerOrFindPoperty": "Immobilie anbieten oder finden"
 
 }

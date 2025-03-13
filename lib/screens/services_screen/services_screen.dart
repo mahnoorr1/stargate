@@ -94,26 +94,12 @@ class _ServicesScreenState extends State<ServicesScreen> {
     });
   }
 
-  final List<Map<String, String>> userMapping = [
-    {'type': UserType.all.name, 'label': TranslationString.all},
-    {'type': UserType.investor.name, 'label': TranslationString.investor},
-    {'type': UserType.agent.name, 'label': TranslationString.agent},
-    {'type': UserType.consultant.name, 'label': TranslationString.consultant},
-    {'type': UserType.lawyer.name, 'label': TranslationString.lawyer},
-    {'type': UserType.notary.name, 'label': TranslationString.notary},
-    {'type': UserType.appraiser.name, 'label': TranslationString.appraiser},
-    {'type': UserType.manager.name, 'label': TranslationString.manager},
-    {'type': UserType.loanBroker.name, 'label': TranslationString.loanBroker},
-    {'type': UserType.economist.name, 'label': TranslationString.economist},
-    {
-      'type': UserType.drawingMaker.name,
-      'label': TranslationString.drawingMaker
-    },
-    {
-      'type': UserType.propertyAdmin.name,
-      'label': TranslationString.propertyAdmin
-    },
+  final List<Map<String, String>> experienceYearsMapping = [
+    {'type': 'below 5 years', 'label': TranslationString.below5years},
+    {'type': 'below 5 years', 'label': TranslationString.years5},
+    {'type': 'below 5 years', 'label': TranslationString.above5years},
   ];
+
   @override
   Widget build(BuildContext context) {
     final allUsersProvider = Provider.of<AllUsersProvider>(context);
@@ -127,7 +113,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
         : allUsersProvider.filteredUsers
             .where((user) =>
                 user.id != currentUserId &&
-                user.containsServiceUserType(selectedUser))
+                user.containsServiceUserType(selectedUser) &&
+                user.isProfileApproved! &&
+                user.isProfileCompleted!)
             .toList();
 
     return Scaffold(

@@ -96,6 +96,15 @@
     "investmentSubcategory": "Subcategoría de inversión",
     "selectSubcategory": "Seleccionar subcategoría",
     "purchase": "Compra",
+    "rental": "alquiler",
+    "new": "nuevo",
+    "old": "viejo",
+
+    "below5years": "menos de 5 años",
+    "above5years": "Más de 5 años",
+    "years5": "5 años",
+
+    "renovating": "Renovar",
     "conditionCapital": "Condición",
     "searchingFor": "Buscando",
     "applyFilters": "Aplicar filtros",
@@ -214,6 +223,7 @@
 "property_admin": "Administrador de Propiedades",
 "marketer": "Comercializador",
 "drawing_maker": "Dibujante",
-"loan_broker": "Corredor de Préstamos"
+"loan_broker": "Corredor de Préstamos",
+"offerOrFindPoperty": "Ofrecer o encontrar una propiedad"
 
 }

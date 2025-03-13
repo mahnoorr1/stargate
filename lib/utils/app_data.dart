@@ -1,3 +1,4 @@
+import 'package:stargate/localization/translation_strings.dart';
 import 'package:stargate/models/faq.dart';
 import 'package:stargate/models/user.dart';
 import 'package:stargate/utils/app_enums.dart';
@@ -109,8 +110,39 @@ List<String> servicesList = [
   UserType.loanBroker.toCamelCaseString(),
   UserType.economist.toCamelCaseString(),
   UserType.drawingMaker.toCamelCaseString(),
-  UserType.propertyAdmin.toCamelCaseString(),
 ];
+final List<Map<String, String>> userMapping = [
+  {'type': UserType.all.name, 'label': TranslationString.all},
+  {'type': UserType.investor.name, 'label': TranslationString.investor},
+  {'type': UserType.agent.name, 'label': TranslationString.agent},
+  {'type': UserType.consultant.name, 'label': TranslationString.consultant},
+  {'type': UserType.lawyer.name, 'label': TranslationString.lawyer},
+  {'type': UserType.notary.name, 'label': TranslationString.notary},
+  {'type': UserType.appraiser.name, 'label': TranslationString.appraiser},
+  {'type': UserType.manager.name, 'label': TranslationString.manager},
+  {'type': UserType.loanBroker.name, 'label': TranslationString.loanBroker},
+  {'type': UserType.economist.name, 'label': TranslationString.economist},
+  {'type': UserType.drawingMaker.name, 'label': TranslationString.drawingMaker},
+  {
+    'type': UserType.propertyAdmin.name,
+    'label': TranslationString.propertyAdmin
+  },
+];
+
+final List<Map<String, String>> userMappingSimple = [
+  {'type': 'All', 'label': TranslationString.all},
+  {'type': 'Investor', 'label': TranslationString.investor},
+  {'type': 'Real Estate Agent', 'label': TranslationString.agent},
+  {'type': 'Consultant', 'label': TranslationString.consultant},
+  {'type': 'Lawyer', 'label': TranslationString.lawyer},
+  {'type': 'Notary', 'label': TranslationString.notary},
+  {'type': 'Appraiser', 'label': TranslationString.appraiser},
+  {'type': 'Manager', 'label': TranslationString.manager},
+  {'type': 'Loan Broker', 'label': TranslationString.loanBroker},
+  {'type': 'Economist', 'label': TranslationString.economist},
+  {'type': 'Drawing Maker', 'label': TranslationString.drawingMaker},
+];
+
 List<String> propertyTypes = ['commercial', 'conventional'];
 List<String> sellingTypes = ['purchase', 'rental'];
 List<String> conditions = ['new', 'old', 'renovating'];

@@ -46,7 +46,7 @@
     "noServiceProvidersAvailable": "No service providers available",
     "serviceProviders":"Service Providers",
     "recentNotifications":"Recent Notifications",
-    "requesting": "requsting",
+    "requesting": "requesting",
     "offering": "offering",
     "request": "request",
     "offer": "offer",
@@ -99,7 +99,15 @@
     "selectInvestmentType": "Select Investment Type",
     "investmentSubcategory": "Investment Subcategory",
     "selectSubcategory": "Select Subcategory",
-    "purchase": "Purchase",
+    "purchase": "purchase",
+    "rental": "rental",
+    "new": "new",
+    "old": "old",
+
+    "below5years": "below 5 years",
+    "above5years": "above 5 years",
+    "years5": "5 years",
+    "renovating": "renovating",
     "conditionCapital": "Condition",
     "searchingFor": "Searching for",
     "applyFilters": "Apply Filters",
@@ -224,7 +232,8 @@
     "property_admin": "Administrator",
     "marketer": "Marketer",
     "drawing_maker": "Drawing Maker",
-    "loan_broker": "Loan Broker"
+    "loan_broker": "Loan Broker",
+    "offerOrFindPoperty": "Offer or Find Property"
     
 
 }

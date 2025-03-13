@@ -339,7 +339,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
                     ),
                   ],
         currentIndex: selected,
-        notchStyle: NotchStyle.square,
+        notchStyle: NotchStyle.circle,
         onTap: (index) {
           if (index == selected) return;
           controller.jumpToPage(index);

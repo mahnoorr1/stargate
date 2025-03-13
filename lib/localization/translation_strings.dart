@@ -127,6 +127,13 @@ class TranslationString {
   static const subcategory = "subcategory";
   static const category = "category";
   static const purchase = "purchase";
+  static const rental = 'rental';
+  static const neww = 'new';
+  static const old = 'old';
+  static const renovating = 'renovating';
+  static const below5years = 'below5years';
+  static const above5years = 'above5years';
+  static const years5 = 'years5';
   static const conditionCapital = "conditionCapital";
   static const searchingFor = "searchingFor";
   static const applyFilters = "applyFilters";
@@ -235,4 +242,5 @@ class TranslationString {
   static const marketer = 'marketer';
   static const drawingMaker = 'drawing_maker';
   static const loanBroker = 'loan_broker';
+  static const offerOrFindPoperty = 'offerOrFindPoperty';
 }

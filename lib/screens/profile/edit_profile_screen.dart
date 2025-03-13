@@ -22,6 +22,7 @@ import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/dialog_box.dart';
 import 'package:stargate/widgets/inputfields/country_textfield.dart';
 import 'package:stargate/widgets/inputfields/outlined_dropdown.dart';
+import 'package:stargate/widgets/inputfields/services_dropdown.dart';
 import 'package:stargate/widgets/inputfields/textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:path/path.dart' as p;
@@ -412,7 +413,7 @@ class _EditProfileState extends State<EditProfile> {
                       profileContentProvider
                           .profileContent!.occupationSelectionTagLine,
                       'svg'),
-                  DropdownButton2Example(
+                  ServicesDropdown(
                     list: servicesList,
                     onSelected: (value) {
                       if (selectedProfessions.contains(value)) {

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/localization/localization.dart';
 import 'package:stargate/models/user.dart';
 import 'package:stargate/utils/app_images.dart';
+import 'package:stargate/utils/app_data.dart';
 
 // ignore: must_be_immutable
 class ServiceProviderHomeCard extends StatefulWidget {
@@ -18,6 +20,11 @@ class ServiceProviderHomeCard extends StatefulWidget {
 class _ServiceProviderHomeCardState extends State<ServiceProviderHomeCard> {
   @override
   Widget build(BuildContext context) {
+    String localizedService = userMappingSimple.firstWhere(
+        (u) => u['type'] == widget.user.services[0].details['name'],
+        orElse: () =>
+            {'label': widget.user.services[0].details['name']})['label']!;
+
     return Container(
       decoration: BoxDecoration(
           color: AppColors.white,
@@ -67,7 +74,7 @@ class _ServiceProviderHomeCardState extends State<ServiceProviderHomeCard> {
                   height: 8.w,
                 ),
                 Text(
-                  widget.user.services[0].details['name'],
+                  AppLocalization.of(context)!.translate(localizedService),
                   style: AppStyles.heading4.copyWith(
                     color: AppColors.blue,
                   ),

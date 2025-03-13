@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/screens/otp_screen/otp_Screen.dart';
 import 'package:stargate/services/user_profiling.dart';
+import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/dropdown.dart';
+import 'package:stargate/widgets/inputfields/service_dropdown_underlined.dart';
 import 'package:stargate/widgets/inputfields/underlined_textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 
+import '../../localization/language_toggle_button.dart';
 import '../../localization/localization.dart';
 import '../../localization/translation_strings.dart';
 import '../../utils/app_enums.dart';
@@ -55,8 +58,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     professions = [
-      AppLocalization.of(context)!
-          .translate(TranslationString.selectProfession),
       UserType.investor.toCamelCaseString(),
       UserType.agent.toCamelCaseString(),
       UserType.consultant.toCamelCaseString(),
@@ -187,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     children: [
                       Text(
                         AppLocalization.of(context)!
-                            .translate(TranslationString.findProperty),
+                            .translate(TranslationString.offerOrFindPoperty),
                         style: AppStyles.heading1.copyWith(
                           color: Colors.white,
                         ),
@@ -260,14 +261,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             prefixSvgPath: AppIcons.lock,
                           ),
                           SizedBox(height: 8.w),
-                          DropdownButtonExample(
-                            list: professions,
+                          ServicesDropdownUnderlined(
+                            list: servicesList,
                             onSelected: (value) {
                               setState(() {
                                 profession.text = value;
                               });
                             },
-                            initial: professions[0],
+                            initial: servicesList[0],
                             label: AppLocalization.of(context)!
                                 .translate(TranslationString.yourProfession),
                             svgIcon: AppIcons.profession,
@@ -311,7 +312,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: Text(
                             AppLocalization.of(context)!
                                 .translate(TranslationString.signInHere),
-                            style: AppStyles.heading4.copyWith(
+                            style: AppStyles.heading3.copyWith(
                               color: AppColors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -319,6 +320,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ],
                     ),
+                  ),
+                  const LanguageToggleButton(
+                    isHorizontal: true,
                   ),
                 ],
               ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/localization/localization.dart';
+import 'package:stargate/localization/translation_strings.dart';
 
 // ignore: must_be_immutable
 class CustomTabButton extends StatefulWidget {
@@ -42,7 +44,21 @@ class _CustomTabButtonState extends State<CustomTabButton> {
           padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.w),
           child: Center(
             child: Text(
-              widget.type,
+              widget.type == 'new'
+                  ? AppLocalization.of(context)!
+                      .translate(TranslationString.neww)
+                  : widget.type == 'below 5 years'
+                      ? AppLocalization.of(context)!
+                          .translate(TranslationString.below5years)
+                      : widget.type == 'above 5 years'
+                          ? AppLocalization.of(context)!
+                              .translate(TranslationString.above5years)
+                          : widget.type == '5 years'
+                              ? AppLocalization.of(context)!
+                                  .translate(TranslationString.years5)
+                              : AppLocalization.of(context)!.translate(
+                                  widget.type,
+                                ),
               style: isSelected
                   ? AppStyles.heading4.copyWith(color: AppColors.white)
                   : AppStyles.normalText,

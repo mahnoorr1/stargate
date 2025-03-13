@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/localization/localization.dart';
 import 'package:stargate/models/real_estate_listing.dart';
 import 'package:stargate/screens/listings/listing_details_screen.dart';
 import 'package:stargate/utils/app_images.dart';
+
+import '../../../localization/translation_strings.dart';
 
 class ListingCard extends StatelessWidget {
   final RealEstateListing listing;
@@ -42,8 +45,26 @@ class ListingCard extends StatelessWidget {
           ),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                height: 30,
+                padding: EdgeInsets.all(4.w),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.blue,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                  child: Text(
+                    AppLocalization.of(context)!.translate(listing.requestType),
+                    style: AppStyles.heading4.copyWith(color: AppColors.white),
+                  ),
+                ),
+              ),
+            ),
             AddressMorphismRectangle(
               country: listing.country,
               state: listing.state ?? '',

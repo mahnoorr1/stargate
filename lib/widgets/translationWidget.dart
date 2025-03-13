@@ -5,21 +5,31 @@ import 'package:stargate/services/helper_methods.dart';
 
 import '../localization/locale_notifier.dart';
 
+// Cache translations
+final Map<String, String> _translationCache = {};
+
 Future<String> translatedText(String text, BuildContext context) async {
-  final localeNotifier = Provider.of<LocaleNotifier>(context);
-  final locale = localeNotifier.locale;
-  String translatedText = await translateData(text, locale.languageCode);
-  return translatedText;
+  final localeNotifier = Provider.of<LocaleNotifier>(context, listen: false);
+  final locale = localeNotifier.locale.languageCode;
+  final cacheKey = "$text-$locale";
+
+  if (_translationCache.containsKey(cacheKey)) {
+    return _translationCache[cacheKey]!;
+  }
+
+  String translated = await translateData(text, locale);
+  _translationCache[cacheKey] = translated; // Store in cache
+  return translated;
 }
 
-translationWidget(
+Widget translationWidget(
   String text,
   BuildContext context,
   String? fallbackText,
   TextStyle style,
 ) {
   return FutureBuilder<String>(
-    future: translatedText(text, context),
+    future: translatedText(text, context), // Now uses cache
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const Align(
@@ -27,17 +37,15 @@ translationWidget(
           child: SizedBox(
             width: 10,
             height: 10,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-            ),
+            child: CircularProgressIndicator(strokeWidth: 2),
           ),
         );
-      } else if (snapshot.hasError) {
+      } else if (snapshot.hasError || !snapshot.hasData) {
         return Text(
           fallbackText ?? '',
-          style: AppStyles.heading4,
+          style: style,
         );
-      } else if (snapshot.hasData) {
+      } else {
         return SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           child: Text(
@@ -47,11 +55,6 @@ translationWidget(
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
           ),
-        );
-      } else {
-        return Text(
-          fallbackText ?? '',
-          style: AppStyles.heading4,
         );
       }
     },

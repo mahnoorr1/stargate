@@ -226,7 +226,7 @@ class _SliderView extends StatelessWidget {
           Column(
             children: <Widget>[
               const SizedBox(
-                height: 200,
+                height: 70,
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 12),

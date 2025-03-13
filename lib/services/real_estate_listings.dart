@@ -205,6 +205,7 @@ Future<List<RealEstateListing>> filterProperty({
     'Content-Type': 'application/json',
     'Authorization': token!,
   };
+  print(country);
   Map<String, String> queryParams = {};
 
   if (offerType != null && offerType.isNotEmpty) {

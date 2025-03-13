@@ -14,10 +14,13 @@ import 'package:stargate/widgets/buttons/custom_tab_button.dart';
 import 'package:stargate/widgets/buttons/filter_button.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/country_textfield.dart';
+import 'package:stargate/widgets/inputfields/textfield.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import '../../localization/localization.dart';
 import '../../providers/real_estate_provider.dart';
+import '../../utils/app_images.dart';
 import '../../widgets/inputfields/outlined_dropdown.dart';
+import '../../widgets/translationWidget.dart';
 
 class ListingsScreen extends StatefulWidget {
   const ListingsScreen({super.key});
@@ -31,7 +34,7 @@ class _ListingsScreenState extends State<ListingsScreen> {
   TextEditingController country = TextEditingController();
   TextEditingController state = TextEditingController();
   TextEditingController city = TextEditingController();
-  SfRangeValues _priceRange = const SfRangeValues(0.0, 100000000.0);
+  // SfRangeValues _priceRange = const SfRangeValues(0.0, 100000000.0);
   String selectedPropertyType = '';
   String selectedPropertyCategory = '';
   String selectedPropertySubcategory = '';
@@ -39,8 +42,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
   String selectedCondition = '';
   String selectedSellingType = '';
   List<String> currentSubcategoryOptions = [];
-
-  final _formKey = GlobalKey<FormState>();
+  TextEditingController startPrice = TextEditingController();
+  TextEditingController endPrice = TextEditingController();
 
   @override
   void initState() {
@@ -83,6 +86,16 @@ class _ListingsScreenState extends State<ListingsScreen> {
   Widget build(BuildContext context) {
     currentSubcategoryOptions = [
       AppLocalization.of(context)!.translate(TranslationString.selectOption)
+    ];
+    List<Map<String, String>> propertyTypesMap = [
+      {
+        "commercial":
+            AppLocalization.of(context)!.translate(TranslationString.commercial)
+      },
+      {
+        "conventional": AppLocalization.of(context)!
+            .translate(TranslationString.conventional)
+      }
     ];
     return Scaffold(
       appBar: AppBar(
@@ -176,9 +189,11 @@ class _ListingsScreenState extends State<ListingsScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                translationWidget(
                   listingContentProvider.listingContent!.searchFilterTagLine,
-                  style: AppStyles.heading4,
+                  context,
+                  listingContentProvider.listingContent!.searchFilterTagLine,
+                  AppStyles.heading4,
                 ),
                 SizedBox(height: 12.h),
                 filterApplied
@@ -215,36 +230,76 @@ class _ListingsScreenState extends State<ListingsScreen> {
                 SizedBox(
                   height: 6.w,
                 ),
-                SfRangeSlider(
-                  min: 0.0,
-                  max: 100000000.0,
-                  values: _priceRange,
-                  interval: 10000000.0,
-                  showTicks: true,
-                  showLabels: false,
-                  enableTooltip: true,
-                  minorTicksPerInterval: 1,
-                  activeColor: AppColors.blue,
-                  inactiveColor: AppColors.lightGrey,
-                  tooltipShape: const SfPaddleTooltipShape(),
-                  numberFormat: NumberFormat.simpleCurrency(
-                      locale: 'de_DE', decimalDigits: 0),
-                  onChanged: (SfRangeValues newRange) {
-                    setState(() {
-                      _priceRange = newRange;
-                    });
-                  },
+                // SfRangeSlider(
+                //   min: 0.0,
+                //   max: 100000000.0,
+                //   values: _priceRange,
+                //   interval: 10000000.0,
+                //   showTicks: true,
+                //   showLabels: false,
+                //   enableTooltip: true,
+                //   minorTicksPerInterval: 1,
+                //   activeColor: AppColors.blue,
+                //   inactiveColor: AppColors.lightGrey,
+                //   tooltipShape: const SfPaddleTooltipShape(),
+                //   numberFormat: NumberFormat.simpleCurrency(
+                //       locale: 'de_DE', decimalDigits: 0),
+                //   onChanged: (SfRangeValues newRange) {
+                //     setState(() {
+                //       _priceRange = newRange;
+                //     });
+                //   },
+                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.43,
+                      child: CustomTextField(
+                        controller: startPrice,
+                        label: AppLocalization.of(context)!
+                            .translate(TranslationString.startValue),
+                        hintText: AppLocalization.of(context)!
+                            .translate(TranslationString.startValue),
+                        inputType: TextInputType.number,
+                        horizontalSpacing: 0,
+                        verticalSpacing: 3,
+                        prefixSvgPath: AppIcons.euro,
+                        onChanged: (value) {
+                          startPrice.text = (value) ?? 0;
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 6.w),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.43,
+                      child: CustomTextField(
+                        controller: endPrice,
+                        label: AppLocalization.of(context)!
+                            .translate(TranslationString.endValue),
+                        hintText: AppLocalization.of(context)!
+                            .translate(TranslationString.endValue),
+                        inputType: TextInputType.number,
+                        horizontalSpacing: 0,
+                        verticalSpacing: 3,
+                        prefixSvgPath: AppIcons.euro,
+                        onChanged: (value) {
+                          endPrice.text = value ?? 0;
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('€0'),
-                      Text('€100 000 000'),
-                    ],
-                  ),
-                ),
+                // const Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 20.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Text('€0'),
+                //       Text('€100 000 000'),
+                //     ],
+                //   ),
+                // ),
                 SizedBox(
                   height: 10.w,
                 ),
@@ -484,6 +539,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                     setState(() {
                       filterApplied = true;
                     });
+                    print("property category");
+                    print(selectedPropertyType);
                     RealEstateProvider.c(context, false).filterProperties(
                         country: country.text,
                         city: city.text,
@@ -493,8 +550,7 @@ class _ListingsScreenState extends State<ListingsScreen> {
                         offerType: selectedRequestType,
                         purchaseType: selectedSellingType,
                         propertyType: selectedPropertyType,
-                        priceRange:
-                            "${_priceRange.start.toInt()},${_priceRange.end.toInt()}");
+                        priceRange: "${startPrice.text},${endPrice.text}");
                     setState(() {
                       filterApplied = true;
                     });

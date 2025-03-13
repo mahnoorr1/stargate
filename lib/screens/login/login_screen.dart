@@ -15,6 +15,7 @@ import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/inputfields/underlined_textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 
+import '../../localization/language_toggle_button.dart';
 import '../../localization/localization.dart';
 import '../../localization/translation_strings.dart';
 import '../../providers/real_estate_provider.dart';
@@ -266,7 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             AppLocalization.of(context)!
                                 .translate(TranslationString.signUpHere),
-                            style: AppStyles.heading4.copyWith(
+                            style: AppStyles.heading3.copyWith(
                               color: AppColors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -274,6 +275,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
+                  ),
+                  const LanguageToggleButton(
+                    isHorizontal: true,
                   ),
                 ],
               ),

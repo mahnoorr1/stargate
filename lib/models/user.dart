@@ -15,6 +15,8 @@ class User {
   bool? restrictContact;
   List<dynamic>? properties;
   List<dynamic>? references;
+  bool? isProfileCompleted;
+  bool? isProfileApproved;
 
   User({
     required this.id,
@@ -31,6 +33,8 @@ class User {
     this.restrictContact,
     this.properties,
     this.references,
+    this.isProfileCompleted = false,
+    this.isProfileApproved = false,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -51,6 +55,8 @@ class User {
       properties: json['properties'] as List<dynamic>,
       membership: json['membership'] ?? '',
       references: json['references'] as List<dynamic>,
+      isProfileCompleted: json['isProfileCompleted'] ?? false,
+      isProfileApproved: json['isProfileApproved'] ?? false,
     );
   }
 
@@ -68,6 +74,8 @@ class User {
       'websiteLink': websiteLink,
       'restrictContact': restrictContact,
       'properties': properties?.toList(),
+      'isProfileCompleted': isProfileCompleted,
+      'isProfileApproved': isProfileApproved,
     };
   }
 
