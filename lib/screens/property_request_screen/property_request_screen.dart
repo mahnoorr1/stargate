@@ -24,6 +24,7 @@ import 'package:stargate/widgets/inputfields/outlined_dropdown.dart';
 import 'package:stargate/widgets/inputfields/textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
+import 'package:stargate/widgets/translationWidget.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../localization/localization.dart';
@@ -53,6 +54,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   TextEditingController selectedBuildableArea = TextEditingController();
   TextEditingController parkingPlaces = TextEditingController(text: '0');
 
+  TextEditingController bedsController = TextEditingController();
+  TextEditingController bathsController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+
   List<String> requestTypeList = ['offering', 'requesting'];
   List<String> currentConventionalSubcategoryOptions = [];
   List<String> currentCommercialSubcategoryOptions = [];
@@ -71,27 +76,36 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   String garage = '';
   List<String> images = [];
   bool loading = false;
+  int selectedIndexOfPropertyCategory = 0;
+  int propertyIndexConventional = 0;
+  final _formKey = GlobalKey<FormState>();
 
   Future<void> onSendRequest() async {
     File requestFile = await assetImageToFile(AppImages.propertySearch);
-    setState(() {
-      loading = true;
-    });
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id')!;
     log('Address: ${address.text}');
-    log('Price: $price');
-    log('Bathrooms: $bathroom');
-    log('Beds: $beds');
+    log('Price: ${priceController.text}');
+    log('Bathrooms: ${bathsController.text}');
+    log('Beds: ${bedsController.text}');
     log('Furnished: $furnished');
     log('Garage: $garage');
     log('Images: ${images.isNotEmpty ? images[0] : 'No images'}');
     log('Purchase Type: $selectedPurchaseType');
-
-    if (address.text.isEmpty ||
-        title.text.isEmpty ||
-        country.text.isEmpty ||
-        state.text.isEmpty) {
+    if (!_formKey.currentState!.validate() ||
+        selectedInvestmentType == '' ||
+        selectedInvestmentSubcategory == '' ||
+        selectedPurchaseType == '' ||
+        selectedCondition == '' ||
+        selectedRequestType == '' ||
+        selectedLandArea.text.isEmpty ||
+        selectedBuildingArea.text.isEmpty ||
+        selectedBuildableArea.text.isEmpty ||
+        bedsController.text.isEmpty ||
+        bathsController.text.isEmpty ||
+        priceController.text.isEmpty ||
+        furnished == '') {
       showToast(
         message: AppLocalization.of(context)!
             .translate(TranslationString.incompletePropertyDetails),
@@ -113,29 +127,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
       setState(() {
         loading = false;
       });
-    } else if (selectedInvestmentType == '' ||
-        // selectedInvestmentSubcategory == '' ||
-        selectedPurchaseType == '' ||
-        selectedCondition == '' ||
-        selectedRequestType == '' ||
-        selectedLandArea.text.isEmpty ||
-        selectedBuildingArea.text.isEmpty ||
-        selectedBuildableArea.text.isEmpty ||
-        beds == 0 ||
-        bathroom == 0 ||
-        price == 0 ||
-        furnished == '') {
-      showToast(
-        message: AppLocalization.of(context)!
-            .translate(TranslationString.incompletePropertyDetails),
-        context: context,
-        isAlert: true,
-        color: Colors.redAccent,
-      );
-      setState(() {
-        loading = false;
-      });
     } else {
+      setState(() {
+        loading = true;
+      });
       Map<String, dynamic> response =
           await RealEstateProvider.c(context).addProperty(
         title: title.text,
@@ -154,10 +149,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         landArea: double.parse(selectedLandArea.text),
         buildingUsageArea: double.parse(selectedBuildingArea.text),
         buildableArea: double.parse(selectedBuildableArea.text),
-        bathrooms: bathroom,
-        beds: beds,
-        rooms: beds,
-        price: price.toDouble(),
+        bathrooms: int.parse(bathsController.text),
+        beds: int.parse(bedsController.text),
+        rooms: int.parse(bedsController.text),
+        price: double.parse(priceController.text),
         equipment: equipment.text,
         qualityOfEquipment: qualityOfEquipment.text,
         isFurnished: furnished == 'yes' ? true : false,
@@ -240,225 +235,248 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         body: Padding(
           padding: EdgeInsets.only(top: 12.w, right: 12.w, left: 12.w),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                targetLang == 'en'
-                    ? Text(
-                        propertyRequestProvider.content!.title,
-                        style: AppStyles.screenTitle.copyWith(
-                          color: AppColors.darkBlue,
-                        ),
-                      )
-                    : FutureBuilder<String>(
-                        future: translateData(
-                            propertyRequestProvider.content!.title, targetLang),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const SizedBox();
-                          } else {
-                            return Text(
-                              snapshot.data!,
-                              style: AppStyles.screenTitle.copyWith(
-                                color: AppColors.darkBlue,
-                              ),
-                            );
-                          }
-                        }),
-                SizedBox(
-                  height: 16.w,
-                ),
-                CustomTextField(
-                  controller: title,
-                  label: AppLocalization.of(context)!
-                      .translate(TranslationString.title),
-                  hintText: AppLocalization.of(context)!
-                      .translate(TranslationString.title),
-                  inputType: TextInputType.text,
-                  horizontalSpacing: 0,
-                  verticalSpacing: 3,
-                ),
-                SizedBox(
-                  height: 3.w,
-                ),
-                CustomTextField(
-                  controller: address,
-                  label: AppLocalization.of(context)!
-                      .translate(TranslationString.address),
-                  hintText: AppLocalization.of(context)!
-                      .translate(TranslationString.address),
-                  inputType: TextInputType.text,
-                  horizontalSpacing: 0,
-                  verticalSpacing: 3,
-                ),
-                CountryPickerField(
-                  country: country,
-                  state: state,
-                  city: city,
-                ),
-                CustomTextField(
-                  controller: description,
-                  label: AppLocalization.of(context)!
-                      .translate(TranslationString.description),
-                  hintText: AppLocalization.of(context)!
-                      .translate(TranslationString.description),
-                  inputType: TextInputType.text,
-                  horizontalSpacing: 0,
-                  verticalSpacing: 3,
-                  maxLines: 4,
-                ),
-                SizedBox(
-                  height: 10.w,
-                ),
-                targetLang == 'en'
-                    ? questionText(
-                        propertyRequestProvider.content!.offerSelectionTagLine,
-                      )
-                    : FutureBuilder(
-                        future: translateData(
-                            propertyRequestProvider
-                                .content!.offerSelectionTagLine,
-                            targetLang),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          } else {
-                            return questionText(
-                              snapshot.data!,
-                            );
-                          }
-                        }),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      ...requestTypeList.map(
-                        (e) => CustomTabButton(
-                          type: e,
-                          selected: (value) {
-                            setState(() {
-                              selectedRequestType = value;
-                            });
-                          },
-                          current: selectedRequestType,
-                        ),
-                      ),
-                    ],
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  targetLang == 'en'
+                      ? Text(
+                          propertyRequestProvider.content!.title,
+                          style: AppStyles.screenTitle.copyWith(
+                            color: AppColors.darkBlue,
+                          ),
+                        )
+                      : FutureBuilder<String>(
+                          future: translateData(
+                              propertyRequestProvider.content!.title,
+                              targetLang),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const SizedBox();
+                            } else {
+                              return Text(
+                                snapshot.data!,
+                                style: AppStyles.screenTitle.copyWith(
+                                  color: AppColors.darkBlue,
+                                ),
+                              );
+                            }
+                          }),
+                  SizedBox(
+                    height: 16.w,
                   ),
-                ),
-                SizedBox(
-                  height: 8.w,
-                ),
-                targetLang == 'en'
-                    ? questionText(
-                        propertyRequestProvider.content!.conditionTagLine,
-                      )
-                    : FutureBuilder(
-                        future: translateData(
-                            propertyRequestProvider.content!.conditionTagLine,
-                            targetLang),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          } else {
-                            return questionText(
-                              snapshot.data!,
-                            );
-                          }
-                        }),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      ...conditions.map(
-                        (e) => CustomTabButton(
-                          type: e,
-                          selected: (value) {
-                            setState(() {
-                              selectedCondition = value;
-                            });
-                          },
-                          current: selectedCondition,
-                        ),
-                      ),
-                    ],
+                  CustomTextField(
+                    controller: title,
+                    label: AppLocalization.of(context)!
+                        .translate(TranslationString.title),
+                    hintText: AppLocalization.of(context)!
+                        .translate(TranslationString.title),
+                    inputType: TextInputType.text,
+                    horizontalSpacing: 0,
+                    verticalSpacing: 3,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '${AppLocalization.of(context)!.translate(TranslationString.title)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                SizedBox(
-                  height: 8.w,
-                ),
-                questionText(AppLocalization.of(context)!
-                    .translate(TranslationString.purchase)),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      ...sellingTypes.map(
-                        (e) => CustomTabButton(
-                          type: e,
-                          selected: (value) {
-                            setState(() {
-                              selectedPurchaseType = value;
-                            });
-                          },
-                          current: selectedPurchaseType,
-                        ),
-                      ),
-                    ],
+                  SizedBox(
+                    height: 3.w,
                   ),
-                ),
-                SizedBox(
-                  height: 8.w,
-                ),
-                targetLang == 'en'
-                    ? questionText(
-                        propertyRequestProvider.content!.investmentTypeTagLine,
-                      )
-                    : FutureBuilder(
-                        future: translateData(
-                            propertyRequestProvider
-                                .content!.investmentTypeTagLine,
-                            targetLang),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          } else {
-                            return questionText(
-                              snapshot.data!,
-                            );
-                          }
-                        }),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      ...propertyTypes.map(
-                        (e) => CustomTabButton(
-                          type: e,
-                          selected: (value) {
-                            setState(() {
-                              selectedPropertyType = value;
-                            });
-                          },
-                          current: selectedPropertyType,
-                        ),
-                      ),
-                    ],
+                  CustomTextField(
+                    controller: address,
+                    label: AppLocalization.of(context)!
+                        .translate(TranslationString.address),
+                    hintText: AppLocalization.of(context)!
+                        .translate(TranslationString.address),
+                    inputType: TextInputType.text,
+                    horizontalSpacing: 0,
+                    verticalSpacing: 3,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '${AppLocalization.of(context)!.translate(TranslationString.address)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                selectedPropertyType == 'commercial'
-                    ? commercialContent()
-                    : selectedPropertyType == 'conventional'
-                        ? conventionalContent()
-                        : const SizedBox(),
-                SizedBox(
-                  height: 20.w,
-                ),
-              ],
+                  CountryPickerField(
+                    country: country,
+                    state: state,
+                    city: city,
+                  ),
+                  country.text.isEmpty
+                      ? Text(
+                          AppLocalization.of(context)!
+                              .translate(TranslationString.selectCountryError),
+                          style:
+                              TextStyle(color: Colors.red[900], fontSize: 12),
+                        )
+                      : const SizedBox(),
+                  selectedRequestType == 'offering'
+                      ? const SizedBox()
+                      : CustomTextField(
+                          controller: description,
+                          label: AppLocalization.of(context)!
+                              .translate(TranslationString.description),
+                          hintText: AppLocalization.of(context)!
+                              .translate(TranslationString.description),
+                          inputType: TextInputType.text,
+                          horizontalSpacing: 0,
+                          verticalSpacing: 3,
+                          maxLines: 4,
+                        ),
+                  SizedBox(
+                    height: 10.w,
+                  ),
+                  translationWidget(
+                    propertyRequestProvider.content!.offerSelectionTagLine,
+                    context,
+                    propertyRequestProvider.content!.offerSelectionTagLine,
+                    AppStyles.heading4.copyWith(color: AppColors.darkBlue),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        ...requestTypeList.map(
+                          (e) => CustomTabButton(
+                            type: e,
+                            selected: (value) {
+                              setState(() {
+                                selectedRequestType = value;
+                              });
+                            },
+                            current: selectedRequestType,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  selectedRequestType == ''
+                      ? Text(
+                          AppLocalization.of(context)!
+                              .translate(TranslationString.selectionRequired),
+                          style:
+                              TextStyle(color: Colors.red[900], fontSize: 12),
+                        )
+                      : const SizedBox(),
+                  SizedBox(
+                    height: 8.w,
+                  ),
+                  translationWidget(
+                    propertyRequestProvider.content!.conditionTagLine,
+                    context,
+                    propertyRequestProvider.content!.conditionTagLine,
+                    AppStyles.heading4.copyWith(color: AppColors.darkBlue),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        ...conditions.map(
+                          (e) => CustomTabButton(
+                            type: e,
+                            selected: (value) {
+                              setState(() {
+                                selectedCondition = value;
+                              });
+                            },
+                            current: selectedCondition,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  selectedCondition == ''
+                      ? Text(
+                          AppLocalization.of(context)!
+                              .translate(TranslationString.selectionRequired),
+                          style:
+                              TextStyle(color: Colors.red[900], fontSize: 12),
+                        )
+                      : const SizedBox(),
+                  SizedBox(
+                    height: 8.w,
+                  ),
+                  questionText(AppLocalization.of(context)!
+                      .translate(TranslationString.purchase)),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        ...sellingTypes.map(
+                          (e) => CustomTabButton(
+                            type: e,
+                            selected: (value) {
+                              setState(() {
+                                selectedPurchaseType = value;
+                              });
+                            },
+                            current: selectedPurchaseType,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  selectedPurchaseType == ''
+                      ? Text(
+                          AppLocalization.of(context)!
+                              .translate(TranslationString.selectionRequired),
+                          style:
+                              TextStyle(color: Colors.red[900], fontSize: 12),
+                        )
+                      : const SizedBox(),
+                  SizedBox(
+                    height: 8.w,
+                  ),
+                  translationWidget(
+                    propertyRequestProvider.content!.investmentTypeTagLine,
+                    context,
+                    propertyRequestProvider.content!.investmentTypeTagLine,
+                    AppStyles.heading4.copyWith(color: AppColors.darkBlue),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        ...propertyTypes.map(
+                          (e) => CustomTabButton(
+                            type: e,
+                            selected: (value) {
+                              setState(() {
+                                selectedPropertyType = value;
+                              });
+                            },
+                            current: selectedPropertyType,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  selectedPropertyType == ''
+                      ? Text(
+                          AppLocalization.of(context)!
+                              .translate(TranslationString.selectionRequired),
+                          style:
+                              TextStyle(color: Colors.red[900], fontSize: 12),
+                        )
+                      : const SizedBox(),
+                  SizedBox(
+                    height: 12.w,
+                  ),
+                  selectedPropertyType == 'commercial'
+                      ? commercialContent()
+                      : selectedPropertyType == 'conventional'
+                          ? conventionalContent()
+                          : const SizedBox(),
+                  SizedBox(
+                    height: 20.w,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -496,15 +514,16 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           onSelected: (value) {
             setState(() {
               selectedInvestmentType = value;
-              int selectedCategoryIndex =
+              selectedIndexOfPropertyCategory =
                   commercialPropertyCategory.indexOf(value);
-              currentCommercialSubcategoryOptions =
-                  commercialPropertySubcategory[selectedCategoryIndex];
-
+              currentCommercialSubcategoryOptions = List.from(
+                  commercialPropertySubcategory[
+                      selectedIndexOfPropertyCategory]);
               selectedInvestmentSubcategory =
                   currentCommercialSubcategoryOptions.isNotEmpty
                       ? currentCommercialSubcategoryOptions[0]
-                      : ''; // Empty if no subcategory available
+                      : '';
+              setState(() {});
             });
           },
           initial: commercialPropertyCategory.isNotEmpty
@@ -518,22 +537,128 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         questionText(AppLocalization.of(context)!
             .translate(TranslationString.investmentSubcategory)),
-        OutlinedDropdownButtonExample(
-          list: currentCommercialSubcategoryOptions,
-          onSelected: (value) {
-            setState(() {
-              selectedInvestmentSubcategory = value;
-            });
-          },
-          // Set the initial value for the subcategory dropdown to selectedInvestmentSubcategory
-          initial: currentCommercialSubcategoryOptions.isNotEmpty
-              ? selectedInvestmentSubcategory.isNotEmpty
-                  ? selectedInvestmentSubcategory
-                  : currentCommercialSubcategoryOptions[0]
-              : '', // If no subcategory selected, fallback to the first subcategory
-          label: AppLocalization.of(context)!
-              .translate(TranslationString.investmentSubcategory),
-        ),
+        selectedIndexOfPropertyCategory == 0
+            ? OutlinedDropdownButtonExample(
+                list: commercialPropertySubcategory[0],
+                onSelected: (value) {
+                  setState(() {
+                    selectedInvestmentSubcategory = value;
+                  });
+                },
+                initial: commercialPropertySubcategory[0][0],
+                label: AppLocalization.of(context)!
+                    .translate(TranslationString.investmentSubcategory),
+              )
+            : selectedIndexOfPropertyCategory == 1
+                ? OutlinedDropdownButtonExample(
+                    list: commercialPropertySubcategory[1],
+                    onSelected: (value) {
+                      setState(() {
+                        selectedInvestmentSubcategory = value;
+                      });
+                    },
+                    initial: commercialPropertySubcategory[1][0],
+                    label: AppLocalization.of(context)!
+                        .translate(TranslationString.investmentSubcategory),
+                  )
+                : selectedIndexOfPropertyCategory == 2
+                    ? OutlinedDropdownButtonExample(
+                        list: commercialPropertySubcategory[2],
+                        onSelected: (value) {
+                          setState(() {
+                            selectedInvestmentSubcategory = value;
+                          });
+                        },
+                        initial: commercialPropertySubcategory[2][0],
+                        label: AppLocalization.of(context)!
+                            .translate(TranslationString.investmentSubcategory),
+                      )
+                    : selectedIndexOfPropertyCategory == 3
+                        ? OutlinedDropdownButtonExample(
+                            list: commercialPropertySubcategory[3],
+                            onSelected: (value) {
+                              setState(() {
+                                selectedInvestmentSubcategory = value;
+                              });
+                            },
+                            initial: commercialPropertySubcategory[3][0],
+                            label: AppLocalization.of(context)!.translate(
+                                TranslationString.investmentSubcategory),
+                          )
+                        : selectedIndexOfPropertyCategory == 4
+                            ? OutlinedDropdownButtonExample(
+                                list: commercialPropertySubcategory[4],
+                                onSelected: (value) {
+                                  setState(() {
+                                    selectedInvestmentSubcategory = value;
+                                  });
+                                },
+                                initial: commercialPropertySubcategory[4][0],
+                                label: AppLocalization.of(context)!.translate(
+                                    TranslationString.investmentSubcategory),
+                              )
+                            : selectedIndexOfPropertyCategory == 5
+                                ? OutlinedDropdownButtonExample(
+                                    list: commercialPropertySubcategory[5],
+                                    onSelected: (value) {
+                                      setState(() {
+                                        selectedInvestmentSubcategory = value;
+                                      });
+                                    },
+                                    initial: commercialPropertySubcategory[5]
+                                        [0],
+                                    label: AppLocalization.of(context)!
+                                        .translate(TranslationString
+                                            .investmentSubcategory),
+                                  )
+                                : selectedIndexOfPropertyCategory == 6
+                                    ? OutlinedDropdownButtonExample(
+                                        list: commercialPropertySubcategory[6],
+                                        onSelected: (value) {
+                                          setState(() {
+                                            selectedInvestmentSubcategory =
+                                                value;
+                                          });
+                                        },
+                                        initial:
+                                            commercialPropertySubcategory[6][0],
+                                        label: AppLocalization.of(context)!
+                                            .translate(TranslationString
+                                                .investmentSubcategory),
+                                      )
+                                    : selectedIndexOfPropertyCategory == 7
+                                        ? OutlinedDropdownButtonExample(
+                                            list: commercialPropertySubcategory[
+                                                7],
+                                            onSelected: (value) {
+                                              setState(() {
+                                                selectedInvestmentSubcategory =
+                                                    value;
+                                              });
+                                            },
+                                            initial:
+                                                commercialPropertySubcategory[7]
+                                                    [0],
+                                            label: AppLocalization.of(context)!
+                                                .translate(TranslationString
+                                                    .investmentSubcategory),
+                                          )
+                                        : OutlinedDropdownButtonExample(
+                                            list: commercialPropertySubcategory[
+                                                8],
+                                            onSelected: (value) {
+                                              setState(() {
+                                                selectedInvestmentSubcategory =
+                                                    value;
+                                              });
+                                            },
+                                            initial:
+                                                commercialPropertySubcategory[8]
+                                                    [0],
+                                            label: AppLocalization.of(context)!
+                                                .translate(TranslationString
+                                                    .investmentSubcategory),
+                                          ),
         SizedBox(
           height: 6.w,
         ),
@@ -546,6 +671,12 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '${AppLocalization.of(context)!.translate(TranslationString.landArea)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+            }
+            return null;
+          },
         ),
         SizedBox(
           height: 3.w,
@@ -559,6 +690,12 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '${AppLocalization.of(context)!.translate(TranslationString.buildingUsageArea)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+            }
+            return null;
+          },
         ),
         SizedBox(
           height: 3.w,
@@ -572,6 +709,12 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '${AppLocalization.of(context)!.translate(TranslationString.buildableAreaInM2)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+            }
+            return null;
+          },
         ),
         SizedBox(
           height: 10.w,
@@ -699,6 +842,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   }
 
   Widget conventionalContent() {
+    int selectedIndex = 0;
     selectedInvestmentSubcategory = '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -710,14 +854,17 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           onSelected: (value) {
             setState(() {
               selectedInvestmentType = value;
-              int selectedCategoryIndex =
+              propertyIndexConventional =
                   conventionalPropertyCategory.indexOf(value);
               currentConventionalSubcategoryOptions =
-                  conventionalPropertySubcategory[selectedCategoryIndex];
+                  List.from(conventionalPropertySubcategory[selectedIndex]);
               selectedInvestmentSubcategory =
                   currentConventionalSubcategoryOptions.isNotEmpty
                       ? currentConventionalSubcategoryOptions[0]
                       : '';
+              Future.delayed(Duration(milliseconds: 100), () {
+                setState(() {});
+              });
             });
           },
           initial: conventionalPropertyCategory.isNotEmpty
@@ -731,21 +878,113 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         ),
         questionText(AppLocalization.of(context)!
             .translate(TranslationString.investmentSubcategory)),
-        DropdownButton2Example(
-          list: currentConventionalSubcategoryOptions,
-          onSelected: (value) {
-            setState(() {
-              selectedInvestmentSubcategory = value;
-            });
-          },
-          initial: currentConventionalSubcategoryOptions.isNotEmpty
-              ? selectedInvestmentSubcategory.isNotEmpty
-                  ? selectedInvestmentSubcategory
-                  : currentConventionalSubcategoryOptions[0]
-              : '',
-          label: AppLocalization.of(context)!
-              .translate(TranslationString.investmentSubcategory),
-        ),
+        propertyIndexConventional == 0
+            ? OutlinedDropdownButtonExample(
+                list: List.from(conventionalPropertySubcategory[0]),
+                onSelected: (value) {
+                  setState(() {
+                    selectedInvestmentSubcategory = value;
+                  });
+                },
+                initial: conventionalPropertySubcategory[0][0],
+                label: AppLocalization.of(context)!
+                    .translate(TranslationString.investmentSubcategory),
+              )
+            : propertyIndexConventional == 1
+                ? OutlinedDropdownButtonExample(
+                    list: List.from(conventionalPropertySubcategory[1]),
+                    onSelected: (value) {
+                      setState(() {
+                        selectedInvestmentSubcategory = value;
+                      });
+                    },
+                    initial: conventionalPropertySubcategory[1][0],
+                    label: AppLocalization.of(context)!
+                        .translate(TranslationString.investmentSubcategory),
+                  )
+                : propertyIndexConventional == 2
+                    ? OutlinedDropdownButtonExample(
+                        list: conventionalPropertySubcategory[2],
+                        onSelected: (value) {
+                          setState(() {
+                            selectedInvestmentSubcategory = value;
+                          });
+                        },
+                        initial: conventionalPropertySubcategory[2][0],
+                        label: AppLocalization.of(context)!
+                            .translate(TranslationString.investmentSubcategory),
+                      )
+                    : propertyIndexConventional == 3
+                        ? OutlinedDropdownButtonExample(
+                            list: conventionalPropertySubcategory[3],
+                            onSelected: (value) {
+                              setState(() {
+                                selectedInvestmentSubcategory = value;
+                              });
+                            },
+                            initial: conventionalPropertySubcategory[3][0],
+                            label: AppLocalization.of(context)!.translate(
+                                TranslationString.investmentSubcategory),
+                          )
+                        : propertyIndexConventional == 4
+                            ? OutlinedDropdownButtonExample(
+                                list: conventionalPropertySubcategory[4],
+                                onSelected: (value) {
+                                  setState(() {
+                                    selectedInvestmentSubcategory = value;
+                                  });
+                                },
+                                initial: conventionalPropertySubcategory[4][0],
+                                label: AppLocalization.of(context)!.translate(
+                                    TranslationString.investmentSubcategory),
+                              )
+                            : propertyIndexConventional == 5
+                                ? OutlinedDropdownButtonExample(
+                                    list: conventionalPropertySubcategory[5],
+                                    onSelected: (value) {
+                                      setState(() {
+                                        selectedInvestmentSubcategory = value;
+                                      });
+                                    },
+                                    initial: conventionalPropertySubcategory[5]
+                                        [0],
+                                    label: AppLocalization.of(context)!
+                                        .translate(TranslationString
+                                            .investmentSubcategory),
+                                  )
+                                : propertyIndexConventional == 6
+                                    ? OutlinedDropdownButtonExample(
+                                        list:
+                                            conventionalPropertySubcategory[6],
+                                        onSelected: (value) {
+                                          setState(() {
+                                            selectedInvestmentSubcategory =
+                                                value;
+                                          });
+                                        },
+                                        initial:
+                                            conventionalPropertySubcategory[6]
+                                                [0],
+                                        label: AppLocalization.of(context)!
+                                            .translate(TranslationString
+                                                .investmentSubcategory),
+                                      )
+                                    : OutlinedDropdownButtonExample(
+                                        list:
+                                            conventionalPropertySubcategory[7],
+                                        onSelected: (value) {
+                                          setState(() {
+                                            selectedInvestmentSubcategory =
+                                                value;
+                                          });
+                                        },
+                                        initial:
+                                            conventionalPropertySubcategory[7]
+                                                [0],
+                                        label: AppLocalization.of(context)!
+                                            .translate(TranslationString
+                                                .investmentSubcategory),
+                                      ),
         SizedBox(
           height: 6.w,
         ),
@@ -758,6 +997,12 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '${AppLocalization.of(context)!.translate(TranslationString.landArea)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+            }
+            return null;
+          },
         ),
         SizedBox(
           height: 3.w,
@@ -771,6 +1016,12 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '${AppLocalization.of(context)!.translate(TranslationString.buildingUsageArea)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+            }
+            return null;
+          },
         ),
         SizedBox(
           height: 3.w,
@@ -784,6 +1035,12 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           inputType: TextInputType.number,
           horizontalSpacing: 0,
           verticalSpacing: 3,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '${AppLocalization.of(context)!.translate(TranslationString.buildableAreaInM2)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+            }
+            return null;
+          },
         ),
         SizedBox(
           height: 10.w,
@@ -974,35 +1231,45 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             ),
             questionText(AppLocalization.of(context)!
                 .translate(TranslationString.rooms)),
-            const Spacer(),
-            Text(
-              beds.toString(),
-              style: AppStyles.heading4.copyWith(
-                color: AppColors.blue,
-              ),
-            ),
             SizedBox(
               width: 6.w,
             ),
           ],
         ),
-        SfSlider(
-          min: 0.0,
-          max: 50.0,
-          value: beds,
-          interval: 1.0,
-          showLabels: false,
-          enableTooltip: true,
-          minorTicksPerInterval: 1,
-          activeColor: AppColors.blue,
-          inactiveColor: AppColors.lightGrey,
-          tooltipShape: const SfPaddleTooltipShape(),
-          onChanged: (value) {
-            setState(() {
-              beds = value.toInt();
-            });
+        // SfSlider(
+        //   min: 0.0,
+        //   max: 50.0,
+        //   value: beds,
+        //   interval: 1.0,
+        //   showLabels: false,
+        //   enableTooltip: true,
+        //   minorTicksPerInterval: 1,
+        //   activeColor: AppColors.blue,
+        //   inactiveColor: AppColors.lightGrey,
+        //   tooltipShape: const SfPaddleTooltipShape(),
+        //   onChanged: (value) {
+        //     setState(() {
+        //       beds = value.toInt();
+        //     });
+        //   },
+        // ),
+        CustomTextField(
+          controller: bedsController,
+          label:
+              AppLocalization.of(context)!.translate(TranslationString.rooms),
+          hintText:
+              AppLocalization.of(context)!.translate(TranslationString.rooms),
+          inputType: TextInputType.number,
+          horizontalSpacing: 0,
+          verticalSpacing: 10,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '${AppLocalization.of(context)!.translate(TranslationString.rooms)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+            }
+            return null;
           },
         ),
+
         SizedBox(
           height: 6.w,
         ),
@@ -1016,33 +1283,42 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             ),
             questionText(AppLocalization.of(context)!
                 .translate(TranslationString.bathrooms)),
-            const Spacer(),
-            Text(
-              bathroom.toString(),
-              style: AppStyles.heading4.copyWith(
-                color: AppColors.blue,
-              ),
-            ),
             SizedBox(
               width: 6.w,
             ),
           ],
         ),
-        SfSlider(
-          min: 0.0,
-          max: 50.0,
-          value: bathroom,
-          interval: 1.0,
-          showLabels: false,
-          enableTooltip: true,
-          minorTicksPerInterval: 1,
-          activeColor: AppColors.blue,
-          inactiveColor: AppColors.lightGrey,
-          tooltipShape: const SfPaddleTooltipShape(),
-          onChanged: (value) {
-            setState(() {
-              bathroom = value.toInt();
-            });
+        // SfSlider(
+        //   min: 0.0,
+        //   max: 50.0,
+        //   value: bathroom,
+        //   interval: 1.0,
+        //   showLabels: false,
+        //   enableTooltip: true,
+        //   minorTicksPerInterval: 1,
+        //   activeColor: AppColors.blue,
+        //   inactiveColor: AppColors.lightGrey,
+        //   tooltipShape: const SfPaddleTooltipShape(),
+        //   onChanged: (value) {
+        //     setState(() {
+        //       bathroom = value.toInt();
+        //     });
+        //   },
+        // ),
+        CustomTextField(
+          controller: bathsController,
+          label: AppLocalization.of(context)!
+              .translate(TranslationString.bathrooms),
+          hintText: AppLocalization.of(context)!
+              .translate(TranslationString.bathrooms),
+          inputType: TextInputType.number,
+          horizontalSpacing: 0,
+          verticalSpacing: 10,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '${AppLocalization.of(context)!.translate(TranslationString.bathrooms)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+            }
+            return null;
           },
         ),
         Row(
@@ -1056,35 +1332,44 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             ),
             questionText(AppLocalization.of(context)!
                 .translate(TranslationString.price)),
-            const Spacer(),
-            Text(
-              "€ ${formatPrice(price.toDouble())}",
-              style: AppStyles.heading4.copyWith(
-                color: AppColors.blue,
-              ),
-            ),
             SizedBox(
               width: 6.w,
             ),
           ],
         ),
-        SfSlider(
-          min: 0.0,
-          max: 100000000.0,
-          value: price,
-          interval: 100000.0,
-          showLabels: false,
-          enableTooltip: true,
-          minorTicksPerInterval: 1000,
-          activeColor: AppColors.blue,
-          inactiveColor: AppColors.lightGrey,
-          tooltipShape: const SfPaddleTooltipShape(),
-          numberFormat:
-              NumberFormat.simpleCurrency(locale: 'de_DE', decimalDigits: 0),
-          onChanged: (value) {
-            setState(() {
-              price = value.toInt();
-            });
+        // SfSlider(
+        //   min: 0.0,
+        //   max: 100000000.0,
+        //   value: price,
+        //   interval: 100000.0,
+        //   showLabels: false,
+        //   enableTooltip: true,
+        //   minorTicksPerInterval: 1000,
+        //   activeColor: AppColors.blue,
+        //   inactiveColor: AppColors.lightGrey,
+        //   tooltipShape: const SfPaddleTooltipShape(),
+        //   numberFormat:
+        //       NumberFormat.simpleCurrency(locale: 'de_DE', decimalDigits: 0),
+        //   onChanged: (value) {
+        //     setState(() {
+        //       price = value.toInt();
+        //     });
+        //   },
+        // ),
+        CustomTextField(
+          controller: priceController,
+          label:
+              AppLocalization.of(context)!.translate(TranslationString.price),
+          hintText:
+              AppLocalization.of(context)!.translate(TranslationString.price),
+          inputType: TextInputType.number,
+          horizontalSpacing: 0,
+          verticalSpacing: 10,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '${AppLocalization.of(context)!.translate(TranslationString.price)} ${AppLocalization.of(context)!.translate(TranslationString.canNotBeEmpty)}'; // Error message
+            }
+            return null;
           },
         ),
       ],

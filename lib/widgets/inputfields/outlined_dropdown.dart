@@ -36,17 +36,19 @@ class _OutlinedDropdownButtonExampleState
   @override
   void didUpdateWidget(OutlinedDropdownButtonExample oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.initial != oldWidget.initial) {
+    if (widget.initial != oldWidget.initial || widget.list != oldWidget.list) {
       setState(() {
         dropdownValue = widget.list.contains(widget.initial)
             ? widget.initial
-            : widget.list[0];
+            : (widget.list.isNotEmpty ? widget.list[0] : null);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    print("📌 Received List in Dropdown: ${widget.list}"); // Debugging line
+
     var seen = <String>{};
     List<String> uniquelist =
         widget.list.where((item) => seen.add(item)).toList();

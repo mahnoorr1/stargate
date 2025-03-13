@@ -233,7 +233,9 @@
     "marketer": "Marketer",
     "drawing_maker": "Drawing Maker",
     "loan_broker": "Loan Broker",
-    "offerOrFindPoperty": "Offer or Find Property"
+    "offerOrFindPoperty": "Offer or Find Property",
+    "canNotBeEmpty": "can not be empty",
+    "selectionRequired": "SelectionRequired"
     
 
 }

@@ -224,6 +224,8 @@
 "marketer": "Comercializador",
 "drawing_maker": "Dibujante",
 "loan_broker": "Corredor de Préstamos",
-"offerOrFindPoperty": "Ofrecer o encontrar una propiedad"
+"offerOrFindPoperty": "Ofrecer o encontrar una propiedad",
+"canNotBeEmpty": "no puede estar vacío",
+"selectionRequired": "Auswahl erforderlich"
 
 }

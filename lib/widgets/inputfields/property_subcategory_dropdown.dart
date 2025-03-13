@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/widgets/translationWidget.dart';
 
-class DropdownButton2Example extends StatefulWidget {
+class PropertySubcategoryDropdown extends StatefulWidget {
   final List<String> list;
   final String initial;
   final String label;
   final void Function(String) onSelected;
 
-  const DropdownButton2Example({
+  const PropertySubcategoryDropdown({
     required this.list,
     required this.onSelected,
     required this.initial,
@@ -18,10 +18,12 @@ class DropdownButton2Example extends StatefulWidget {
   });
 
   @override
-  State<DropdownButton2Example> createState() => _DropdownButtonExampleState();
+  State<PropertySubcategoryDropdown> createState() =>
+      _OutlinedDropdownButtonExampleState();
 }
 
-class _DropdownButtonExampleState extends State<DropdownButton2Example> {
+class _OutlinedDropdownButtonExampleState
+    extends State<PropertySubcategoryDropdown> {
   String? dropdownValue;
 
   @override
@@ -32,26 +34,26 @@ class _DropdownButtonExampleState extends State<DropdownButton2Example> {
   }
 
   @override
-  void didUpdateWidget(DropdownButton2Example oldWidget) {
+  void didUpdateWidget(PropertySubcategoryDropdown oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.initial != oldWidget.initial || widget.list != oldWidget.list) {
+    if (widget.initial != oldWidget.initial) {
       setState(() {
         dropdownValue = widget.list.contains(widget.initial)
             ? widget.initial
-            : (widget.list.isNotEmpty ? widget.list[0] : null);
+            : widget.list[0];
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print("📌 Received List in Dropdown: ${widget.list}"); // Debugging line
     var seen = <String>{};
     List<String> uniquelist =
         widget.list.where((item) => seen.add(item)).toList();
+
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
-        value: dropdownValue,
+        value: dropdownValue, // Use dropdownValue here
         isDense: true,
         isExpanded: false,
         buttonStyleData: ButtonStyleData(
@@ -94,7 +96,11 @@ class _DropdownButtonExampleState extends State<DropdownButton2Example> {
           return DropdownMenuItem<String>(
             value: value,
             child: translationWidget(
-                value, context, value, const TextStyle(fontSize: 14)),
+              value,
+              context,
+              value,
+              AppStyles.normalText,
+            ),
           );
         }).toList(),
         customButton: Container(
@@ -112,11 +118,8 @@ class _DropdownButtonExampleState extends State<DropdownButton2Example> {
                 child: translationWidget(
                   dropdownValue ?? widget.label,
                   context,
-                  '',
-                  const TextStyle(
-                    color: AppColors.black,
-                    fontSize: 14,
-                  ),
+                  dropdownValue ?? widget.label,
+                  AppStyles.normalText,
                 ),
               ),
               const Icon(

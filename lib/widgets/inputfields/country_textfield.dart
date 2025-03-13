@@ -6,10 +6,10 @@ import '../../localization/localization.dart';
 
 class CountryPickerField extends StatefulWidget {
   final TextEditingController country;
-  final TextEditingController city;
-  final TextEditingController state; // Add the form key here
+  TextEditingController city;
+  TextEditingController state; // Add the form key here
 
-  const CountryPickerField({
+  CountryPickerField({
     super.key,
     required this.country,
     required this.city,
@@ -124,15 +124,23 @@ class _CountryPickerFieldState extends State<CountryPickerField> {
               onCountrySelected: (value) {
                 setState(() {
                   widget.country.text = value.toString();
-                  widget.state.clear();
-
+                  widget.state.clear(); // Clear text properly
                   widget.city.clear();
+                });
+
+                // Force refresh by creating new instances of the controllers
+                Future.delayed(Duration(milliseconds: 10), () {
+                  setState(() {
+                    widget.state = TextEditingController();
+                    widget.city = TextEditingController();
+                  });
                 });
               },
               onStateSelected: (value) {
                 setState(() {
                   widget.state.text = value.toString();
                   widget.city.clear();
+                  widget.city.text = '';
                 });
               },
               onCitySelected: (value) {
@@ -140,6 +148,8 @@ class _CountryPickerFieldState extends State<CountryPickerField> {
                   widget.city.text = value.toString();
                 });
               },
+              cityInitialValue: '',
+              stateInitialValue: '',
             ),
             // Add a custom validation for the form
           ],

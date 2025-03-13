@@ -46,14 +46,17 @@ Widget translationWidget(
           style: style,
         );
       } else {
-        return SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          child: Text(
-            snapshot.data!,
-            style: style,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: Text(
+              snapshot.data!,
+              style: style,
+              softWrap: true,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
           ),
         );
       }

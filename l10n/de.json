@@ -224,6 +224,8 @@
 "marketer": "Vermarkter",
 "drawing_maker": "Zeichner",
 "loan_broker": "Kreditmakler",
-"offerOrFindPoperty": "Immobilie anbieten oder finden"
+"offerOrFindPoperty": "Immobilie anbieten oder finden",
+"canNotBeEmpty": "darf nicht leer sein",
+"selectionRequired": "Auswahl erforderlich"
 
 }

@@ -243,4 +243,6 @@ class TranslationString {
   static const drawingMaker = 'drawing_maker';
   static const loanBroker = 'loan_broker';
   static const offerOrFindPoperty = 'offerOrFindPoperty';
+  static const canNotBeEmpty = 'canNotBeEmpty';
+  static const selectionRequired = 'selectionRequired';
 }
