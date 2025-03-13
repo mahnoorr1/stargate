@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/widgets/translationWidget.dart';
 
 class OutlinedDropdownButtonExample extends StatefulWidget {
   final List<String> list;
@@ -94,9 +95,11 @@ class _OutlinedDropdownButtonExampleState
         items: uniquelist.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            child: Text(
+            child: translationWidget(
               value,
-              style: const TextStyle(fontSize: 14),
+              context,
+              value,
+              AppStyles.normalText,
             ),
           );
         }).toList(),
@@ -112,12 +115,11 @@ class _OutlinedDropdownButtonExampleState
           child: Row(
             children: [
               Expanded(
-                child: Text(
+                child: translationWidget(
                   dropdownValue ?? widget.label,
-                  style: const TextStyle(
-                    color: AppColors.black,
-                    fontSize: 14,
-                  ),
+                  context,
+                  dropdownValue ?? widget.label,
+                  AppStyles.normalText,
                 ),
               ),
               const Icon(

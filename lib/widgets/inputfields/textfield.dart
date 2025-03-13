@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stargate/config/core.dart';
@@ -17,6 +15,7 @@ class CustomTextField extends StatefulWidget {
   final int maxLines;
   final bool isPasswordField;
   final Function(dynamic value)? onChanged;
+  final FormFieldValidator<String>? validator; // Add validator
 
   const CustomTextField({
     super.key,
@@ -32,6 +31,7 @@ class CustomTextField extends StatefulWidget {
     this.verticalSpacing,
     this.maxLines = 1,
     this.onChanged,
+    this.validator, // Accept validator
   });
 
   @override
@@ -76,7 +76,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       margin: EdgeInsets.symmetric(
           horizontal: widget.horizontalSpacing ?? 20,
           vertical: widget.verticalSpacing ?? 7),
-      child: TextField(
+      child: TextFormField(
         onChanged: (value) {
           widget.onChanged!(value);
         },
@@ -146,6 +146,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 )
               : null,
         ),
+        validator: widget.validator, // Use the validator
       ),
     );
   }

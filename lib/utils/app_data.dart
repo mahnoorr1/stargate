@@ -286,7 +286,6 @@ List<FAQ> faqs = [
 List<String> userCategories = [
   'Investor',
   'Customer',
-  //under are all service providers
   'Real Estate Agent',
   'Appraiser',
   'Notary',

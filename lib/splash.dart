@@ -76,7 +76,10 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 2), () async {
       _initializeProviders();
       if (onboardDone == true) {
-        if (authData == null || authData == '') {
+        if (authData == null ||
+            authData == '' ||
+            token.isEmpty ||
+            token == '') {
           Navigator.pushReplacementNamed(
             context,
             AppRoutes.login,
@@ -88,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
           await UserProfileProvider.c(context).fetchUserProfile();
           print("Checking Incomplete");
-          if (UserProfileProvider.c(context).incompleteProfile()) {
+          if (!UserProfileProvider.c(context).profileApproved()) {
             Navigator.pushReplacementNamed(context, '/incompleteProfileDrawer');
           } else {
             await AllUsersProvider.c(context).fetchUsers();

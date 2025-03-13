@@ -74,7 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         UserProfileProvider.c(context)
             .setMembership(prefs.getString('membership') ?? '');
-        if (UserProfileProvider.c(context).incompleteProfile()) {
+        await UserProfileProvider.c(context).fetchUserProfile();
+        if (!UserProfileProvider.c(context).profileApproved()) {
           Navigator.pushReplacementNamed(context, '/incompleteProfileDrawer');
           showToast(
               message: AppLocalization.of(context)!

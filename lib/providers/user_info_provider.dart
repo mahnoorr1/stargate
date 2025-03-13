@@ -39,6 +39,8 @@ class UserProfileProvider with ChangeNotifier {
   bool _isLoading = true;
   bool _firstProfileInfoAlertDone = false;
   String _membership = '';
+  bool _isProfileCompleted = false;
+  bool _isProfileApproved = false;
 
   String get id => _id;
   String get name => _name;
@@ -58,6 +60,8 @@ class UserProfileProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get firstProfileInfoAlertDone => _firstProfileInfoAlertDone;
   String get membership => _membership;
+  bool get isProfileCompleted => _isProfileCompleted;
+  bool get isProfileApproved => _isProfileApproved;
 
   Future<void> _loadInitialProfileData() async {
     _isLoading = true;
@@ -96,6 +100,8 @@ class UserProfileProvider with ChangeNotifier {
       _properties = user.properties ?? [];
       _references = user.references ?? [];
       _membership = user.membership ?? '';
+      _isProfileCompleted = user.isProfileCompleted ?? false;
+      _isProfileApproved = user.isProfileApproved ?? false;
 
       await _saveToPrefs('id', _id);
       await _saveToPrefs('name', _name);
@@ -187,19 +193,28 @@ class UserProfileProvider with ChangeNotifier {
   }
 
   bool incompleteProfile() {
-    if (countryName == '' ||
-        address == '' ||
-        profileImage == '' ||
-        (services.isEmpty ||
-            services[0].details['yearsOfExperience'] == '' ||
-            services[0].details['yeasOfExperience'] == null ||
-            services[0].details['specialization'] == '' ||
-            services[0].details['specialization'] == null)) {
+    if (!isProfileCompleted
+        // countryName == '' ||
+        //   address == '' ||
+        //   profileImage == '' ||
+        //   (services.isEmpty ||
+        //       services[0].details['yearsOfExperience'] == '' ||
+        //       services[0].details['yeasOfExperience'] == null ||
+        //       services[0].details['specialization'] == '' ||
+        //       services[0].details['specialization'] == null)
+        ) {
       print("Incomplete Profile");
       return true;
     }
     print("Complete Profile");
     return false;
+  }
+
+  bool profileApproved() {
+    if (!isProfileApproved) {
+      return false;
+    }
+    return true;
   }
 
   void setUserDetails({

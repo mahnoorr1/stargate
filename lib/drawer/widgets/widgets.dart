@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/config/core.dart';
+import 'package:stargate/providers/user_info_provider.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
@@ -15,8 +16,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       backgroundColor: AppColors.backgroundColor,
       leading: GestureDetector(
-        onTap: () => Navigator.pushNamedAndRemoveUntil(
-            context, '/navbar', (route) => false),
+        onTap: () => UserProfileProvider.c(context).profileApproved()
+            ? Navigator.pushNamedAndRemoveUntil(
+                context, '/navbar', (route) => false)
+            : Navigator.pop(context),
         child: Container(
           height: 20.w,
           width: 20.w,

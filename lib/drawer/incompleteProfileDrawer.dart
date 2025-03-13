@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/providers/user_info_provider.dart';
-import 'package:stargate/screens/home/home_screen.dart';
 import 'package:stargate/screens/profile/edit_profile_screen.dart';
 import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
@@ -34,6 +33,7 @@ class _CustomDrawerState extends State<IncompleteCustomDrawer> {
       GlobalKey<SliderDrawerState>();
 
   bool _isDrawerOpen = false;
+  bool _isUserDataLoaded = false; // Track if the user data is loaded
 
   void _toggleDrawer() {
     if (_isDrawerOpen) {
@@ -50,6 +50,7 @@ class _CustomDrawerState extends State<IncompleteCustomDrawer> {
   void initState() {
     super.initState();
     UserProfileProvider profileProvdier = UserProfileProvider.c(context);
+    fetchUserProfile();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (UserProfileProvider.c(context).incompleteProfile()) {
         profileProvdier.setFirstTimeAlert();
@@ -67,8 +68,44 @@ class _CustomDrawerState extends State<IncompleteCustomDrawer> {
             Navigator.pop(context);
           },
         );
+      } else if (!UserProfileProvider.c(context).profileApproved()) {
+        showCustomDialog(
+          context: context,
+          circleBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+          titleText: AppLocalization.of(context)!
+              .translate(TranslationString.unapprovedProfile),
+          titleColor: AppColors.black,
+          descriptionText: AppLocalization.of(context)!
+              .translate(TranslationString.unapprovedProfileDescription),
+          buttonText:
+              AppLocalization.of(context)!.translate(TranslationString.ok),
+          onButtonPressed: () {
+            Navigator.pop(context);
+          },
+        );
       }
     });
+  }
+
+  Future<void> fetchUserProfile() async {
+    UserProfileProvider provider = UserProfileProvider.c(context);
+    try {
+      await provider.fetchUserProfile();
+      setState(() {
+        _isUserDataLoaded = true; // Set user data as loaded
+      });
+    } catch (e) {
+      showToast(
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.unableToFetchDetails),
+        context: context,
+        isAlert: true,
+      );
+      setState(() {
+        _isUserDataLoaded =
+            true; // Even if there's an error, stop loading indicator
+      });
+    }
   }
 
   @override
@@ -76,6 +113,14 @@ class _CustomDrawerState extends State<IncompleteCustomDrawer> {
     UserProfileProvider provider = UserProfileProvider.c(context);
     final homeContentProvider =
         Provider.of<HomeContentProvider>(context, listen: false);
+
+    // If user is not loaded, show a loading indicator
+    if (!_isUserDataLoaded) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     final user = User(
       services: provider.services,
       id: provider.id,
@@ -89,6 +134,11 @@ class _CustomDrawerState extends State<IncompleteCustomDrawer> {
       references: provider.references,
       websiteLink: provider.websiteLink,
     );
+    if (user.name != '') {
+      setState(() {
+        _isUserDataLoaded = true;
+      });
+    }
 
     return GestureDetector(
       child: SliderDrawer(
@@ -136,8 +186,9 @@ class _CustomDrawerState extends State<IncompleteCustomDrawer> {
               ),
             ),
           ),
-          title: const Text(
-            'Edit Profile',
+          title: Text(
+            AppLocalization.of(context)!
+                .translate(TranslationString.editProfile),
             style: AppStyles.heading3,
           ),
         ),
@@ -151,6 +202,7 @@ class _CustomDrawerState extends State<IncompleteCustomDrawer> {
         ),
         child: EditProfile(
           user: user,
+          backButton: false,
         ),
       ),
     );

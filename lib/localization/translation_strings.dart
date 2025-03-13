@@ -79,6 +79,24 @@ class TranslationString {
   static const noProperties = "noProperties";
   static const title = "title";
   static const description = "description";
+  static const update = 'update';
+  static const informationUpdated = 'informationUpdated';
+  static const dataValidationFromAdminDescription =
+      'dataValidationFromAdminDescription';
+  static const unapprovedProfile = 'unapprovedProfile';
+  static const unapprovedProfileDescription = 'unapprovedProfileDescription';
+  static const editProfile = 'editProfile';
+
+  static const enterNameError = 'enterNameError';
+  static const enterAddressError = 'enterAddressError';
+  static const enterRangeError = 'enterRangeError';
+  static const enterMaxRangeError = 'enterMaxRangeError';
+  static const enterSpecialization = 'enterSpecialization';
+  static const enterValidYearsOfExperience = 'enterValidYearsOfExperience';
+  static const upload1ReferenceError = 'upload1ReferenceError';
+  static const enterWebsiteLinkError = 'enterWebsiteLinkError';
+  static const selectProfessionError = 'selectProfessionError';
+  static const selectCountryError = 'selectCountryError';
 
   //real estate
   static const landArea = "landArea";

@@ -40,6 +40,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
   String selectedSellingType = '';
   List<String> currentSubcategoryOptions = [];
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
