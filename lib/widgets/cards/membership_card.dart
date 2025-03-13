@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/membership.dart';
 import 'package:stargate/widgets/buttons/custom_button.dart';
+import 'package:stargate/widgets/translationWidget.dart';
 
 import '../../localization/localization.dart';
 import '../../localization/translation_strings.dart';
@@ -53,9 +54,11 @@ class MembershipCard extends StatelessWidget {
                       : const SizedBox(),
                 ],
               ),
-              Text(
+              translationWidget(
                 membership.tag ?? '',
-                style: AppStyles.heading3.copyWith(
+                context,
+                membership.tag ?? '',
+                AppStyles.heading3.copyWith(
                   color: AppColors.darkBlue,
                 ),
               ),
@@ -87,10 +90,11 @@ class MembershipCard extends StatelessWidget {
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.75,
-                    child: Text(
+                    child: translationWidget(
                       item,
-                      style: AppStyles.normalText,
-                      maxLines: 2,
+                      context,
+                      item,
+                      AppStyles.normalText,
                     ),
                   ),
                 ],
