@@ -117,8 +117,7 @@ class _EditProfileState extends State<EditProfile> {
     if (!_formKey.currentState!.validate() ||
         selectedProfessions.isEmpty ||
         referencesNames.isEmpty ||
-        country.text.isEmpty ||
-        state.text.isEmpty) {
+        country.text.isEmpty) {
       setState(() {
         emptyCountryCityState = true;
       });

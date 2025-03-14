@@ -2,6 +2,7 @@ import 'package:stargate/localization/translation_strings.dart';
 import 'package:stargate/models/faq.dart';
 import 'package:stargate/models/user.dart';
 import 'package:stargate/utils/app_enums.dart';
+import 'package:translator/translator.dart';
 
 List<User> users = [
   // User(
@@ -111,6 +112,18 @@ List<String> servicesList = [
   UserType.economist.toCamelCaseString(),
   UserType.drawingMaker.toCamelCaseString(),
 ];
+
+List<Map<String, String>> offerRequestMapping = [
+  {
+    'type': 'offer',
+    'label': TranslationString.offer,
+  },
+  {
+    'type': 'request',
+    'label': TranslationString.request,
+  },
+];
+
 final List<Map<String, String>> userMapping = [
   {'type': UserType.all.name, 'label': TranslationString.all},
   {'type': UserType.investor.name, 'label': TranslationString.investor},
@@ -146,7 +159,7 @@ final List<Map<String, String>> userMappingSimple = [
 List<String> propertyTypes = ['commercial', 'conventional'];
 List<String> sellingTypes = ['purchase', 'rental'];
 List<String> conditions = ['new', 'old', 'renovating'];
-List<String> requestType = ['offering', 'requesting'];
+List<String> requestType = ['offer', 'request'];
 List<String> furnishedTypes = ['yes', 'no'];
 List<String> commercialPropertyCategory = [
   'Select an Option',

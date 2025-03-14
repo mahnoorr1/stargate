@@ -8,14 +8,19 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/models/profile.dart';
+import 'package:stargate/models/real_estate_listing.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/property_request_screen/property_request_screen.dart';
+import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/utils/app_images.dart';
+import 'package:stargate/widgets/buttons/bubble_text_button.dart';
+import 'package:stargate/widgets/buttons/custom_tab_button.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 import '../../localization/localization.dart';
 import '../../localization/translation_strings.dart';
+import '../../services/user_profiling.dart';
 import 'edit_profile_screen.dart';
 import 'package:stargate/widgets/buttons/membership_button.dart';
 import 'widgets/post_card.dart';
@@ -29,6 +34,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool hasShownNoPropertiesToast = false;
+  String selectedRequestType = 'offer';
   @override
   void initState() {
     super.initState();
@@ -97,6 +103,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       websiteLink: provider.websiteLink,
     );
 
+    List<RealEstateListing> userProperties = selectedRequestType == 'offer'
+        ? user.properties!.where((p) => p.requestType == 'offering').toList()
+        : user.properties!.where((p) => p.requestType == 'requesting').toList();
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Stack(
@@ -245,7 +254,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             height: 12.w,
                           ),
-                          user.properties == null || user.properties!.isEmpty
+                          Row(
+                            children: offerRequestMapping.map((or) {
+                              final localizedLabel = AppLocalization.of(context)
+                                      ?.translate(or['label']!) ??
+                                  or['label']!;
+
+                              return CustomTabButton(
+                                type: localizedLabel,
+                                current: AppLocalization.of(context)?.translate(
+                                        offerRequestMapping.firstWhere((u) =>
+                                            u['type'] ==
+                                            selectedRequestType)['label']!) ??
+                                    offerRequestMapping.firstWhere((u) =>
+                                        u['type'] ==
+                                        selectedRequestType)['label']!,
+                                selected: (value) {
+                                  final selected =
+                                      offerRequestMapping.firstWhere(
+                                    (u) =>
+                                        AppLocalization.of(context)
+                                            ?.translate(u['label']!) ==
+                                        value,
+                                  );
+                                  setState(() {
+                                    selectedRequestType = selected['type']!;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ),
+                          userProperties == null || userProperties.isEmpty
                               ? SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.3,
@@ -263,15 +302,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     crossAxisSpacing: 8.w,
                                     mainAxisSpacing: 8.w,
                                     children: List.generate(
-                                      user.properties!.length,
+                                      userProperties.length,
                                       (index) {
                                         return PostCard(
-                                          listing: user.properties![index],
+                                          listing: userProperties[index],
                                         );
                                       },
                                     ),
                                   ),
                                 ),
+                          SizedBox(
+                            height: 80.w,
+                          ),
                         ],
                       ),
                     ),
@@ -293,7 +335,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 );
                 if (result == 'success') {
-                  fetchUserProfile(); // Fetch updated profile after editing
+                  fetchUserProfile();
                 }
               },
               child: Container(
@@ -320,6 +362,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
               textColor: AppColors.white,
             ),
           ),
+          Positioned(
+            bottom: 10.w,
+            left: MediaQuery.of(context).size.width * 0.025,
+            child: GestureDetector(
+              onTap: () {
+                deleteAccessToken();
+                deleteUserData();
+                UserProfileProvider().resetUserDetails();
+                Navigator.popAndPushNamed(context, '/login');
+                showToast(
+                    message: AppLocalization.of(context)!
+                        .translate(TranslationString.loggedOut),
+                    context: context);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width * 0.95,
+                height: 60.w,
+                decoration: BoxDecoration(
+                  color: AppColors.blue,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    const Icon(Icons.logout, color: AppColors.white),
+                    SizedBox(
+                      width: 16.w,
+                    ),
+                    Text(
+                      AppLocalization.of(context)!.translate(
+                        TranslationString.logout,
+                      ),
+                      style: AppStyles.heading3.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -327,7 +413,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void dispose() {
-    hasShownNoPropertiesToast = false; // Reset flag when disposing
+    hasShownNoPropertiesToast = false;
     super.dispose();
   }
 }

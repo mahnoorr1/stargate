@@ -115,21 +115,30 @@ class _NavBarScreenState extends State<NavBarScreen> {
                     homeContentProvider.homeContent!.homeIcon,
                     width: 20,
                     height: 24,
-                    color: AppColors
-                        .primaryGrey, // Ensure grey for unselected state
+                    color: AppColors.primaryGrey,
                   ),
-                  selectedIcon: Image.network(
-                    homeContentProvider.homeContent!.homeIcon,
-                    width: 22,
-                    height: 24,
-                    color: AppColors.blue,
+                  selectedIcon: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.blue,
+                    ),
+                    child: Center(
+                      child: Image.network(
+                        homeContentProvider.homeContent!.homeIcon,
+                        width: 24,
+                        height: 24,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                   selectedColor: AppColors.blue,
                   unSelectedColor: AppColors.primaryGrey,
                   title: Text(
                     AppLocalization.of(context)!
                         .translate(TranslationString.home),
-                    style: const TextStyle(fontSize: 12),
+                    style: AppStyles.heading4,
                   ),
                 ),
                 BottomBarItem(
@@ -137,14 +146,23 @@ class _NavBarScreenState extends State<NavBarScreen> {
                     servicesContentProvider.searchContent!,
                     width: 20,
                     height: 24,
-                    color: AppColors
-                        .primaryGrey, // Ensure grey for unselected state
+                    color: AppColors.primaryGrey,
                   ),
-                  selectedIcon: Image.network(
-                    servicesContentProvider.searchContent!,
-                    width: 22,
-                    height: 24,
-                    color: AppColors.blue,
+                  selectedIcon: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.blue,
+                    ),
+                    child: Center(
+                      child: Image.network(
+                        servicesContentProvider.searchContent!,
+                        width: 24,
+                        height: 24,
+                        color: Colors.white, // Icon turns white
+                      ),
+                    ),
                   ),
                   selectedColor: AppColors.blue,
                   unSelectedColor: AppColors.primaryGrey,
@@ -159,14 +177,23 @@ class _NavBarScreenState extends State<NavBarScreen> {
                     profileContentProvider.profileContent!.profileIcon,
                     width: 18,
                     height: 24,
-                    color: AppColors
-                        .primaryGrey, // Ensure grey for unselected state
+                    color: AppColors.primaryGrey,
                   ),
-                  selectedIcon: Image.network(
-                    profileContentProvider.profileContent!.profileIcon,
-                    color: AppColors.blue,
-                    width: 20,
-                    height: 24,
+                  selectedIcon: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.blue,
+                    ),
+                    child: Center(
+                      child: Image.network(
+                        profileContentProvider.profileContent!.profileIcon,
+                        width: 24,
+                        height: 24,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                   selectedColor: AppColors.blue,
                   unSelectedColor: AppColors.primaryGrey,
@@ -198,7 +225,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
                       title: Text(
                         AppLocalization.of(context)!
                             .translate(TranslationString.home),
-                        style: const TextStyle(fontSize: 12),
+                        style: AppStyles.heading4,
                       ),
                     ),
                     BottomBarItem(
@@ -206,15 +233,23 @@ class _NavBarScreenState extends State<NavBarScreen> {
                         listingContentProvider.listingContent!.icon,
                         width: 22,
                         height: 24,
-                        color: AppColors
-                            .primaryGrey, // Ensure grey for unselected state
+                        color: AppColors.primaryGrey,
                       ),
-                      selectedIcon: Image.network(
-                        listingContentProvider.listingContent!.icon,
-                        color: AppColors.blue,
-                        width: 24,
-                        height: 24,
-                        fit: BoxFit.contain,
+                      selectedIcon: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.blue,
+                        ),
+                        child: Center(
+                          child: Image.network(
+                            listingContentProvider.listingContent!.icon,
+                            width: 24,
+                            height: 24,
+                            color: Colors.white, // Icon turns white
+                          ),
+                        ),
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
@@ -229,14 +264,23 @@ class _NavBarScreenState extends State<NavBarScreen> {
                         profileContentProvider.profileContent!.profileIcon,
                         width: 18,
                         height: 24,
-                        color: AppColors
-                            .primaryGrey, // Ensure grey for unselected state
+                        color: AppColors.primaryGrey,
                       ),
-                      selectedIcon: Image.network(
-                        profileContentProvider.profileContent!.profileIcon,
-                        color: AppColors.blue,
-                        width: 20,
-                        height: 24,
+                      selectedIcon: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.blue,
+                        ),
+                        child: Center(
+                          child: Image.network(
+                            profileContentProvider.profileContent!.profileIcon,
+                            width: 24,
+                            height: 24,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
@@ -253,14 +297,23 @@ class _NavBarScreenState extends State<NavBarScreen> {
                         homeContentProvider.homeContent!.homeIcon,
                         width: 20,
                         height: 24,
-                        color: AppColors
-                            .primaryGrey, // Ensure grey for unselected state
+                        color: AppColors.primaryGrey,
                       ),
-                      selectedIcon: Image.network(
-                        homeContentProvider.homeContent!.homeIcon,
-                        width: 22,
-                        height: 24,
-                        color: AppColors.blue,
+                      selectedIcon: Container(
+                        width: 50, // Adjust circle size
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.blue, // Blue background
+                        ),
+                        child: Center(
+                          child: Image.network(
+                            homeContentProvider.homeContent!.homeIcon,
+                            width: 24,
+                            height: 24,
+                            color: Colors.white, // Icon turns white
+                          ),
+                        ),
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
@@ -275,14 +328,23 @@ class _NavBarScreenState extends State<NavBarScreen> {
                         servicesContentProvider.searchContent!,
                         width: 20,
                         height: 24,
-                        color: AppColors
-                            .primaryGrey, // Ensure grey for unselected state
+                        color: AppColors.primaryGrey,
                       ),
-                      selectedIcon: Image.network(
-                        servicesContentProvider.searchContent!,
-                        width: 22,
-                        height: 24,
-                        color: AppColors.blue,
+                      selectedIcon: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.blue,
+                        ),
+                        child: Center(
+                          child: Image.network(
+                            servicesContentProvider.searchContent!,
+                            width: 24,
+                            height: 24,
+                            color: Colors.white, // Icon turns white
+                          ),
+                        ),
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
@@ -297,15 +359,23 @@ class _NavBarScreenState extends State<NavBarScreen> {
                         listingContentProvider.listingContent!.icon,
                         width: 22,
                         height: 24,
-                        color: AppColors
-                            .primaryGrey, // Ensure grey for unselected state
+                        color: AppColors.primaryGrey,
                       ),
-                      selectedIcon: Image.network(
-                        listingContentProvider.listingContent!.icon,
-                        color: AppColors.blue,
-                        width: 24,
-                        height: 24,
-                        fit: BoxFit.contain,
+                      selectedIcon: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.blue,
+                        ),
+                        child: Center(
+                          child: Image.network(
+                            listingContentProvider.listingContent!.icon,
+                            width: 24,
+                            height: 24,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,
@@ -320,14 +390,23 @@ class _NavBarScreenState extends State<NavBarScreen> {
                         profileContentProvider.profileContent!.profileIcon,
                         width: 18,
                         height: 24,
-                        color: AppColors
-                            .primaryGrey, // Ensure grey for unselected state
+                        color: AppColors.primaryGrey,
                       ),
-                      selectedIcon: Image.network(
-                        profileContentProvider.profileContent!.profileIcon,
-                        color: AppColors.blue,
-                        width: 20,
-                        height: 24,
+                      selectedIcon: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.blue,
+                        ),
+                        child: Center(
+                          child: Image.network(
+                            profileContentProvider.profileContent!.profileIcon,
+                            width: 24,
+                            height: 24,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                       selectedColor: AppColors.blue,
                       unSelectedColor: AppColors.primaryGrey,

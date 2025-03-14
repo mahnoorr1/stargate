@@ -127,14 +127,6 @@ class _CountryPickerFieldState extends State<CountryPickerField> {
                   widget.state.clear(); // Clear text properly
                   widget.city.clear();
                 });
-
-                // Force refresh by creating new instances of the controllers
-                Future.delayed(Duration(milliseconds: 10), () {
-                  setState(() {
-                    widget.state = TextEditingController();
-                    widget.city = TextEditingController();
-                  });
-                });
               },
               onStateSelected: (value) {
                 setState(() {
@@ -148,8 +140,6 @@ class _CountryPickerFieldState extends State<CountryPickerField> {
                   widget.city.text = value.toString();
                 });
               },
-              cityInitialValue: '',
-              stateInitialValue: '',
             ),
             // Add a custom validation for the form
           ],

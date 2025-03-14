@@ -6,6 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/buttons/membership_button.dart';
 import 'package:stargate/screens/onboarding/widgets/next_button.dart';
 
+import '../../../localization/localization.dart';
+import '../../../localization/translation_strings.dart';
+import '../../profile/membership_screen.dart';
+
 class OnboardContent extends StatelessWidget {
   final String image;
   final bool isNetworkImage;
@@ -143,10 +147,56 @@ class OnBoardAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 )
           : const SizedBox(),
-      actions: const [
+      actions: [
         Padding(
-          padding: EdgeInsets.only(right: 20, left: 20),
-          child: MembershipButton(),
+          padding: const EdgeInsets.only(right: 20, left: 20),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const MembershipScreen(),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                Container(
+                  height: 40.w,
+                  width: 40.w,
+                  margin: EdgeInsets.all(6.w),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20.w),
+                    ),
+                    // ignore: deprecated_member_use
+                    color: AppColors.lightBlue.withOpacity(0.5),
+                  ),
+                  child: Icon(
+                    Icons.star,
+                    color: Colors.amber[600],
+                  ),
+                ),
+                Container(
+                  height: 40.w,
+                  width: 120.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20.w),
+                    ),
+                    color: AppColors.lightBlue,
+                  ),
+                  child: Center(
+                    child: Text(
+                      AppLocalization.of(context)!
+                          .translate(TranslationString.membership),
+                      style: AppStyles.heading4
+                          .copyWith(color: AppColors.darkBlue),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         )
       ],
     );

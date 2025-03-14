@@ -277,6 +277,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,7 +291,10 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                   height: 6.w,
                 ),
                 BubbleTextButton(
-                  child: translationString(widget.listing.propertyCategory),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    child: translationString(widget.listing.propertyCategory),
+                  ),
                 ),
               ],
             ),
@@ -307,7 +311,10 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                   height: 6.w,
                 ),
                 BubbleTextButton(
-                  child: translationString(widget.listing.propertySubCategory),
+                  child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      child: translationString(
+                          widget.listing.propertySubCategory)),
                 ),
               ],
             )
