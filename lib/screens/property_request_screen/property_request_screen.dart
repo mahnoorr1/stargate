@@ -82,6 +82,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   String furnished = '';
   String garage = '';
   List<String> images = [];
+  List<String> existingImages = [];
   bool loading = false;
   int selectedIndexOfPropertyCategory = 0;
   int propertyIndexConventional = 0;
@@ -218,6 +219,64 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
     }
   }
 
+  void updateProperty() async {
+    setState(() => loading = true);
+    print("updating now");
+    try {
+      String success =
+          await RealEstateProvider.c(context).updateExistingProperty(
+        propertyId: widget.listing!.id!,
+        title: title.text,
+        country: country.text,
+        requestType: selectedRequestType,
+        condition: selectedCondition,
+        purchaseType: selectedPurchaseType,
+        propertyType: selectedPropertyType,
+        landArea: selectedLandArea.text,
+        buildingUsageArea: selectedBuildingArea.text,
+        buildableArea: selectedBuildableArea.text,
+        bathrooms: bathsController.text,
+        price: priceController.text,
+        newImagePaths: images, // List of new image file paths
+        existingImageUrls: existingImages, // List of existing image URLs
+        address: address.text,
+        district: state.text,
+        city: city.text,
+        shortDescription: description.text,
+        investmentType: selectedInvestmentType,
+        investmentSubcategory: selectedInvestmentSubcategory,
+        beds: bedsController.text,
+        rooms: bedsController.text,
+        isFurnished: furnished,
+        garage: garage,
+        parkingPlaces: parkingPlaces.text,
+      );
+
+      if (success == 'Property updated successfully') {
+        showToast(
+            message: AppLocalization.of(context)!
+                .translate(TranslationString.propertyUpdateSuccess),
+            context: context,
+            color: AppColors.blue);
+        Navigator.pop(context);
+      } else {
+        showToast(
+            message: AppLocalization.of(context)!
+                .translate(TranslationString.propertyUpdateFailed),
+            context: context,
+            color: Colors.redAccent);
+      }
+    } catch (e) {
+      showToast(
+          message:
+              AppLocalization.of(context)!.translate(TranslationString.error),
+          context: context,
+          color: Colors.redAccent);
+    } finally {
+      setState(() => loading = false);
+    }
+  }
+
   Future<List<String>> _pickFile(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
     final List<XFile>? pickedFiles = await picker.pickMultiImage();
@@ -256,6 +315,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
       furnished = widget.listing!.furnished == true ? 'yes' : 'no';
       garage = widget.listing!.garage == true ? 'yes' : 'no';
       //pictures initialization
+      existingImages = widget.listing!.pictures ?? [];
       parkingPlaces.text = widget.listing!.parkingPlaces.toString();
       selectedIndexOfPropertyCategory = widget.listing!.propertyType ==
               'commercial'
@@ -943,7 +1003,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           height: 10.w,
         ),
         GestureDetector(
-          onTap: onSendRequest,
+          onTap:
+              widget.isEditingEnabled == true ? updateProperty : onSendRequest,
           child: CustomButton(
             text: widget.isEditingEnabled == true
                 ? AppLocalization.of(context)!
@@ -1299,7 +1360,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
           height: 10.w,
         ),
         GestureDetector(
-          onTap: onSendRequest,
+          onTap:
+              widget.isEditingEnabled == true ? updateProperty : onSendRequest,
           child: CustomButton(
             text: widget.isEditingEnabled == true
                 ? AppLocalization.of(context)!
@@ -1313,10 +1375,12 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   }
 
   Widget imagesContainer(BuildContext context) {
-    return images.isNotEmpty
+    List<String> allImages = [...existingImages, ...images]; // Combine lists
+
+    return allImages.isNotEmpty
         ? LayoutBuilder(
             builder: (context, constraints) {
-              int rows = (images.length / 3).ceil();
+              int rows = (allImages.length / 3).ceil();
               double totalHeight =
                   (rows * MediaQuery.of(context).size.width * 0.315) +
                       ((rows - 1) * 4.0);
@@ -1330,18 +1394,30 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                     crossAxisSpacing: 4.0,
                     mainAxisSpacing: 4.0,
                   ),
-                  itemCount: images.length,
+                  itemCount: allImages.length,
                   itemBuilder: (context, index) {
+                    bool isExistingImage = index < existingImages.length;
+
                     return Stack(
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.file(
-                            File(images[index]),
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
+                          child: isExistingImage
+                              ? Image.network(
+                                  existingImages[
+                                      index], // Show URL images first
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                )
+                              : Image.file(
+                                  File(images[index -
+                                      existingImages
+                                          .length]), // Show local images after
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                ),
                         ),
                         Positioned(
                           right: 6,
@@ -1349,7 +1425,14 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                images.removeAt(index);
+                                if (isExistingImage) {
+                                  existingImages
+                                      .removeAt(index); // Remove URL image
+                                } else {
+                                  images.removeAt(index -
+                                      existingImages
+                                          .length); // Remove local image
+                                }
                               });
                             },
                             child: Container(

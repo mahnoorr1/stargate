@@ -232,6 +232,8 @@
     "pending": "ausstehend",
     "rejected": "abgelehnt",
     "approved": "genehmigt",
-    "approval": "Genehmigung"
+    "approval": "Genehmigung",
+    "propertyUpdateSuccess": "Immobilie erfolgreich aktualisiert",
+    "propertyUpdateFailed": "Fehler beim Aktualisieren der Eigenschaft"
 
 }

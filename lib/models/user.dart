@@ -17,6 +17,7 @@ class User {
   List<dynamic>? references;
   bool? isProfileCompleted;
   bool? isProfileApproved;
+  String? status;
 
   User({
     required this.id,
@@ -35,29 +36,31 @@ class User {
     this.references,
     this.isProfileCompleted = false,
     this.isProfileApproved = false,
+    this.status,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
+    print(json['profileStatus']);
     return User(
-      id: json['_id'],
-      name: json['name'] ?? '',
-      image: json['profilePicture'] ?? '',
-      services: (json['professions'] as List<dynamic>? ?? [])
-          .map((profession) => Service.fromJson(profession))
-          .toList(),
-      address: json['address'] ?? '',
-      city: json['city'] ?? '',
-      country: json['country'] ?? '',
-      email: json['email'] ?? '',
-      verified: json['isRecommended'] ?? false,
-      websiteLink: json['websiteLink'] ?? '',
-      restrictContact: json['restrictContact'] ?? false,
-      properties: json['properties'] as List<dynamic>,
-      membership: json['membership'] ?? '',
-      references: json['references'] as List<dynamic>,
-      isProfileCompleted: json['isProfileCompleted'] ?? false,
-      isProfileApproved: json['isProfileApproved'] ?? false,
-    );
+        id: json['_id'],
+        name: json['name'] ?? '',
+        image: json['profilePicture'] ?? '',
+        services: (json['professions'] as List<dynamic>? ?? [])
+            .map((profession) => Service.fromJson(profession))
+            .toList(),
+        address: json['address'] ?? '',
+        city: json['city'] ?? '',
+        country: json['country'] ?? '',
+        email: json['email'] ?? '',
+        verified: json['isRecommended'] ?? false,
+        websiteLink: json['websiteLink'] ?? '',
+        restrictContact: json['restrictContact'] ?? false,
+        properties: json['properties'] as List<dynamic>,
+        membership: json['membership'] ?? '',
+        references: json['references'] as List<dynamic>,
+        isProfileCompleted: json['isProfileCompleted'] ?? false,
+        isProfileApproved: json['isProfileApproved'] ?? false,
+        status: json['profileStatus'] ?? '');
   }
 
   Map<String, dynamic> toJson() {

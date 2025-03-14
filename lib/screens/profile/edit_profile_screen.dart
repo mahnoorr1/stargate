@@ -265,10 +265,36 @@ class _EditProfileState extends State<EditProfile> {
           padding: EdgeInsets.only(right: 12.w, left: 12.w, top: 12.w),
           child: SingleChildScrollView(
             child: Form(
-              key: _formKey, // Wrapping the body with Form widget
+              key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        height: 36,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 6.w),
+                        decoration: BoxDecoration(
+                          color: UserProfileProvider.c(context).status ==
+                                  'approved'
+                              ? AppColors.blue
+                              : UserProfileProvider.c(context).status ==
+                                      'rejected'
+                                  ? Colors.redAccent
+                                  : Colors.orange,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                            style: AppStyles.heading4
+                                .copyWith(color: Colors.white),
+                            "${AppLocalization.of(context)!.translate(TranslationString.profile)} ${AppLocalization.of(context)!.translate(UserProfileProvider.c(context).status)}"),
+                      ),
+                    ],
+                  ),
                   Row(
                     children: [
                       Container(

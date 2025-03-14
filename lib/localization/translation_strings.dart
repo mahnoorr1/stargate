@@ -251,4 +251,6 @@ class TranslationString {
   static const rejected = 'rejected';
   static const approved = 'approved';
   static const approval = "approval";
+  static const propertyUpdateSuccess = 'propertyUpdateSuccess';
+  static const propertyUpdateFailed = 'propertyUpdateFailed';
 }

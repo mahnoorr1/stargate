@@ -6,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/services/real_estate_listings.dart';
 import '../models/real_estate_listing.dart';
+import '../services/property_update_api.dart';
 
 class RealEstateProvider extends ChangeNotifier {
   static RealEstateProvider c(BuildContext context, [bool listen = false]) =>
@@ -248,6 +249,114 @@ class RealEstateProvider extends ChangeNotifier {
     } else {
       if (kDebugMode) print('Error adding property: $result');
       return {};
+    }
+  }
+
+  Future<String> updateExistingProperty({
+    required String propertyId,
+    required String title,
+    required String country,
+    required String requestType,
+    required String condition,
+    required String purchaseType,
+    required String propertyType,
+    required String landArea,
+    required String buildingUsageArea,
+    required String buildableArea,
+    required String bathrooms,
+    required String price,
+    List<String>? newImagePaths,
+    List<String>? existingImageUrls,
+    String? address,
+    String? district,
+    String? city,
+    String? shortDescription,
+    String? investmentType,
+    String? investmentSubcategory,
+    String? beds,
+    String? rooms,
+    String? isFurnished,
+    String? garage,
+    String? equipment,
+    String? qualityOfEquipment,
+    String? parkingPlaces,
+  }) async {
+    print(existingImageUrls);
+    print(newImagePaths);
+    // Call API
+    Map<String, dynamic> result = await updateProperty(
+      propertyId: propertyId,
+      title: title,
+      country: country,
+      requestType: requestType,
+      condition: condition,
+      purchaseType: purchaseType,
+      propertyType: propertyType,
+      landArea: landArea,
+      buildingUsageArea: buildingUsageArea,
+      buildableArea: buildableArea,
+      bathrooms: bathrooms,
+      price: price,
+      newImagePaths: newImagePaths ?? [],
+      existingImageUrls: existingImageUrls ?? [],
+      address: address,
+      district: district,
+      city: city,
+      shortDescription: shortDescription,
+      investmentType: investmentType,
+      investmentSubcategory: investmentSubcategory,
+      beds: beds,
+      rooms: rooms,
+      isFurnished: isFurnished,
+      garage: garage,
+      equipment: equipment,
+      qualityOfEquipment: qualityOfEquipment,
+      parkingPlaces: parkingPlaces,
+    );
+    print(result);
+
+    if (result['message'] == 'Property updated successfully') {
+      // Find and update the listing in provider
+      int index =
+          _allProperties.indexWhere((property) => property.id == propertyId);
+      print("debugging 1");
+      if (index != -1) {
+        _allProperties[index] = RealEstateListing(
+          id: propertyId,
+          title: title,
+          address: address ?? '',
+          country: country,
+          city: city ?? '',
+          price: double.parse(price),
+          requestType: requestType,
+          condition: condition,
+          sellingType: purchaseType,
+          propertyType: propertyType,
+          propertyCategory: investmentType ?? '',
+          propertySubCategory: investmentSubcategory ?? '',
+          landAreaInTotal: double.parse(landArea),
+          rooms: rooms != null ? int.parse(rooms) : 0,
+          noOfBathrooms: int.parse(bathrooms),
+          garage: garage == 'yes',
+          furnished: isFurnished == 'yes',
+          description: shortDescription ?? '',
+          pictures: [...?existingImageUrls, ...?newImagePaths],
+          parkingPlaces: parkingPlaces != null ? int.parse(parkingPlaces) : 0,
+          state: district ?? '',
+          userID: UserProfileProvider().id,
+          userEmail: UserProfileProvider().email,
+          userName: UserProfileProvider().name,
+          status: result['status'],
+        );
+        print("debugging 2");
+        notifyListeners();
+        print("debugging 3");
+      }
+      print("debugging 4");
+      return result['message'];
+    } else {
+      print("debugging 5");
+      return result['message'];
     }
   }
 

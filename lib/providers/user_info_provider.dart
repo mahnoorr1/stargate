@@ -41,6 +41,7 @@ class UserProfileProvider with ChangeNotifier {
   String _membership = '';
   bool _isProfileCompleted = false;
   bool _isProfileApproved = false;
+  String _status = 'pending';
 
   String get id => _id;
   String get name => _name;
@@ -62,6 +63,7 @@ class UserProfileProvider with ChangeNotifier {
   String get membership => _membership;
   bool get isProfileCompleted => _isProfileCompleted;
   bool get isProfileApproved => _isProfileApproved;
+  String get status => _status;
 
   Future<void> _loadInitialProfileData() async {
     _isLoading = true;
@@ -108,6 +110,7 @@ class UserProfileProvider with ChangeNotifier {
       _membership = user.membership ?? '';
       _isProfileCompleted = user.isProfileCompleted ?? false;
       _isProfileApproved = user.isProfileApproved ?? false;
+      _status = user.status ?? 'pending';
 
       await _saveToPrefs('id', _id);
       await _saveToPrefs('name', _name);
@@ -217,7 +220,7 @@ class UserProfileProvider with ChangeNotifier {
   }
 
   bool profileApproved() {
-    if (!isProfileApproved) {
+    if (status != 'approved') {
       return false;
     }
     return true;

@@ -18,6 +18,7 @@ class User {
   String? membership;
   bool? isProfileCompleted;
   bool? isProfileApproved;
+  String? status;
 
   User({
     required this.id,
@@ -36,9 +37,11 @@ class User {
     this.membership,
     this.isProfileCompleted,
     this.isProfileApproved,
+    this.status,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
+    print(json['profileStatus']);
     return User(
       id: json['_id'],
       name: json['name'] ?? '',
@@ -61,6 +64,7 @@ class User {
       membership: json['membership']['_id'] as String,
       isProfileCompleted: json['isProfileCompleted'] ?? false,
       isProfileApproved: json['isProfileApproved'] ?? false,
+      status: json['profileStatus'] ?? '',
     );
   }
 

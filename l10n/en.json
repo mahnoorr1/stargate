@@ -241,7 +241,9 @@
     "pending": "pending",
     "rejected": "rejected",
     "approved": "approved",
-    "approval": "approval"
+    "approval": "approval",
+    "propertyUpdateSuccess": "Property Updated Successfully",
+    "propertyUpdateFailed": "Property Update Failed"
     
 
 }

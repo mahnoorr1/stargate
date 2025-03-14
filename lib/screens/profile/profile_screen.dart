@@ -364,7 +364,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           Positioned(
             bottom: 10.w,
-            left: MediaQuery.of(context).size.width * 0.025,
+            right: 20.w,
             child: GestureDetector(
               onTap: () {
                 deleteAccessToken();
@@ -377,9 +377,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context: context);
               },
               child: Container(
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width * 0.95,
-                height: 60.w,
+                width: MediaQuery.of(context).size.width * 0.45,
+                height: 40.w,
                 decoration: BoxDecoration(
                   color: AppColors.blue,
                   borderRadius: BorderRadius.circular(50),

@@ -232,6 +232,8 @@
     "pending": "pendiente",
     "rejected": "rechazado",
     "approved": "aprobado",
-    "approval": "aprobación"
+    "approval": "aprobación",
+     "propertyUpdateSuccess": "Propiedad actualizada con éxito",
+     "propertyUpdateFailed": "Error en la actualización de la propiedad"
 
 }
