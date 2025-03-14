@@ -13,6 +13,7 @@ import 'package:stargate/models/profile.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
 import 'package:stargate/screens/profile/change_password.dart';
+import 'package:stargate/screens/profile/request_email_change.dart';
 import 'package:stargate/utils/app_data.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/widgets/buttons/back_button.dart';
@@ -326,10 +327,19 @@ class _EditProfileState extends State<EditProfile> {
                       SizedBox(
                         width: 6.w,
                       ),
-                      const Icon(
-                        Icons.edit,
-                        size: 20,
-                        color: AppColors.blue,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const EmailChangeScreen()));
+                        },
+                        child: const Icon(
+                          Icons.edit,
+                          size: 20,
+                          color: AppColors.blue,
+                        ),
                       ),
                     ],
                   ),

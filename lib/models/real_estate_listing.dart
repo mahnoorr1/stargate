@@ -28,6 +28,7 @@ class RealEstateListing {
   String userName;
   String userEmail;
   String userID;
+  String status;
 
   RealEstateListing({
     this.id,
@@ -59,6 +60,7 @@ class RealEstateListing {
     required this.userEmail,
     required this.userID,
     required this.userName,
+    required this.status,
   });
 
   factory RealEstateListing.fromJson(
@@ -96,6 +98,7 @@ class RealEstateListing {
       userName:
           name == '' || name == null ? json['postedBy']['name'] ?? '' : name,
       userID: id == '' || id == null ? json['postedBy']['_id'] ?? '' : id,
+      status: json['status'],
     );
   }
 

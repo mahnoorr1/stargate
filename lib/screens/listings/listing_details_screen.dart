@@ -226,6 +226,30 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             left: 16.w,
             child: const CustomBackButton(),
           ),
+          Positioned(
+            top: 36.w,
+            right: 16.w,
+            child: Container(
+              height: 30,
+              margin: EdgeInsets.only(top: 4.w),
+              padding: EdgeInsets.all(4.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: widget.listing.status == 'pending'
+                    ? Colors.orange
+                    : widget.listing.status == 'rejected'
+                        ? Colors.redAccent
+                        : AppColors.blue,
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Text(
+                  "${AppLocalization.of(context)!.translate(TranslationString.approval)} ${AppLocalization.of(context)!.translate(widget.listing.status)}",
+                  style: AppStyles.heading4.copyWith(color: AppColors.white),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

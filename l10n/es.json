@@ -226,6 +226,12 @@
 "loan_broker": "Corredor de Préstamos",
 "offerOrFindPoperty": "Ofrecer o encontrar una propiedad",
 "canNotBeEmpty": "no puede estar vacío",
-"selectionRequired": "Auswahl erforderlich"
+"selectionRequired": "Auswahl erforderlich",
+    "resendOtp": "Reenviar OTP",
+    "emailAlreadyInYourUse": "Correo electrónico ya en su uso.",
+    "pending": "pendiente",
+    "rejected": "rechazado",
+    "approved": "aprobado",
+    "approval": "aprobación"
 
 }

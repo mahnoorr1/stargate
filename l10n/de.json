@@ -226,6 +226,12 @@
 "loan_broker": "Kreditmakler",
 "offerOrFindPoperty": "Immobilie anbieten oder finden",
 "canNotBeEmpty": "darf nicht leer sein",
-"selectionRequired": "Auswahl erforderlich"
+"selectionRequired": "Auswahl erforderlich",
+    "resendOtp": "OTP erneut senden",
+    "emailAlreadyInYourUse": "Sie verwenden die E-Mail-Adresse bereits.",
+    "pending": "ausstehend",
+    "rejected": "abgelehnt",
+    "approved": "genehmigt",
+    "approval": "Genehmigung"
 
 }

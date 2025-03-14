@@ -235,7 +235,13 @@
     "loan_broker": "Loan Broker",
     "offerOrFindPoperty": "Offer or Find Property",
     "canNotBeEmpty": "can not be empty",
-    "selectionRequired": "SelectionRequired"
+    "selectionRequired": "SelectionRequired",
+    "resendOtp": "Resend OTP",
+    "emailAlreadyInYourUse": "Email already in your use.",
+    "pending": "pending",
+    "rejected": "rejected",
+    "approved": "approved",
+    "approval": "approval"
     
 
 }

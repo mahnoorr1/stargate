@@ -245,4 +245,10 @@ class TranslationString {
   static const offerOrFindPoperty = 'offerOrFindPoperty';
   static const canNotBeEmpty = 'canNotBeEmpty';
   static const selectionRequired = 'selectionRequired';
+  static const resendOtp = 'resendOtp';
+  static const emailAlreadyInYourUse = 'emailAlreadyInYourUse';
+  static const pending = 'pending';
+  static const rejected = 'rejected';
+  static const approved = 'approved';
+  static const approval = "approval";
 }

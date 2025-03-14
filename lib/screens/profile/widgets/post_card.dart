@@ -64,7 +64,7 @@ class _PostCardState extends State<PostCard> {
       ),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.47,
-        height: 240,
+        height: 260,
         padding: EdgeInsets.all(8.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(
@@ -79,39 +79,71 @@ class _PostCardState extends State<PostCard> {
           ),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PropertyRequestForm(
-                          isEditingEnabled: true,
-                          listing: widget.listing,
-                        ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    height: 30,
+                    margin: EdgeInsets.only(top: 4.w),
+                    padding: EdgeInsets.all(4.w),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: widget.listing.status == 'pending'
+                          ? Colors.orange
+                          : widget.listing.status == 'rejected'
+                              ? Colors.redAccent
+                              : AppColors.blue,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: Text(
+                        AppLocalization.of(context)!
+                            .translate(widget.listing.status),
+                        style:
+                            AppStyles.heading4.copyWith(color: AppColors.white),
                       ),
-                    );
-                  },
-                  child: bubble(
-                    Icons.edit,
-                    Colors.white,
+                    ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    showDeleteConfirmationDialog(
-                      context,
-                      widget.listing.title,
-                      deleteListing,
-                    );
-                  },
-                  child: bubble(
-                    Icons.delete_outline_outlined,
-                    Colors.red,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PropertyRequestForm(
+                              isEditingEnabled: true,
+                              listing: widget.listing,
+                            ),
+                          ),
+                        );
+                      },
+                      child: bubble(
+                        Icons.edit,
+                        Colors.white,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showDeleteConfirmationDialog(
+                          context,
+                          widget.listing.title,
+                          deleteListing,
+                        );
+                      },
+                      child: bubble(
+                        Icons.delete_outline_outlined,
+                        Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

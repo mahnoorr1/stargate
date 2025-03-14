@@ -240,6 +240,7 @@ class RealEstateProvider extends ChangeNotifier {
         userEmail: UserProfileProvider().email,
         userID: UserProfileProvider().id,
         userName: UserProfileProvider().name,
+        status: result['status'],
       );
 
       notifyListeners();

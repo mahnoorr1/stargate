@@ -82,6 +82,12 @@ class UserProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setEmail(String email) async {
+    _email = email;
+    await _saveToPrefs('email', _email);
+    notifyListeners();
+  }
+
   Future<void> fetchUserProfile() async {
     _isLoading = true;
     User? user = await myProfile();
