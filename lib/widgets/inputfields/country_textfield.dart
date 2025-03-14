@@ -6,6 +6,9 @@ import '../../localization/localization.dart';
 
 class CountryPickerField extends StatefulWidget {
   final TextEditingController country;
+  String? initalCountry;
+  String? initialCity;
+  String? initialState;
   TextEditingController city;
   TextEditingController state; // Add the form key here
 
@@ -14,6 +17,9 @@ class CountryPickerField extends StatefulWidget {
     required this.country,
     required this.city,
     required this.state,
+    this.initalCountry,
+    this.initialCity,
+    this.initialState,
   });
 
   @override
@@ -140,6 +146,18 @@ class _CountryPickerFieldState extends State<CountryPickerField> {
                   widget.city.text = value.toString();
                 });
               },
+              countryInitialValue:
+                  widget.initalCountry != '' && widget.initalCountry != null
+                      ? widget.initalCountry
+                      : 'Germany',
+              cityInitialValue:
+                  widget.initialCity != '' && widget.initialCity != null
+                      ? widget.initialCity
+                      : '',
+              stateInitialValue:
+                  widget.initialState != '' && widget.initialState != null
+                      ? widget.initialState
+                      : '',
             ),
             // Add a custom validation for the form
           ],

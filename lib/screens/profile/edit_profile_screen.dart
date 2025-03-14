@@ -322,7 +322,15 @@ class _EditProfileState extends State<EditProfile> {
                       Text(
                         widget.user.email,
                         style: AppStyles.greyText,
-                      )
+                      ),
+                      SizedBox(
+                        width: 6.w,
+                      ),
+                      const Icon(
+                        Icons.edit,
+                        size: 20,
+                        color: AppColors.blue,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -391,6 +399,8 @@ class _EditProfileState extends State<EditProfile> {
                     },
                   ),
                   CountryPickerField(
+                    initalCountry: widget.user.country,
+                    initialCity: widget.user.city,
                     country: country,
                     city: city,
                     state: state,

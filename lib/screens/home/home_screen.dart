@@ -240,8 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       rootNavigator: false)
                                   .push(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const PropertyRequestForm(),
+                                  builder: (context) => PropertyRequestForm(),
                                 ),
                               );
                               if (result == 'success') {
@@ -321,8 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       rootNavigator: false)
                                   .push(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const PropertyRequestForm(),
+                                  builder: (context) => PropertyRequestForm(),
                                 ),
                               );
                               if (result == 'success') {

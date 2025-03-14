@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/content_management/providers/offer_request_property_content_provider.dart';
 import 'package:stargate/localization/locale_notifier.dart';
+import 'package:stargate/models/real_estate_listing.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
 import 'package:stargate/utils/app_data.dart';
@@ -25,14 +26,19 @@ import 'package:stargate/widgets/inputfields/textfield.dart';
 import 'package:stargate/widgets/loader/loader.dart';
 import 'package:stargate/widgets/screen/screen.dart';
 import 'package:stargate/widgets/translationWidget.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../localization/localization.dart';
 import '../../localization/translation_strings.dart';
 import '../../services/helper_methods.dart';
 
 class PropertyRequestForm extends StatefulWidget {
-  const PropertyRequestForm({super.key});
+  bool? isEditingEnabled = false;
+  RealEstateListing? listing;
+  PropertyRequestForm({
+    super.key,
+    this.isEditingEnabled,
+    this.listing,
+  });
 
   @override
   State<PropertyRequestForm> createState() => _PropertyRequestFormState();
@@ -69,6 +75,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
 
   String selectedInvestmentType = '';
   String selectedInvestmentSubcategory = '';
+  String selectedInvestmentConventionalSubcategory = '';
   int beds = 0;
   int bathroom = 0;
   int price = 0;
@@ -78,6 +85,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   bool loading = false;
   int selectedIndexOfPropertyCategory = 0;
   int propertyIndexConventional = 0;
+  int indexOfSubcategory = 0;
   final _formKey = GlobalKey<FormState>();
 
   Future<void> onSendRequest() async {
@@ -95,7 +103,6 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
     log('Purchase Type: $selectedPurchaseType');
     if (!_formKey.currentState!.validate() ||
         selectedInvestmentType == '' ||
-        selectedInvestmentSubcategory == '' ||
         selectedPurchaseType == '' ||
         selectedCondition == '' ||
         selectedRequestType == '' ||
@@ -104,8 +111,8 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         selectedBuildableArea.text.isEmpty ||
         bedsController.text.isEmpty ||
         bathsController.text.isEmpty ||
-        priceController.text.isEmpty ||
-        furnished == '') {
+        priceController.text.isEmpty) {
+      print(selectedInvestmentConventionalSubcategory);
       showToast(
         message: AppLocalization.of(context)!
             .translate(TranslationString.incompletePropertyDetails),
@@ -127,6 +134,25 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
       setState(() {
         loading = false;
       });
+    } else if ((selectedPropertyType == 'commercial' &&
+            selectedInvestmentSubcategory == '') ||
+        selectedPropertyType == 'conventional' &&
+            selectedInvestmentConventionalSubcategory == '') {
+      print("subcategroy");
+      print(selectedInvestmentConventionalSubcategory);
+      print(conventionalPropertySubcategory[propertyIndexConventional]
+          [indexOfSubcategory]);
+      showToast(
+        message: AppLocalization.of(context)!
+            .translate(TranslationString.incompletePropertyDetails),
+        context: context,
+        isAlert: true,
+        color: Colors.redAccent,
+      );
+      setState(() {
+        loading = false;
+      });
+      return;
     } else {
       setState(() {
         loading = true;
@@ -140,7 +166,9 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         city: city.text,
         shortDescription: description.text,
         investmentType: selectedInvestmentType,
-        investmentSubcategory: selectedInvestmentSubcategory,
+        investmentSubcategory: selectedPropertyType == 'commercial'
+            ? selectedInvestmentSubcategory
+            : selectedInvestmentConventionalSubcategory,
         // investmentSubcategory: 'Small House',
         requestType: selectedRequestType,
         condition: selectedCondition,
@@ -202,6 +230,51 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
   @override
   void initState() {
     super.initState();
+    if (widget.isEditingEnabled == true && widget.listing != null) {
+      title.text = widget.listing!.title;
+      country.text = widget.listing!.country;
+      address.text = widget.listing!.address;
+      state.text = widget.listing!.state ?? '';
+      city.text = widget.listing!.city!;
+      description.text = widget.listing!.description;
+      selectedInvestmentType = widget.listing!.propertyCategory;
+      selectedInvestmentSubcategory = widget.listing!.propertySubCategory;
+      // investmentSubcategory: 'Small House',
+      selectedRequestType = widget.listing!.requestType;
+      selectedCondition = widget.listing!.condition;
+      selectedPurchaseType = widget.listing!.sellingType;
+      selectedPropertyType = widget.listing!.propertyType;
+      selectedLandArea.text = widget.listing!.landAreaInTotal.toString();
+      selectedBuildingArea.text = widget.listing!.occupiedLandArea.toString();
+      selectedBuildableArea.text = widget.listing!.buildableArea.toString();
+      bathsController.text = widget.listing!.noOfBathrooms.toString();
+      bedsController.text = widget.listing!.noOfBeds.toString();
+      bedsController.text = widget.listing!.noOfBeds.toString();
+      priceController.text = widget.listing!.price.toString();
+      equipment.text = widget.listing!.equipment ?? '';
+      qualityOfEquipment.text = widget.listing!.qualityOfEquipment ?? '';
+      furnished = widget.listing!.furnished == true ? 'yes' : 'no';
+      garage = widget.listing!.garage == true ? 'yes' : 'no';
+      //pictures initialization
+      parkingPlaces.text = widget.listing!.parkingPlaces.toString();
+      selectedIndexOfPropertyCategory = widget.listing!.propertyType ==
+              'commercial'
+          ? commercialPropertyCategory.indexOf(widget.listing!.propertyCategory)
+          : conventionalPropertyCategory
+              .indexOf(widget.listing!.propertyCategory);
+      propertyIndexConventional = widget.listing!.propertyType == 'commercial'
+          ? 0
+          : conventionalPropertyCategory
+              .indexOf(widget.listing!.propertyCategory);
+      indexOfSubcategory = widget.listing!.propertyType == 'commercial'
+          ? commercialPropertySubcategory[selectedIndexOfPropertyCategory]
+              .indexOf(widget.listing!.propertySubCategory)
+          : conventionalPropertySubcategory[selectedIndexOfPropertyCategory]
+              .indexOf(widget.listing!.propertySubCategory);
+      print(indexOfSubcategory);
+      selectedInvestmentConventionalSubcategory =
+          widget.listing!.propertySubCategory;
+    }
   }
 
   @override
@@ -240,30 +313,14 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  targetLang == 'en'
-                      ? Text(
-                          propertyRequestProvider.content!.title,
-                          style: AppStyles.screenTitle.copyWith(
-                            color: AppColors.darkBlue,
-                          ),
-                        )
-                      : FutureBuilder<String>(
-                          future: translateData(
-                              propertyRequestProvider.content!.title,
-                              targetLang),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const SizedBox();
-                            } else {
-                              return Text(
-                                snapshot.data!,
-                                style: AppStyles.screenTitle.copyWith(
-                                  color: AppColors.darkBlue,
-                                ),
-                              );
-                            }
-                          }),
+                  translationWidget(
+                    propertyRequestProvider.content!.title,
+                    context,
+                    propertyRequestProvider.content!.title,
+                    AppStyles.screenTitle.copyWith(
+                      color: AppColors.darkBlue,
+                    ),
+                  ),
                   SizedBox(
                     height: 16.w,
                   ),
@@ -303,6 +360,9 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                     },
                   ),
                   CountryPickerField(
+                    initalCountry: country.text,
+                    initialCity: city.text,
+                    initialState: state.text,
                     country: country,
                     state: state,
                     city: city,
@@ -315,7 +375,7 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                               TextStyle(color: Colors.red[900], fontSize: 12),
                         )
                       : const SizedBox(),
-                  selectedRequestType == 'offering'
+                  selectedRequestType == 'requesting'
                       ? const SizedBox()
                       : CustomTextField(
                           controller: description,
@@ -526,9 +586,11 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
               setState(() {});
             });
           },
-          initial: commercialPropertyCategory.isNotEmpty
-              ? commercialPropertyCategory[0]
-              : '',
+          initial: widget.isEditingEnabled == true
+              ? selectedInvestmentType
+              : commercialPropertyCategory.isNotEmpty
+                  ? commercialPropertyCategory[0]
+                  : '',
           label: AppLocalization.of(context)!
               .translate(TranslationString.investmentType),
         ),
@@ -555,9 +617,13 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                     onSelected: (value) {
                       setState(() {
                         selectedInvestmentSubcategory = value;
+                        indexOfSubcategory =
+                            commercialPropertySubcategory[1].indexOf(value);
                       });
                     },
-                    initial: commercialPropertySubcategory[1][0],
+                    initial: widget.isEditingEnabled == true
+                        ? commercialPropertySubcategory[1][indexOfSubcategory]
+                        : commercialPropertySubcategory[1][0],
                     label: AppLocalization.of(context)!
                         .translate(TranslationString.investmentSubcategory),
                   )
@@ -567,9 +633,14 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                         onSelected: (value) {
                           setState(() {
                             selectedInvestmentSubcategory = value;
+                            indexOfSubcategory =
+                                commercialPropertySubcategory[2].indexOf(value);
                           });
                         },
-                        initial: commercialPropertySubcategory[2][0],
+                        initial: widget.isEditingEnabled == true
+                            ? commercialPropertySubcategory[2]
+                                [indexOfSubcategory]
+                            : commercialPropertySubcategory[2][0],
                         label: AppLocalization.of(context)!
                             .translate(TranslationString.investmentSubcategory),
                       )
@@ -579,9 +650,15 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                             onSelected: (value) {
                               setState(() {
                                 selectedInvestmentSubcategory = value;
+                                indexOfSubcategory =
+                                    commercialPropertySubcategory[3]
+                                        .indexOf(value);
                               });
                             },
-                            initial: commercialPropertySubcategory[3][0],
+                            initial: widget.isEditingEnabled == true
+                                ? commercialPropertySubcategory[3]
+                                    [indexOfSubcategory]
+                                : commercialPropertySubcategory[3][0],
                             label: AppLocalization.of(context)!.translate(
                                 TranslationString.investmentSubcategory),
                           )
@@ -591,9 +668,15 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                                 onSelected: (value) {
                                   setState(() {
                                     selectedInvestmentSubcategory = value;
+                                    indexOfSubcategory =
+                                        commercialPropertySubcategory[4]
+                                            .indexOf(value);
                                   });
                                 },
-                                initial: commercialPropertySubcategory[4][0],
+                                initial: widget.isEditingEnabled == true
+                                    ? commercialPropertySubcategory[4]
+                                        [indexOfSubcategory]
+                                    : commercialPropertySubcategory[4][0],
                                 label: AppLocalization.of(context)!.translate(
                                     TranslationString.investmentSubcategory),
                               )
@@ -603,10 +686,15 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                                     onSelected: (value) {
                                       setState(() {
                                         selectedInvestmentSubcategory = value;
+                                        indexOfSubcategory =
+                                            commercialPropertySubcategory[5]
+                                                .indexOf(value);
                                       });
                                     },
-                                    initial: commercialPropertySubcategory[5]
-                                        [0],
+                                    initial: widget.isEditingEnabled == true
+                                        ? commercialPropertySubcategory[5]
+                                            [indexOfSubcategory]
+                                        : commercialPropertySubcategory[5][0],
                                     label: AppLocalization.of(context)!
                                         .translate(TranslationString
                                             .investmentSubcategory),
@@ -618,10 +706,16 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                                           setState(() {
                                             selectedInvestmentSubcategory =
                                                 value;
+                                            indexOfSubcategory =
+                                                commercialPropertySubcategory[6]
+                                                    .indexOf(value);
                                           });
                                         },
-                                        initial:
-                                            commercialPropertySubcategory[6][0],
+                                        initial: widget.isEditingEnabled == true
+                                            ? commercialPropertySubcategory[6]
+                                                [indexOfSubcategory]
+                                            : commercialPropertySubcategory[6]
+                                                [0],
                                         label: AppLocalization.of(context)!
                                             .translate(TranslationString
                                                 .investmentSubcategory),
@@ -634,11 +728,18 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                                               setState(() {
                                                 selectedInvestmentSubcategory =
                                                     value;
+                                                indexOfSubcategory =
+                                                    commercialPropertySubcategory[
+                                                            7]
+                                                        .indexOf(value);
                                               });
                                             },
-                                            initial:
-                                                commercialPropertySubcategory[7]
-                                                    [0],
+                                            initial: widget.isEditingEnabled ==
+                                                    true
+                                                ? commercialPropertySubcategory[
+                                                    7][indexOfSubcategory]
+                                                : commercialPropertySubcategory[
+                                                    7][0],
                                             label: AppLocalization.of(context)!
                                                 .translate(TranslationString
                                                     .investmentSubcategory),
@@ -650,11 +751,18 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                                               setState(() {
                                                 selectedInvestmentSubcategory =
                                                     value;
+                                                indexOfSubcategory =
+                                                    commercialPropertySubcategory[
+                                                            8]
+                                                        .indexOf(value);
                                               });
                                             },
-                                            initial:
-                                                commercialPropertySubcategory[8]
-                                                    [0],
+                                            initial: widget.isEditingEnabled ==
+                                                    true
+                                                ? commercialPropertySubcategory[
+                                                    8][indexOfSubcategory]
+                                                : commercialPropertySubcategory[
+                                                    8][0],
                                             label: AppLocalization.of(context)!
                                                 .translate(TranslationString
                                                     .investmentSubcategory),
@@ -746,29 +854,33 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         SizedBox(
           height: 3.w,
         ),
-        CustomTextField(
-          controller: equipment,
-          label: AppLocalization.of(context)!
-              .translate(TranslationString.anyEquipments),
-          hintText: AppLocalization.of(context)!
-              .translate(TranslationString.anyEquipments),
-          inputType: TextInputType.text,
-          horizontalSpacing: 0,
-          verticalSpacing: 3,
-        ),
+        furnished == 'no'
+            ? const SizedBox()
+            : CustomTextField(
+                controller: equipment,
+                label: AppLocalization.of(context)!
+                    .translate(TranslationString.anyEquipments),
+                hintText: AppLocalization.of(context)!
+                    .translate(TranslationString.anyEquipments),
+                inputType: TextInputType.text,
+                horizontalSpacing: 0,
+                verticalSpacing: 3,
+              ),
         SizedBox(
           height: 3.w,
         ),
-        CustomTextField(
-          controller: qualityOfEquipment,
-          label: AppLocalization.of(context)!
-              .translate(TranslationString.qualityOfEquipmentsSmall),
-          hintText: AppLocalization.of(context)!
-              .translate(TranslationString.qualityOfEquipmentsSmall),
-          inputType: TextInputType.text,
-          horizontalSpacing: 0,
-          verticalSpacing: 3,
-        ),
+        furnished == 'no'
+            ? const SizedBox()
+            : CustomTextField(
+                controller: qualityOfEquipment,
+                label: AppLocalization.of(context)!
+                    .translate(TranslationString.qualityOfEquipmentsSmall),
+                hintText: AppLocalization.of(context)!
+                    .translate(TranslationString.qualityOfEquipmentsSmall),
+                inputType: TextInputType.text,
+                horizontalSpacing: 0,
+                verticalSpacing: 3,
+              ),
         SizedBox(
           height: 3.w,
         ),
@@ -833,8 +945,11 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         GestureDetector(
           onTap: onSendRequest,
           child: CustomButton(
-            text:
-                AppLocalization.of(context)!.translate(TranslationString.post),
+            text: widget.isEditingEnabled == true
+                ? AppLocalization.of(context)!
+                    .translate(TranslationString.update)
+                : AppLocalization.of(context)!
+                    .translate(TranslationString.post),
           ),
         ),
       ],
@@ -858,18 +973,17 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                   conventionalPropertyCategory.indexOf(value);
               currentConventionalSubcategoryOptions =
                   List.from(conventionalPropertySubcategory[selectedIndex]);
-              selectedInvestmentSubcategory =
+              selectedInvestmentConventionalSubcategory =
                   currentConventionalSubcategoryOptions.isNotEmpty
                       ? currentConventionalSubcategoryOptions[0]
                       : '';
-              Future.delayed(Duration(milliseconds: 100), () {
-                setState(() {});
-              });
             });
           },
-          initial: conventionalPropertyCategory.isNotEmpty
-              ? conventionalPropertyCategory[0]
-              : '',
+          initial: widget.isEditingEnabled == true
+              ? conventionalPropertyCategory[selectedIndexOfPropertyCategory]
+              : conventionalPropertyCategory.isNotEmpty
+                  ? conventionalPropertyCategory[0]
+                  : '',
           label: AppLocalization.of(context)!
               .translate(TranslationString.investmentType),
         ),
@@ -880,10 +994,12 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
             .translate(TranslationString.investmentSubcategory)),
         propertyIndexConventional == 0
             ? OutlinedDropdownButtonExample(
-                list: List.from(conventionalPropertySubcategory[0]),
+                list: conventionalPropertySubcategory[0],
                 onSelected: (value) {
                   setState(() {
-                    selectedInvestmentSubcategory = value;
+                    selectedInvestmentConventionalSubcategory = value;
+                    indexOfSubcategory =
+                        conventionalPropertySubcategory[0].indexOf(value);
                   });
                 },
                 initial: conventionalPropertySubcategory[0][0],
@@ -892,13 +1008,17 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
               )
             : propertyIndexConventional == 1
                 ? OutlinedDropdownButtonExample(
-                    list: List.from(conventionalPropertySubcategory[1]),
+                    list: conventionalPropertySubcategory[1],
                     onSelected: (value) {
                       setState(() {
-                        selectedInvestmentSubcategory = value;
+                        selectedInvestmentConventionalSubcategory = value;
+                        indexOfSubcategory =
+                            conventionalPropertySubcategory[1].indexOf(value);
                       });
                     },
-                    initial: conventionalPropertySubcategory[1][0],
+                    initial: widget.isEditingEnabled == true
+                        ? conventionalPropertySubcategory[1][indexOfSubcategory]
+                        : conventionalPropertySubcategory[1][0],
                     label: AppLocalization.of(context)!
                         .translate(TranslationString.investmentSubcategory),
                   )
@@ -907,10 +1027,16 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                         list: conventionalPropertySubcategory[2],
                         onSelected: (value) {
                           setState(() {
-                            selectedInvestmentSubcategory = value;
+                            selectedInvestmentConventionalSubcategory = value;
+                            indexOfSubcategory =
+                                conventionalPropertySubcategory[2]
+                                    .indexOf(value);
                           });
                         },
-                        initial: conventionalPropertySubcategory[2][0],
+                        initial: widget.isEditingEnabled == true
+                            ? conventionalPropertySubcategory[2]
+                                [indexOfSubcategory]
+                            : conventionalPropertySubcategory[2][0],
                         label: AppLocalization.of(context)!
                             .translate(TranslationString.investmentSubcategory),
                       )
@@ -919,10 +1045,17 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                             list: conventionalPropertySubcategory[3],
                             onSelected: (value) {
                               setState(() {
-                                selectedInvestmentSubcategory = value;
+                                selectedInvestmentConventionalSubcategory =
+                                    value;
+                                indexOfSubcategory =
+                                    conventionalPropertySubcategory[3]
+                                        .indexOf(value);
                               });
                             },
-                            initial: conventionalPropertySubcategory[3][0],
+                            initial: widget.isEditingEnabled == true
+                                ? conventionalPropertySubcategory[3]
+                                    [indexOfSubcategory]
+                                : conventionalPropertySubcategory[3][0],
                             label: AppLocalization.of(context)!.translate(
                                 TranslationString.investmentSubcategory),
                           )
@@ -931,10 +1064,17 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                                 list: conventionalPropertySubcategory[4],
                                 onSelected: (value) {
                                   setState(() {
-                                    selectedInvestmentSubcategory = value;
+                                    selectedInvestmentConventionalSubcategory =
+                                        value;
+                                    indexOfSubcategory =
+                                        conventionalPropertySubcategory[4]
+                                            .indexOf(value);
                                   });
                                 },
-                                initial: conventionalPropertySubcategory[4][0],
+                                initial: widget.isEditingEnabled == true
+                                    ? conventionalPropertySubcategory[4]
+                                        [indexOfSubcategory]
+                                    : conventionalPropertySubcategory[4][0],
                                 label: AppLocalization.of(context)!.translate(
                                     TranslationString.investmentSubcategory),
                               )
@@ -943,11 +1083,17 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                                     list: conventionalPropertySubcategory[5],
                                     onSelected: (value) {
                                       setState(() {
-                                        selectedInvestmentSubcategory = value;
+                                        selectedInvestmentConventionalSubcategory =
+                                            value;
+                                        indexOfSubcategory =
+                                            conventionalPropertySubcategory[5]
+                                                .indexOf(value);
                                       });
                                     },
-                                    initial: conventionalPropertySubcategory[5]
-                                        [0],
+                                    initial: widget.isEditingEnabled == true
+                                        ? conventionalPropertySubcategory[5]
+                                            [indexOfSubcategory]
+                                        : conventionalPropertySubcategory[5][0],
                                     label: AppLocalization.of(context)!
                                         .translate(TranslationString
                                             .investmentSubcategory),
@@ -958,12 +1104,18 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                                             conventionalPropertySubcategory[6],
                                         onSelected: (value) {
                                           setState(() {
-                                            selectedInvestmentSubcategory =
+                                            selectedInvestmentConventionalSubcategory =
                                                 value;
+                                            indexOfSubcategory =
+                                                conventionalPropertySubcategory[
+                                                        6]
+                                                    .indexOf(value);
                                           });
                                         },
-                                        initial:
-                                            conventionalPropertySubcategory[6]
+                                        initial: widget.isEditingEnabled == true
+                                            ? conventionalPropertySubcategory[6]
+                                                [indexOfSubcategory]
+                                            : conventionalPropertySubcategory[6]
                                                 [0],
                                         label: AppLocalization.of(context)!
                                             .translate(TranslationString
@@ -974,12 +1126,18 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
                                             conventionalPropertySubcategory[7],
                                         onSelected: (value) {
                                           setState(() {
-                                            selectedInvestmentSubcategory =
+                                            selectedInvestmentConventionalSubcategory =
                                                 value;
+                                            indexOfSubcategory =
+                                                conventionalPropertySubcategory[
+                                                        7]
+                                                    .indexOf(value);
                                           });
                                         },
-                                        initial:
-                                            conventionalPropertySubcategory[7]
+                                        initial: widget.isEditingEnabled == true
+                                            ? conventionalPropertySubcategory[7]
+                                                [indexOfSubcategory]
+                                            : conventionalPropertySubcategory[7]
                                                 [0],
                                         label: AppLocalization.of(context)!
                                             .translate(TranslationString
@@ -1143,8 +1301,11 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
         GestureDetector(
           onTap: onSendRequest,
           child: CustomButton(
-            text:
-                AppLocalization.of(context)!.translate(TranslationString.post),
+            text: widget.isEditingEnabled == true
+                ? AppLocalization.of(context)!
+                    .translate(TranslationString.update)
+                : AppLocalization.of(context)!
+                    .translate(TranslationString.post),
           ),
         ),
       ],

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/providers/user_info_provider.dart';
+import 'package:stargate/screens/property_request_screen/property_request_screen.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:stargate/models/real_estate_listing.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -82,9 +83,22 @@ class _PostCardState extends State<PostCard> {
             Row(
               children: [
                 const Spacer(),
-                bubble(
-                  Icons.notifications_none,
-                  Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PropertyRequestForm(
+                          isEditingEnabled: true,
+                          listing: widget.listing,
+                        ),
+                      ),
+                    );
+                  },
+                  child: bubble(
+                    Icons.edit,
+                    Colors.white,
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {
