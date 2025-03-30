@@ -15,7 +15,7 @@
     "dontHaveAccount": "¿No tienes una cuenta?",
     "signUpHere": "Regístrate aquí",
     "pleaseEnterEmail": "¡Por favor, ingresa el correo electrónico!",
-    "otpSentToYourEmail": "OTP enviado a tu correo electrónico",
+    "otpSentToYourEmail": "¡OTP enviado a tu correo electrónico y podría estar en la carpeta de correo no deseado!",
     "emailVerified": "¡Correo electrónico verificado!",
     "passwordDoesNotMatch": "La contraseña no coincide",
     "passwordChangedLoginToContinue": "Contraseña cambiada, ¡Inicia sesión para continuar!",

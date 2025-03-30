@@ -15,7 +15,7 @@
     "dontHaveAccount": "Haben Sie kein Konto?",
     "signUpHere": "Hier registrieren",
     "pleaseEnterEmail": "Bitte E-Mail eingeben!",
-    "otpSentToYourEmail": "OTP wurde an Ihre E-Mail gesendet",
+    "otpSentToYourEmail": "OTP wurde an Ihre E-Mail-Adresse gesendet und befindet sich möglicherweise im Spam-Ordner!",
     "emailVerified": "E-Mail verifiziert!",
     "passwordDoesNotMatch": "Passwort stimmt nicht überein",
     "passwordChangedLoginToContinue": "Passwort geändert, melden Sie sich an, um fortzufahren!",

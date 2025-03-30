@@ -16,7 +16,7 @@
     "emailVerifiedLoginToContinue": "Email verified, login to continue!",
 
     "pleaseEnterEmail": "Please enter email!",
-    "otpSentToYourEmail": "OTP sent to your email",
+    "otpSentToYourEmail": "OTP sent to your email, and might be in spam folder!",
     "emailVerified": "Email verified!",
     "passwordDoesNotMatch": "Password does not match",
     "passwordChangedLoginToContinue": "Password Changed, Login to Continue!",
