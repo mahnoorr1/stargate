@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../config/core.dart';
+import '../../../../config/core.dart';
 import '../../model/faq_model.dart';
 
 class FAQCard extends StatelessWidget {

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
-import 'package:stargate/content_management/providers/profile_content_provider.dart';
+import 'package:stargate/features/content_management/providers/profile_content_provider.dart';
 import 'package:stargate/drawer/drawer.dart';
 import 'package:stargate/localization/localization.dart';
 import 'package:stargate/localization/translation_strings.dart';
@@ -14,9 +14,9 @@ import 'package:stargate/screens/services_screen/services_screen.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../content_management/providers/home_content_provider.dart';
-import '../content_management/providers/listing_content_provider.dart';
-import '../content_management/providers/search_content_provider.dart';
+import '../features/content_management/providers/home_content_provider.dart';
+import '../features/content_management/providers/listing_content_provider.dart';
+import '../features/content_management/providers/search_content_provider.dart';
 
 // ignore: must_be_immutable
 class NavBarScreen extends StatefulWidget {

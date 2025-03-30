@@ -8,7 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
-import 'package:stargate/content_management/providers/profile_content_provider.dart';
+import 'package:stargate/features/content_management/providers/profile_content_provider.dart';
 import 'package:stargate/models/profile.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';

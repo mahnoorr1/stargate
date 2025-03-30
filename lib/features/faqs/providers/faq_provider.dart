@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stargate/faqs/repositories/faq_remote_repository.dart';
+import 'package:stargate/features/faqs/repositories/faq_remote_repository.dart';
 
 import '../model/faq_model.dart';
 import 'package:flutter/material.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
-import 'package:stargate/content_management/providers/home_content_provider.dart';
+import 'package:stargate/features/content_management/providers/home_content_provider.dart';
 import 'package:stargate/localization/locale_notifier.dart';
 import 'package:stargate/providers/real_estate_provider.dart';
 import 'package:stargate/providers/service_providers_provider.dart';
@@ -551,6 +551,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       );
                                     });
                               }
+                              return null;
                             },
                           ),
                         ),

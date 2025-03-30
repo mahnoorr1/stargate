@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 
-import '../../config/constants.dart';
+import '../../../config/constants.dart';
 import '../model/faq_model.dart';
 
 class FaqRemoteRepository {

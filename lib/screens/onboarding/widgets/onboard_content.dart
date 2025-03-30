@@ -8,7 +8,7 @@ import 'package:stargate/screens/onboarding/widgets/next_button.dart';
 
 import '../../../localization/localization.dart';
 import '../../../localization/translation_strings.dart';
-import '../../profile/membership_screen.dart';
+import '../../../features/membership/screens/membership_screen.dart';
 
 class OnboardContent extends StatelessWidget {
   final String image;

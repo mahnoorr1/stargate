@@ -12,12 +12,12 @@ import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 
-import '../content_management/providers/home_content_provider.dart';
+import '../features/content_management/providers/home_content_provider.dart';
 import '../localization/language_toggle_button.dart';
 import '../localization/localization.dart';
 import '../localization/translation_strings.dart';
 import '../models/profile.dart';
-import '../screens/profile/membership_screen.dart';
+import '../features/membership/screens/membership_screen.dart';
 import '../widgets/dialog_box.dart';
 
 class IncompleteCustomDrawer extends StatefulWidget {

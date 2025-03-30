@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:stargate/drawer/widgets/widgets.dart';
-import 'package:stargate/legal_documents/providers/legal_document_provider.dart';
+import 'package:stargate/features/legal_documents/providers/legal_document_provider.dart';
 import 'package:stargate/localization/locale_notifier.dart';
 import 'package:stargate/localization/localization.dart';
 import 'package:stargate/localization/translation_strings.dart';
 import 'package:stargate/services/helper_methods.dart';
 
-import '../../../config/core.dart';
-import '../../../widgets/loader/loader.dart';
+import '../../../../config/core.dart';
+import '../../../../widgets/loader/loader.dart';
 import '../widgets/legal_document_main_widget.dart';
 
 class LegalNoticeScreen extends StatefulWidget {

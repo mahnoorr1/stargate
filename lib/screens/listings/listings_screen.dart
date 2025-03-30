@@ -4,7 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:stargate/config/core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stargate/content_management/providers/listing_content_provider.dart';
+import 'package:stargate/features/content_management/providers/listing_content_provider.dart';
 import 'package:stargate/localization/translation_strings.dart';
 import 'package:stargate/screens/listings/widgets/dropdown_button2.dart';
 import 'package:stargate/screens/listings/widgets/listing_card.dart';

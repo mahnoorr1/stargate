@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/config/core.dart';
-import 'package:stargate/content_management/providers/offer_request_property_content_provider.dart';
+import 'package:stargate/features/content_management/providers/offer_request_property_content_provider.dart';
 import 'package:stargate/localization/locale_notifier.dart';
 import 'package:stargate/models/real_estate_listing.dart';
 import 'package:stargate/providers/real_estate_provider.dart';

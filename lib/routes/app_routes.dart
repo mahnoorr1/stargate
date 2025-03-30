@@ -3,11 +3,11 @@ import 'package:path/path.dart';
 import 'package:stargate/drawer/drawer.dart';
 import 'package:stargate/drawer/incompleteProfileDrawer.dart';
 
-import 'package:stargate/faqs/view/pages/faq_page.dart';
+import 'package:stargate/features/faqs/view/pages/faq_page.dart';
 
-import 'package:stargate/legal_documents/view/pages/legal_notice.dart';
-import 'package:stargate/legal_documents/view/pages/privacy_policy.dart';
-import 'package:stargate/legal_documents/view/pages/terms_and_conditions.dart';
+import 'package:stargate/features/legal_documents/view/pages/legal_notice.dart';
+import 'package:stargate/features/legal_documents/view/pages/privacy_policy.dart';
+import 'package:stargate/features/legal_documents/view/pages/terms_and_conditions.dart';
 import 'package:stargate/navbar/navbar.dart';
 import 'package:stargate/screens/login/login_screen.dart';
 import 'package:stargate/screens/onboarding/onboarding1.dart';

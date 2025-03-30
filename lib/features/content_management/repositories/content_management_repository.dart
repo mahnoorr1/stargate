@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:stargate/content_management/models/home_content_model.dart';
-import 'package:stargate/content_management/models/listing_model.dart';
-import 'package:stargate/content_management/models/offer_request_property_content_model.dart';
+import 'package:stargate/features/content_management/models/home_content_model.dart';
+import 'package:stargate/features/content_management/models/listing_model.dart';
+import 'package:stargate/features/content_management/models/offer_request_property_content_model.dart';
 import 'package:stargate/models/membership.dart';
 
-import '../../config/constants.dart';
+import '../../../config/constants.dart';
 
 import '../models/getting_started_model.dart';
 

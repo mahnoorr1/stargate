@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stargate/screens/onboarding/widgets/onboard_content.dart';
 
-import '../../content_management/providers/getting_started_content_provider.dart';
+import '../../features/content_management/providers/getting_started_content_provider.dart';
 import 'onboarding3.dart';
 
 class OnBoardingScreen2 extends StatefulWidget {

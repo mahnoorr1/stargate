@@ -7,13 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:stargate/config/core.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/screens/home/home_screen.dart';
-import 'package:stargate/screens/profile/membership_screen.dart';
+import 'package:stargate/features/membership/screens/membership_screen.dart';
 import 'package:stargate/services/user_profiling.dart';
 import 'package:stargate/utils/app_images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stargate/widgets/custom_toast.dart';
 
-import '../content_management/providers/home_content_provider.dart';
+import '../features/content_management/providers/home_content_provider.dart';
 import '../localization/language_toggle_button.dart';
 import '../localization/localization.dart';
 import '../localization/translation_strings.dart';

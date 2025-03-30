@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:stargate/localization/localization.dart';
 import 'package:stargate/localization/translation_strings.dart';
 
-import '../../../widgets/loader/loader.dart';
+import '../../../../widgets/loader/loader.dart';
 
 class PDFViewerScreen extends StatefulWidget {
   final String filePath;

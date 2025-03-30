@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:stargate/legal_documents/view/widgets/pdf_viewer.dart';
+import 'package:stargate/features/legal_documents/view/widgets/pdf_viewer.dart';
 
-import '../../../config/core.dart';
+import '../../../../config/core.dart';
 
-import '../../../services/helper_methods.dart';
-import '../../../utils/app_images.dart';
+import '../../../../services/helper_methods.dart';
+import '../../../../utils/app_images.dart';
 
 class LegalDocumentDataWidget extends StatelessWidget {
   final String text;

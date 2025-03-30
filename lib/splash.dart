@@ -10,16 +10,16 @@ import 'package:stargate/providers/service_providers_provider.dart';
 import 'package:stargate/providers/user_info_provider.dart';
 import 'package:stargate/widgets/animated/entrance_fader.dart';
 
-import 'content_management/providers/membership_content.dart';
+import 'features/content_management/providers/membership_content.dart';
 import 'routes/app_routes.dart';
 import 'utils/app_images.dart';
 
-import 'content_management/providers/getting_started_content_provider.dart';
-import 'content_management/providers/home_content_provider.dart';
-import 'content_management/providers/listing_content_provider.dart';
-import 'content_management/providers/offer_request_property_content_provider.dart';
-import 'content_management/providers/profile_content_provider.dart';
-import 'content_management/providers/search_content_provider.dart';
+import 'features/content_management/providers/getting_started_content_provider.dart';
+import 'features/content_management/providers/home_content_provider.dart';
+import 'features/content_management/providers/listing_content_provider.dart';
+import 'features/content_management/providers/offer_request_property_content_provider.dart';
+import 'features/content_management/providers/profile_content_provider.dart';
+import 'features/content_management/providers/search_content_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

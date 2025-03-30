@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:stargate/faqs/model/faq_model.dart';
-import 'package:stargate/faqs/view/widgets/faq_card.dart';
+import 'package:stargate/features/faqs/model/faq_model.dart';
+import 'package:stargate/features/faqs/view/widgets/faq_card.dart';
 import 'package:stargate/localization/locale_notifier.dart';
 import 'package:stargate/localization/localization.dart';
 import 'package:stargate/localization/translation_strings.dart';
 import 'package:translator/translator.dart';
 
-import '../../../config/core.dart';
-import '../../../drawer/widgets/widgets.dart';
-import '../../../widgets/loader/loader.dart';
+import '../../../../config/core.dart';
+import '../../../../drawer/widgets/widgets.dart';
+import '../../../../widgets/loader/loader.dart';
 import '../../providers/faq_provider.dart';
 
 class FAQScreen extends StatefulWidget {
