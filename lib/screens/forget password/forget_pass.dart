@@ -220,7 +220,6 @@ class _ForgetPassState extends State<ForgetPass> {
                                               TranslationString.enterEmail),
                                       inputType: TextInputType.emailAddress,
                                       icon: Icons.email_outlined,
-                                      obscureText: true,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return AppLocalization.of(context)!
@@ -275,6 +274,7 @@ class _ForgetPassState extends State<ForgetPass> {
                                                               .newPassword),
                                               inputType: TextInputType.text,
                                               prefixSvgPath: AppIcons.lock,
+                                              obscureText: true,
                                               validator: (value) {
                                                 if (value == null ||
                                                     value.isEmpty) {

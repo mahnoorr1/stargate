@@ -440,11 +440,8 @@ Future<String> changePassword(
   String currentPass,
   String newPass,
 ) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('accessToken');
   var headers = {
     'Content-Type': 'application/json',
-    'Authorization': token!,
   };
   var request =
       http.Request('POST', Uri.parse('${server}user/change-password'));
@@ -466,33 +463,36 @@ Future<String> changePassword(
   }
 }
 
-Future<String> forgetPassword(
-  String email,
-) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('accessToken');
+Future<String> forgetPassword(String email) async {
   var headers = {
     'Content-Type': 'application/json',
-    'Authorization': token!,
   };
+
+  // No need for authorization token for forget password
   var request =
       http.Request('POST', Uri.parse('${server}user/forgot-password'));
+
   request.body = json.encode({
     "email": email,
   });
+
   request.headers.addAll(headers);
 
-  http.StreamedResponse response = await request.send();
+  try {
+    http.StreamedResponse response = await request.send();
 
-  if (response.statusCode == 200 || response.statusCode == 201) {
-    final stringResponse = await response.stream.bytesToString();
-    final Map<String, dynamic> data = jsonDecode(stringResponse);
-    return data['message'];
-  } else {
-    final errorResponse = await response.stream.bytesToString();
-    final Map<String, dynamic> errorData = jsonDecode(errorResponse);
-    final String errorMessage = errorData['message'] as String;
-    return errorMessage;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final stringResponse = await response.stream.bytesToString();
+      final Map<String, dynamic> data = jsonDecode(stringResponse);
+      return data['message'];
+    } else {
+      final errorResponse = await response.stream.bytesToString();
+      final Map<String, dynamic> errorData = jsonDecode(errorResponse);
+      final String errorMessage = errorData['message'] as String;
+      return errorMessage;
+    }
+  } catch (e) {
+    return "Network error. Please check your connection.";
   }
 }
 
@@ -500,11 +500,8 @@ Future<String> resetForgottenPassword(
   String email,
   String newPass,
 ) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('accessToken');
   var headers = {
     'Content-Type': 'application/json',
-    'Authorization': token!,
   };
   var request = http.Request('POST', Uri.parse('${server}user/reset-password'));
   request.body = json.encode({
