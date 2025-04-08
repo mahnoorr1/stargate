@@ -101,8 +101,8 @@ List<User> users = [
 //   ),
 // ];
 List<String> servicesList = [
-  UserType.investor.toCamelCaseString(),
   UserType.agent.toCamelCaseString(),
+  UserType.investor.toCamelCaseString(),
   UserType.consultant.toCamelCaseString(),
   UserType.lawyer.toCamelCaseString(),
   UserType.notary.toCamelCaseString(),

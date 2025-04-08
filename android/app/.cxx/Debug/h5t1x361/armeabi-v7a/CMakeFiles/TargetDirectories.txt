@@ -1,0 +1,2 @@
+D:/FREELANCE/Projects/stargate/android/app/.cxx/Debug/h5t1x361/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/FREELANCE/Projects/stargate/android/app/.cxx/Debug/h5t1x361/armeabi-v7a/CMakeFiles/rebuild_cache.dir

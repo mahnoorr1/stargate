@@ -331,7 +331,10 @@ class _PropertyRequestFormState extends State<PropertyRequestForm> {
               .indexOf(widget.listing!.propertySubCategory)
           : conventionalPropertySubcategory[selectedIndexOfPropertyCategory]
               .indexOf(widget.listing!.propertySubCategory);
+
       print(indexOfSubcategory);
+      print(widget.listing!.propertySubCategory);
+      print(selectedIndexOfPropertyCategory);
       selectedInvestmentConventionalSubcategory =
           widget.listing!.propertySubCategory;
     }

@@ -58,8 +58,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     professions = [
-      UserType.investor.toCamelCaseString(),
       UserType.agent.toCamelCaseString(),
+      UserType.investor.toCamelCaseString(),
       UserType.consultant.toCamelCaseString(),
       UserType.lawyer.toCamelCaseString(),
       UserType.notary.toCamelCaseString(),
@@ -179,152 +179,165 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalization.of(context)!
-                            .translate(TranslationString.offerOrFindPoperty),
-                        style: AppStyles.heading1.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        AppLocalization.of(context)!
-                            .translate(TranslationString.getStarted),
-                        style: AppStyles.heading3.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 450.w,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      padding: EdgeInsets.all(12.w),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.w),
-                        color: AppColors.lightBlue,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 24.w,
-                          ),
-                          UnderlinedTextField(
-                            controller: name,
-                            label: AppLocalization.of(context)!
-                                .translate(TranslationString.fullName),
-                            hintText: AppLocalization.of(context)!
-                                .translate(TranslationString.enterFullName),
-                            inputType: TextInputType.text,
-                            icon: Icons.person_outlined,
-                          ),
-                          SizedBox(height: 6.w),
-                          UnderlinedTextField(
-                            controller: email,
-                            label: AppLocalization.of(context)!
-                                .translate(TranslationString.email),
-                            hintText: AppLocalization.of(context)!
-                                .translate(TranslationString.enterEmail),
-                            inputType: TextInputType.emailAddress,
-                            icon: Icons.email_outlined,
-                          ),
-                          SizedBox(height: 6.w),
-                          UnderlinedTextField(
-                            controller: password,
-                            label: AppLocalization.of(context)!
-                                .translate(TranslationString.password),
-                            hintText: AppLocalization.of(context)!
-                                .translate(TranslationString.enterPass),
-                            inputType: TextInputType.text,
-                            obscureText: true,
-                            prefixSvgPath: AppIcons.lock,
-                          ),
-                          SizedBox(height: 6.w),
-                          UnderlinedTextField(
-                            controller: confirmPassword,
-                            label: AppLocalization.of(context)!
-                                .translate(TranslationString.confirmPass),
-                            hintText: AppLocalization.of(context)!
-                                .translate(TranslationString.confirmPass),
-                            inputType: TextInputType.text,
-                            obscureText: true,
-                            prefixSvgPath: AppIcons.lock,
-                          ),
-                          SizedBox(height: 8.w),
-                          ServicesDropdownUnderlined(
-                            list: servicesList,
-                            onSelected: (value) {
-                              setState(() {
-                                profession.text = value;
-                              });
-                            },
-                            initial: servicesList[0],
-                            label: AppLocalization.of(context)!
-                                .translate(TranslationString.yourProfession),
-                            svgIcon: AppIcons.profession,
-                          ),
-                          const Spacer(),
-                          CustomButton(
-                            text: AppLocalization.of(context)!
-                                .translate(TranslationString.signUp),
-                            onPressed: () {
-                              if (password.text != confirmPassword.text) {
-                                showToast(
-                                  message: AppLocalization.of(context)!
-                                      .translate(TranslationString
-                                          .passwordDoesNotMatch),
-                                  context: context,
-                                  isAlert: true,
-                                  color: Colors.redAccent,
-                                );
-                              }
-                              onSignUp();
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(height: 60.w),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           AppLocalization.of(context)!
-                              .translate(TranslationString.alreadyHaveAccount),
-                          style: AppStyles.normalText.copyWith(
-                            color: AppColors.backgroundColor,
+                              .translate(TranslationString.offerOrFindPoperty),
+                          style: AppStyles.heading1.copyWith(
+                            color: Colors.white,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: onSignIn,
-                          child: Text(
-                            AppLocalization.of(context)!
-                                .translate(TranslationString.signInHere),
-                            style: AppStyles.heading3.copyWith(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        Text(
+                          AppLocalization.of(context)!
+                              .translate(TranslationString.getStarted),
+                          style: AppStyles.heading3.copyWith(
+                            color: Colors.white,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const LanguageToggleButton(
-                    isHorizontal: true,
-                  ),
-                ],
+                    SizedBox(height: 20.w),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 480.w,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        padding: EdgeInsets.all(12.w),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.w),
+                          color: AppColors.lightBlue,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 24.w,
+                            ),
+                            UnderlinedTextField(
+                              controller: name,
+                              label: AppLocalization.of(context)!
+                                  .translate(TranslationString.enterFullName),
+                              hintText: AppLocalization.of(context)!
+                                  .translate(TranslationString.enterFullName),
+                              inputType: TextInputType.text,
+                              icon: Icons.person_outlined,
+                            ),
+                            SizedBox(height: 6.w),
+                            UnderlinedTextField(
+                              controller: email,
+                              label: AppLocalization.of(context)!
+                                  .translate(TranslationString.enterEmail),
+                              hintText: AppLocalization.of(context)!
+                                  .translate(TranslationString.enterEmail),
+                              inputType: TextInputType.emailAddress,
+                              icon: Icons.email_outlined,
+                            ),
+                            SizedBox(height: 6.w),
+                            UnderlinedTextField(
+                              controller: password,
+                              label: AppLocalization.of(context)!
+                                  .translate(TranslationString.enterPass),
+                              hintText: AppLocalization.of(context)!
+                                  .translate(TranslationString.enterPass),
+                              inputType: TextInputType.text,
+                              obscureText: true,
+                              prefixSvgPath: AppIcons.lock,
+                            ),
+                            SizedBox(height: 6.w),
+                            UnderlinedTextField(
+                              controller: confirmPassword,
+                              label: AppLocalization.of(context)!
+                                  .translate(TranslationString.confirmPass),
+                              hintText: AppLocalization.of(context)!
+                                  .translate(TranslationString.confirmPass),
+                              inputType: TextInputType.text,
+                              obscureText: true,
+                              prefixSvgPath: AppIcons.lock,
+                            ),
+                            SizedBox(height: 12.w),
+                            Text(
+                              AppLocalization.of(context)!.translate(
+                                  TranslationString.selectProfession),
+                              style: AppStyles.normalText.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                            ServicesDropdownUnderlined(
+                              list: servicesList,
+                              onSelected: (value) {
+                                setState(() {
+                                  profession.text = value;
+                                });
+                              },
+                              initial: servicesList[0],
+                              label: AppLocalization.of(context)!
+                                  .translate(TranslationString.yourProfession),
+                              svgIcon: AppIcons.profession,
+                            ),
+                            const Spacer(),
+                            CustomButton(
+                              text: AppLocalization.of(context)!
+                                  .translate(TranslationString.signUp),
+                              onPressed: () {
+                                if (password.text != confirmPassword.text) {
+                                  showToast(
+                                    message: AppLocalization.of(context)!
+                                        .translate(TranslationString
+                                            .passwordDoesNotMatch),
+                                    context: context,
+                                    isAlert: true,
+                                    color: Colors.redAccent,
+                                  );
+                                }
+                                onSignUp();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20.w),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppLocalization.of(context)!.translate(
+                                TranslationString.alreadyHaveAccount),
+                            style: AppStyles.normalText.copyWith(
+                              color: AppColors.backgroundColor,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: onSignIn,
+                            child: Text(
+                              AppLocalization.of(context)!
+                                  .translate(TranslationString.signInHere),
+                              style: AppStyles.heading3.copyWith(
+                                color: AppColors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20.w),
+                    const LanguageToggleButton(
+                      isHorizontal: true,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
