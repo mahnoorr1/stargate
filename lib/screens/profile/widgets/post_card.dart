@@ -94,7 +94,7 @@ class _PostCardState extends State<PostCard> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: widget.listing.status == 'pending'
-                          ? Colors.orange
+                          ? Colors.orange[500]
                           : widget.listing.status == 'rejected'
                               ? Colors.redAccent
                               : AppColors.blue,

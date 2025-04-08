@@ -126,7 +126,7 @@ class TranslationString {
   static const selectSubcategory = "selectSubcategory";
   static const subcategory = "subcategory";
   static const category = "category";
-  static const purchase = "purchase";
+  static const purchase = "offerType";
   static const rental = 'rental';
   static const neww = 'new';
   static const old = 'old';

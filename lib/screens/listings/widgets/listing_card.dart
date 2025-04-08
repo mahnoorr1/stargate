@@ -54,7 +54,7 @@ class ListingCard extends StatelessWidget {
                 padding: EdgeInsets.all(4.w),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: AppColors.blue,
+                  color: listing.requestType == 'offering'? AppColors.blue : Colors.purple[200] ,
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.w),

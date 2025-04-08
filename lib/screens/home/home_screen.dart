@@ -106,8 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Stack(
                       children: [
-                        Container(
-                          height: 180,
+                        
+                         Container(
+                          height: 150,
                           width: double.infinity,
                           color: AppColors.darkBlue,
                         ),
